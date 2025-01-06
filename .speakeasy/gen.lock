@@ -5,8 +5,8 @@ management:
   docVersion: 0.1.0
   speakeasyVersion: 1.463.1
   generationVersion: 2.486.6
-  releaseVersion: 0.0.1
-  configChecksum: a08e54b04a6e243da627003fe01db446
+  releaseVersion: 0.1.0
+  configChecksum: e7255b5d9cf5b07e131df1b5e4f52d1d
 features:
   typescript:
     additionalDependencies: 0.1.0
