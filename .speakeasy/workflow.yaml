@@ -1,0 +1,18 @@
+workflowVersion: 1.0.0
+speakeasyVersion: latest
+sources:
+    atoma-proxy:
+        inputs:
+            - location: ../atoma-proxy/atoma-proxy/docs/openapi.yml
+        registry:
+            location: registry.speakeasyapi.dev/atoma/atoma-sdk/atoma-proxy
+targets:
+    atoma-sdk:
+        target: typescript
+        source: atoma-proxy
+        codeSamples:
+            registry:
+                location: registry.speakeasyapi.dev/atoma/atoma-sdk/atoma-proxy-typescript-code-samples
+            labelOverride:
+                fixedValue: Typescript (SDK)
+            blocking: false

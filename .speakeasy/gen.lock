@@ -1,0 +1,216 @@
+lockVersion: 2.0.0
+id: 66f4e327-df0a-4274-a6cc-0c9758913098
+management:
+  docChecksum: 0463008ff3011f43c54201460abcfa6d
+  docVersion: 0.1.0
+  speakeasyVersion: 1.463.1
+  generationVersion: 2.486.6
+  releaseVersion: 0.0.1
+  configChecksum: a08e54b04a6e243da627003fe01db446
+features:
+  typescript:
+    additionalDependencies: 0.1.0
+    constsAndDefaults: 0.1.11
+    core: 3.18.12
+    defaultEnabledRetries: 0.1.0
+    devContainers: 2.90.0
+    envVarSecurityUsage: 0.1.2
+    globalSecurity: 2.82.12
+    globalSecurityCallbacks: 0.1.0
+    globalSecurityFlattening: 0.1.0
+    globalServerURLs: 2.82.4
+    nameOverrides: 2.81.2
+    nullables: 0.1.0
+    responseFormat: 0.2.3
+    retries: 2.83.0
+    sdkHooks: 0.2.0
+    serverEvents: 0.1.5
+    unions: 2.85.8
+generatedFiles:
+  - .devcontainer/README.md
+  - .devcontainer/devcontainer.json
+  - .devcontainer/setup.sh
+  - .eslintrc.cjs
+  - .gitattributes
+  - .npmignore
+  - CONTRIBUTING.md
+  - FUNCTIONS.md
+  - RUNTIMES.md
+  - USAGE.md
+  - docs/lib/utils/retryconfig.md
+  - docs/models/components/chatcompletionchoice.md
+  - docs/models/components/chatcompletionchunk.md
+  - docs/models/components/chatcompletionchunkchoice.md
+  - docs/models/components/chatcompletionchunkdelta.md
+  - docs/models/components/chatcompletionmessage.md
+  - docs/models/components/chatcompletionresponse.md
+  - docs/models/components/chatcompletionstreamresponse.md
+  - docs/models/components/completionusage.md
+  - docs/models/components/confidentialcomputerequest.md
+  - docs/models/components/confidentialcomputeresponse.md
+  - docs/models/components/createchatcompletionrequest.md
+  - docs/models/components/createchatcompletionstreamrequest.md
+  - docs/models/components/createembeddingrequest.md
+  - docs/models/components/createembeddingresponse.md
+  - docs/models/components/createimagerequest.md
+  - docs/models/components/createimageresponse.md
+  - docs/models/components/embeddinginput.md
+  - docs/models/components/embeddingobject.md
+  - docs/models/components/embeddingusage.md
+  - docs/models/components/imagedata.md
+  - docs/models/components/security.md
+  - docs/models/components/usage.md
+  - docs/sdks/atomasdk/README.md
+  - docs/sdks/chat/README.md
+  - docs/sdks/confidentialchat/README.md
+  - docs/sdks/confidentialembeddings/README.md
+  - docs/sdks/confidentialimages/README.md
+  - docs/sdks/embeddings/README.md
+  - docs/sdks/health/README.md
+  - docs/sdks/images/README.md
+  - docs/sdks/models/README.md
+  - docs/sdks/nodepublicaddressregistration/README.md
+  - jsr.json
+  - package.json
+  - src/core.ts
+  - src/funcs/chatCreate.ts
+  - src/funcs/chatCreateStream.ts
+  - src/funcs/confidentialChatCreate.ts
+  - src/funcs/confidentialEmbeddingsCreate.ts
+  - src/funcs/confidentialImagesGenerate.ts
+  - src/funcs/embeddingsCreate.ts
+  - src/funcs/healthHealth.ts
+  - src/funcs/imagesGenerate.ts
+  - src/funcs/modelsModelsHandler.ts
+  - src/funcs/nodePublicAddressRegistrationNodePublicAddressRegistration.ts
+  - src/hooks/hooks.ts
+  - src/hooks/index.ts
+  - src/hooks/types.ts
+  - src/index.ts
+  - src/lib/base64.ts
+  - src/lib/config.ts
+  - src/lib/dlv.ts
+  - src/lib/encodings.ts
+  - src/lib/env.ts
+  - src/lib/event-streams.ts
+  - src/lib/files.ts
+  - src/lib/http.ts
+  - src/lib/is-plain-object.ts
+  - src/lib/logger.ts
+  - src/lib/matchers.ts
+  - src/lib/primitives.ts
+  - src/lib/retries.ts
+  - src/lib/schemas.ts
+  - src/lib/sdks.ts
+  - src/lib/security.ts
+  - src/lib/url.ts
+  - src/models/components/chatcompletionchoice.ts
+  - src/models/components/chatcompletionchunk.ts
+  - src/models/components/chatcompletionchunkchoice.ts
+  - src/models/components/chatcompletionchunkdelta.ts
+  - src/models/components/chatcompletionmessage.ts
+  - src/models/components/chatcompletionresponse.ts
+  - src/models/components/chatcompletionstreamresponse.ts
+  - src/models/components/completionusage.ts
+  - src/models/components/confidentialcomputerequest.ts
+  - src/models/components/confidentialcomputeresponse.ts
+  - src/models/components/createchatcompletionrequest.ts
+  - src/models/components/createchatcompletionstreamrequest.ts
+  - src/models/components/createembeddingrequest.ts
+  - src/models/components/createembeddingresponse.ts
+  - src/models/components/createimagerequest.ts
+  - src/models/components/createimageresponse.ts
+  - src/models/components/embeddinginput.ts
+  - src/models/components/embeddingobject.ts
+  - src/models/components/embeddingusage.ts
+  - src/models/components/imagedata.ts
+  - src/models/components/index.ts
+  - src/models/components/security.ts
+  - src/models/components/usage.ts
+  - src/models/errors/apierror.ts
+  - src/models/errors/httpclienterrors.ts
+  - src/models/errors/index.ts
+  - src/models/errors/sdkvalidationerror.ts
+  - src/sdk/chat.ts
+  - src/sdk/confidentialchat.ts
+  - src/sdk/confidentialembeddings.ts
+  - src/sdk/confidentialimages.ts
+  - src/sdk/embeddings.ts
+  - src/sdk/health.ts
+  - src/sdk/images.ts
+  - src/sdk/index.ts
+  - src/sdk/models.ts
+  - src/sdk/nodepublicaddressregistration.ts
+  - src/sdk/sdk.ts
+  - src/types/blobs.ts
+  - src/types/constdatetime.ts
+  - src/types/enums.ts
+  - src/types/fp.ts
+  - src/types/index.ts
+  - src/types/operations.ts
+  - src/types/rfcdate.ts
+  - src/types/streams.ts
+  - tsconfig.json
+examples:
+  health:
+    speakeasy-default-health:
+      responses:
+        "200":
+          application/json: "<value>"
+  models_handler:
+    speakeasy-default-models-handler:
+      responses:
+        "200":
+          application/json: "<value>"
+  node_public_address_registration:
+    speakeasy-default-node-public-address-registration:
+      responses:
+        "200":
+          application/json: "<value>"
+  chat_completions_create:
+    speakeasy-default-chat-completions-create:
+      requestBody:
+        application/json: {"messages": [{"content": "<value>", "role": "<value>"}], "model": "LeBaron"}
+      responses:
+        "200":
+          application/json: {"choices": [{"index": 134365, "message": {"content": "<value>", "role": "<value>"}}], "created": 69025, "id": "<id>", "model": "PT Cruiser"}
+  chat_completions_create_stream:
+    speakeasy-default-chat-completions-create-stream:
+      requestBody:
+        application/json: {"messages": [], "model": "Impala"}
+  confidential_chat_completions_create:
+    speakeasy-default-confidential-chat-completions-create:
+      requestBody:
+        application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 486589}
+      responses:
+        "200":
+          application/json: {"ciphertext": "<value>", "nonce": "<value>"}
+  embeddings_create:
+    speakeasy-default-embeddings-create:
+      requestBody:
+        application/json: {"input": "<value>", "model": "LeBaron"}
+      responses:
+        "200":
+          application/json: {"data": [{"embedding": [], "index": 69025, "object": "<value>"}], "model": "PT Cruiser", "object": "<value>", "usage": {"prompt_tokens": 951062, "total_tokens": 86}}
+  confidential_embeddings_create:
+    speakeasy-default-confidential-embeddings-create:
+      requestBody:
+        application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 486589}
+      responses:
+        "200":
+          application/json: {"ciphertext": "<value>", "nonce": "<value>"}
+  image_generations_create:
+    speakeasy-default-image-generations-create:
+      requestBody:
+        application/json: {"model": "Model X", "prompt": "<value>"}
+      responses:
+        "200":
+          application/json: {"created": 447445, "data": [{"url": "https://prudent-defendant.com/"}]}
+  confidential_image_generations_create:
+    speakeasy-default-confidential-image-generations-create:
+      requestBody:
+        application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 740198}
+      responses:
+        "200":
+          application/json: {"ciphertext": "<value>", "nonce": "<value>"}
+generatedTests: {}

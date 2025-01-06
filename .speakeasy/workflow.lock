@@ -1,0 +1,36 @@
+speakeasyVersion: 1.463.1
+sources:
+    atoma-proxy:
+        sourceNamespace: atoma-proxy
+        sourceRevisionDigest: sha256:5972371c2ef33b5b53de74f31b1149a7bdd744633c40feb9095113005f809ef0
+        sourceBlobDigest: sha256:ef17a76c56f8fe4faa472bbb496be69cf1cd7f5947e2d7730563e925909564bb
+        tags:
+            - latest
+            - 0.1.0
+targets:
+    atoma-sdk:
+        source: atoma-proxy
+        sourceNamespace: atoma-proxy
+        sourceRevisionDigest: sha256:5972371c2ef33b5b53de74f31b1149a7bdd744633c40feb9095113005f809ef0
+        sourceBlobDigest: sha256:ef17a76c56f8fe4faa472bbb496be69cf1cd7f5947e2d7730563e925909564bb
+        codeSamplesNamespace: atoma-proxy-typescript-code-samples
+        codeSamplesRevisionDigest: sha256:624d3cab6994cdb6bc10f6af94b101e16ea81a2fda507ae120b4f8375cc90563
+workflow:
+    workflowVersion: 1.0.0
+    speakeasyVersion: latest
+    sources:
+        atoma-proxy:
+            inputs:
+                - location: ../atoma-proxy/atoma-proxy/docs/openapi.yml
+            registry:
+                location: registry.speakeasyapi.dev/atoma/atoma-sdk/atoma-proxy
+    targets:
+        atoma-sdk:
+            target: typescript
+            source: atoma-proxy
+            codeSamples:
+                registry:
+                    location: registry.speakeasyapi.dev/atoma/atoma-sdk/atoma-proxy-typescript-code-samples
+                labelOverride:
+                    fixedValue: Typescript (SDK)
+                blocking: false
