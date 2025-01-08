@@ -22,5 +22,7 @@ export * from "./embeddinginput.js";
 export * from "./embeddingobject.js";
 export * from "./embeddingusage.js";
 export * from "./imagedata.js";
+export * from "./model.js";
+export * from "./modellist.js";
 export * from "./security.js";
 export * from "./usage.js";

@@ -8,7 +8,7 @@ Individual image data in the response
 import { ImageData } from "atoma-sdk/models/components";
 
 let value: ImageData = {
-  url: "https://pleasant-obligation.org",
+  url: "https://wavy-pleasure.info",
 };
 ```
 

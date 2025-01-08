@@ -6,9 +6,9 @@
 import { CompletionUsage } from "atoma-sdk/models/components";
 
 let value: CompletionUsage = {
-  completionTokens: 544883,
-  promptTokens: 423655,
-  totalTokens: 645894,
+  completionTokens: 645894,
+  promptTokens: 437587,
+  totalTokens: 891773,
 };
 ```
 
