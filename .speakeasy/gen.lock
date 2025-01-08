@@ -5,8 +5,8 @@ management:
   docVersion: 0.1.0
   speakeasyVersion: 1.463.1
   generationVersion: 2.486.6
-  releaseVersion: 0.1.1
-  configChecksum: 296c1c0c5f047dfca9a6de3934751a96
+  releaseVersion: 0.1.0
+  configChecksum: 99dd9cad58772fb011ca19605d70f90a
   repoURL: https://github.com/atoma-network/atoma-sdk-typescript.git
   installationURL: https://github.com/atoma-network/atoma-sdk-typescript.git
 features:
