@@ -8,10 +8,8 @@ Request object for creating embeddings
 import { CreateEmbeddingRequest } from "atoma-sdk/models/components";
 
 let value: CreateEmbeddingRequest = {
-  input: [
-    "<value>",
-  ],
-  model: "Element",
+  input: "<value>",
+  model: "Mustang",
 };
 ```
 

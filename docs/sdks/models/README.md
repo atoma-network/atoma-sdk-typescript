@@ -7,14 +7,13 @@ OpenAI's API models v1 endpoint
 
 ### Available Operations
 
-* [modelsHandler](#modelshandler) - List models
+* [modelsList](#modelslist) - List models
 
-## modelsHandler
+## modelsList
 
 This endpoint mimics the OpenAI models endpoint format, returning a list of
-available models with their associated metadata and permissions. Each model
-includes standard OpenAI-compatible fields to ensure compatibility with
-existing OpenAI client libraries.
+available models with their associated metadata. Each model includes standard
+OpenAI-compatible fields to ensure compatibility with existing OpenAI client libraries.
 
 ### Example Usage
 
@@ -26,7 +25,7 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.models.modelsHandler();
+  const result = await atomaSDK.models.modelsList();
 
   // Handle the result
   console.log(result);
@@ -41,7 +40,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AtomaSDKCore } from "atoma-sdk/core.js";
-import { modelsModelsHandler } from "atoma-sdk/funcs/modelsModelsHandler.js";
+import { modelsModelsList } from "atoma-sdk/funcs/modelsModelsList.js";
 
 // Use `AtomaSDKCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -50,7 +49,7 @@ const atomaSDK = new AtomaSDKCore({
 });
 
 async function run() {
-  const res = await modelsModelsHandler(atomaSDK);
+  const res = await modelsModelsList(atomaSDK);
 
   if (!res.ok) {
     throw res.error;
@@ -75,7 +74,7 @@ run();
 
 ### Response
 
-**Promise\<[any](../../models/.md)\>**
+**Promise\<[components.ModelList](../../models/components/modellist.md)\>**
 
 ### Errors
 

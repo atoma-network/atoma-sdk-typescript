@@ -1,12 +1,14 @@
 lockVersion: 2.0.0
 id: 66f4e327-df0a-4274-a6cc-0c9758913098
 management:
-  docChecksum: 0463008ff3011f43c54201460abcfa6d
+  docChecksum: 34761678c601639b82e18d49096ab352
   docVersion: 0.1.0
   speakeasyVersion: 1.463.1
   generationVersion: 2.486.6
   releaseVersion: 0.1.0
-  configChecksum: e7255b5d9cf5b07e131df1b5e4f52d1d
+  configChecksum: 99dd9cad58772fb011ca19605d70f90a
+  repoURL: https://github.com/atoma-network/atoma-sdk-typescript.git
+  installationURL: https://github.com/atoma-network/atoma-sdk-typescript.git
 features:
   typescript:
     additionalDependencies: 0.1.0
@@ -58,6 +60,8 @@ generatedFiles:
   - docs/models/components/embeddingobject.md
   - docs/models/components/embeddingusage.md
   - docs/models/components/imagedata.md
+  - docs/models/components/model.md
+  - docs/models/components/modellist.md
   - docs/models/components/security.md
   - docs/models/components/usage.md
   - docs/sdks/atomasdk/README.md
@@ -81,7 +85,7 @@ generatedFiles:
   - src/funcs/embeddingsCreate.ts
   - src/funcs/healthHealth.ts
   - src/funcs/imagesGenerate.ts
-  - src/funcs/modelsModelsHandler.ts
+  - src/funcs/modelsModelsList.ts
   - src/funcs/nodePublicAddressRegistrationNodePublicAddressRegistration.ts
   - src/hooks/hooks.ts
   - src/hooks/index.ts
@@ -125,6 +129,8 @@ generatedFiles:
   - src/models/components/embeddingusage.ts
   - src/models/components/imagedata.ts
   - src/models/components/index.ts
+  - src/models/components/model.ts
+  - src/models/components/modellist.ts
   - src/models/components/security.ts
   - src/models/components/usage.ts
   - src/models/errors/apierror.ts
@@ -213,4 +219,9 @@ examples:
       responses:
         "200":
           application/json: {"ciphertext": "<value>", "nonce": "<value>"}
+  models_list:
+    speakeasy-default-models-list:
+      responses:
+        "200":
+          application/json: {"data": [{"created": 640785, "id": "<id>", "object": "<value>", "owned_by": "<value>"}, {"created": 744692, "id": "<id>", "object": "<value>", "owned_by": "<value>"}, {"created": 941970, "id": "<id>", "object": "<value>", "owned_by": "<value>"}], "object": "<value>"}
 generatedTests: {}

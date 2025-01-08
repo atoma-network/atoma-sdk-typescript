@@ -54,25 +54,25 @@ The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https
 ### NPM
 
 ```bash
-npm add <UNSET>
+npm add https://github.com/atoma-network/atoma-sdk-typescript.git
 ```
 
 ### PNPM
 
 ```bash
-pnpm add <UNSET>
+pnpm add https://github.com/atoma-network/atoma-sdk-typescript.git
 ```
 
 ### Bun
 
 ```bash
-bun add <UNSET>
+bun add https://github.com/atoma-network/atoma-sdk-typescript.git
 ```
 
 ### Yarn
 
 ```bash
-yarn add <UNSET> zod
+yarn add https://github.com/atoma-network/atoma-sdk-typescript.git zod
 
 # Note that Yarn does not install peer dependencies automatically. You will need
 # to install zod as shown above.
@@ -178,7 +178,7 @@ run();
 
 ### [models](docs/sdks/models/README.md)
 
-* [modelsHandler](docs/sdks/models/README.md#modelshandler) - List models
+* [modelsList](docs/sdks/models/README.md#modelslist) - List models
 
 ### [nodePublicAddressRegistration](docs/sdks/nodepublicaddressregistration/README.md)
 
@@ -210,7 +210,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`embeddingsCreate`](docs/sdks/embeddings/README.md#create) - Create embeddings
 - [`healthHealth`](docs/sdks/health/README.md#health) - Health
 - [`imagesGenerate`](docs/sdks/images/README.md#generate) - Create image
-- [`modelsModelsHandler`](docs/sdks/models/README.md#modelshandler) - List models
+- [`modelsModelsList`](docs/sdks/models/README.md#modelslist) - List models
 - [`nodePublicAddressRegistrationNodePublicAddressRegistration`](docs/sdks/nodepublicaddressregistration/README.md#nodepublicaddressregistration) - Register node
 
 </details>

@@ -12,7 +12,7 @@ let value: CreateChatCompletionRequest = {
       role: "<value>",
     },
   ],
-  model: "Spyder",
+  model: "El Camino",
 };
 ```
 

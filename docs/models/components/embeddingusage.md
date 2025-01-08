@@ -8,8 +8,8 @@ Usage information for the embeddings request
 import { EmbeddingUsage } from "atoma-sdk/models/components";
 
 let value: EmbeddingUsage = {
-  promptTokens: 118274,
-  totalTokens: 639921,
+  promptTokens: 143353,
+  totalTokens: 944669,
 };
 ```
 

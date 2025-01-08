@@ -9,9 +9,9 @@ import { EmbeddingObject } from "atoma-sdk/models/components";
 
 let value: EmbeddingObject = {
   embedding: [
-    1433.53,
+    5218.48,
   ],
-  index: 944669,
+  index: 414662,
   object: "<value>",
 };
 ```

@@ -4,12 +4,14 @@
   "author": "Speakeasy",
   "main": "./index.js",
   "sideEffects": false,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/atoma-network/atoma-sdk-typescript.git"
+  },
   "scripts": {
     "lint": "eslint --max-warnings=0 src",
     "build": "tsc",
-    "prepublishOnly": "npm run build",
-    "test": "jest",
-    "test:watch": "jest --watch"
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "zod": ">= 3"
@@ -26,5 +28,8 @@
     "ts-jest": "^29.2.5",
     "typescript": "^5.4.5",
     "zod": "^3.23.4"
+  },
+  "dependencies": {
+    
   }
 }
