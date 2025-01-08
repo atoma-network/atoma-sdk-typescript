@@ -15,5 +15,9 @@
 /.tsbuildinfo
 /.tshy
 /.tshy-*
-/__tests__
 /.speakeasy/reports
+
+# Environment variables
+.env
+.env.*
+!.env.example
