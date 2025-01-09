@@ -8,10 +8,10 @@ Response format for image generation
 import { CreateImageResponse } from "atoma-sdk/models/components";
 
 let value: CreateImageResponse = {
-  created: 456150,
+  created: 264555,
   data: [
     {
-      url: "https://agitated-ocelot.name",
+      url: "https://lasting-metabolite.com",
     },
   ],
 };

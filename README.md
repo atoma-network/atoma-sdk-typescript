@@ -98,7 +98,15 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.health.health();
+  const result = await atomaSDK.chat.create({
+    messages: [
+      {
+        content: "<value>",
+        role: "<value>",
+      },
+    ],
+    model: "LeBaron",
+  });
 
   // Handle the result
   console.log(result);
@@ -129,7 +137,15 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.health.health();
+  const result = await atomaSDK.chat.create({
+    messages: [
+      {
+        content: "<value>",
+        role: "<value>",
+      },
+    ],
+    model: "LeBaron",
+  });
 
   // Handle the result
   console.log(result);
@@ -180,9 +196,10 @@ run();
 
 * [modelsList](docs/sdks/models/README.md#modelslist) - List models
 
-### [nodePublicAddressRegistration](docs/sdks/nodepublicaddressregistration/README.md)
+### [nodes](docs/sdks/nodes/README.md)
 
-* [nodePublicAddressRegistration](docs/sdks/nodepublicaddressregistration/README.md#nodepublicaddressregistration) - Register node
+* [nodesCreate](docs/sdks/nodes/README.md#nodescreate) - Create node
+* [nodesModelsRetrieve](docs/sdks/nodes/README.md#nodesmodelsretrieve) - Retrieve node for a given model
 
 </details>
 <!-- End Available Resources and Operations [operations] -->
@@ -211,7 +228,8 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`healthHealth`](docs/sdks/health/README.md#health) - Health
 - [`imagesGenerate`](docs/sdks/images/README.md#generate) - Create image
 - [`modelsModelsList`](docs/sdks/models/README.md#modelslist) - List models
-- [`nodePublicAddressRegistrationNodePublicAddressRegistration`](docs/sdks/nodepublicaddressregistration/README.md#nodepublicaddressregistration) - Register node
+- [`nodesNodesCreate`](docs/sdks/nodes/README.md#nodescreate) - Create node
+- [`nodesNodesModelsRetrieve`](docs/sdks/nodes/README.md#nodesmodelsretrieve) - Retrieve node for a given model
 
 </details>
 <!-- End Standalone functions [standalone-funcs] -->
@@ -271,7 +289,15 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.health.health({
+  const result = await atomaSDK.chat.create({
+    messages: [
+      {
+        content: "<value>",
+        role: "<value>",
+      },
+    ],
+    model: "LeBaron",
+  }, {
     retries: {
       strategy: "backoff",
       backoff: {
@@ -311,7 +337,15 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.health.health();
+  const result = await atomaSDK.chat.create({
+    messages: [
+      {
+        content: "<value>",
+        role: "<value>",
+      },
+    ],
+    model: "LeBaron",
+  });
 
   // Handle the result
   console.log(result);
@@ -342,7 +376,15 @@ const atomaSDK = new AtomaSDK({
 async function run() {
   let result;
   try {
-    result = await atomaSDK.health.health();
+    result = await atomaSDK.chat.create({
+      messages: [
+        {
+          content: "<value>",
+          role: "<value>",
+        },
+      ],
+      model: "LeBaron",
+    });
 
     // Handle the result
     console.log(result);
@@ -399,12 +441,20 @@ The default server can also be overridden globally by passing a URL to the `serv
 import { AtomaSDK } from "atoma-sdk";
 
 const atomaSDK = new AtomaSDK({
-  serverURL: "https://api.atomacloud.com",
+  serverURL: "https://api.atoma.network",
   bearerAuth: process.env["ATOMASDK_BEARER_AUTH"] ?? "",
 });
 
 async function run() {
-  const result = await atomaSDK.health.health();
+  const result = await atomaSDK.chat.create({
+    messages: [
+      {
+        content: "<value>",
+        role: "<value>",
+      },
+    ],
+    model: "LeBaron",
+  });
 
   // Handle the result
   console.log(result);

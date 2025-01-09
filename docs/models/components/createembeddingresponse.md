@@ -11,17 +11,17 @@ let value: CreateEmbeddingResponse = {
   data: [
     {
       embedding: [
-        7991.59,
+        8700.12,
       ],
-      index: 461479,
+      index: 978619,
       object: "<value>",
     },
   ],
-  model: "Mustang",
+  model: "PT Cruiser",
   object: "<value>",
   usage: {
-    promptTokens: 118274,
-    totalTokens: 639921,
+    promptTokens: 461479,
+    totalTokens: 780529,
   },
 };
 ```

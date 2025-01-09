@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 66f4e327-df0a-4274-a6cc-0c9758913098
 management:
-  docChecksum: 34761678c601639b82e18d49096ab352
+  docChecksum: 8b43958c5807bd02b511ea1737673d76
   docVersion: 0.1.0
   speakeasyVersion: 1.463.1
   generationVersion: 2.486.6
-  releaseVersion: 0.1.0
-  configChecksum: 99dd9cad58772fb011ca19605d70f90a
+  releaseVersion: 0.1.1
+  configChecksum: 296c1c0c5f047dfca9a6de3934751a96
   repoURL: https://github.com/atoma-network/atoma-sdk-typescript.git
   installationURL: https://github.com/atoma-network/atoma-sdk-typescript.git
 features:
@@ -59,11 +59,17 @@ generatedFiles:
   - docs/models/components/embeddinginput.md
   - docs/models/components/embeddingobject.md
   - docs/models/components/embeddingusage.md
+  - docs/models/components/healthresponse.md
   - docs/models/components/imagedata.md
   - docs/models/components/model.md
   - docs/models/components/modellist.md
+  - docs/models/components/nodepublicaddressassignment.md
+  - docs/models/components/nodescreaterequest.md
+  - docs/models/components/nodescreateresponse.md
+  - docs/models/components/nodesmodelsretrieveresponse.md
   - docs/models/components/security.md
   - docs/models/components/usage.md
+  - docs/models/operations/nodesmodelsretrieverequest.md
   - docs/sdks/atomasdk/README.md
   - docs/sdks/chat/README.md
   - docs/sdks/confidentialchat/README.md
@@ -73,7 +79,7 @@ generatedFiles:
   - docs/sdks/health/README.md
   - docs/sdks/images/README.md
   - docs/sdks/models/README.md
-  - docs/sdks/nodepublicaddressregistration/README.md
+  - docs/sdks/nodes/README.md
   - jsr.json
   - package.json
   - src/core.ts
@@ -86,7 +92,8 @@ generatedFiles:
   - src/funcs/healthHealth.ts
   - src/funcs/imagesGenerate.ts
   - src/funcs/modelsModelsList.ts
-  - src/funcs/nodePublicAddressRegistrationNodePublicAddressRegistration.ts
+  - src/funcs/nodesNodesCreate.ts
+  - src/funcs/nodesNodesModelsRetrieve.ts
   - src/hooks/hooks.ts
   - src/hooks/index.ts
   - src/hooks/types.ts
@@ -127,16 +134,23 @@ generatedFiles:
   - src/models/components/embeddinginput.ts
   - src/models/components/embeddingobject.ts
   - src/models/components/embeddingusage.ts
+  - src/models/components/healthresponse.ts
   - src/models/components/imagedata.ts
   - src/models/components/index.ts
   - src/models/components/model.ts
   - src/models/components/modellist.ts
+  - src/models/components/nodepublicaddressassignment.ts
+  - src/models/components/nodescreaterequest.ts
+  - src/models/components/nodescreateresponse.ts
+  - src/models/components/nodesmodelsretrieveresponse.ts
   - src/models/components/security.ts
   - src/models/components/usage.ts
   - src/models/errors/apierror.ts
   - src/models/errors/httpclienterrors.ts
   - src/models/errors/index.ts
   - src/models/errors/sdkvalidationerror.ts
+  - src/models/operations/index.ts
+  - src/models/operations/nodesmodelsretrieve.ts
   - src/sdk/chat.ts
   - src/sdk/confidentialchat.ts
   - src/sdk/confidentialembeddings.ts
@@ -146,7 +160,7 @@ generatedFiles:
   - src/sdk/images.ts
   - src/sdk/index.ts
   - src/sdk/models.ts
-  - src/sdk/nodepublicaddressregistration.ts
+  - src/sdk/nodes.ts
   - src/sdk/sdk.ts
   - src/types/blobs.ts
   - src/types/constdatetime.ts
@@ -162,7 +176,7 @@ examples:
     speakeasy-default-health:
       responses:
         "200":
-          application/json: "<value>"
+          application/json: {"message": "<value>"}
   models_handler:
     speakeasy-default-models-handler:
       responses:
@@ -224,4 +238,19 @@ examples:
       responses:
         "200":
           application/json: {"data": [{"created": 640785, "id": "<id>", "object": "<value>", "owned_by": "<value>"}, {"created": 744692, "id": "<id>", "object": "<value>", "owned_by": "<value>"}, {"created": 941970, "id": "<id>", "object": "<value>", "owned_by": "<value>"}], "object": "<value>"}
+  nodes_create:
+    speakeasy-default-nodes-create:
+      requestBody:
+        application/json: {"data": {"country": "Andorra", "node_small_id": 3665, "public_address": "<value>"}, "signature": "<value>"}
+      responses:
+        "200":
+          application/json: {"message": "<value>"}
+  nodes_models_retrieve:
+    speakeasy-default-nodes-models-retrieve:
+      parameters:
+        path:
+          model: "Charger"
+      responses:
+        "200":
+          application/json: {"node_small_id": 695945, "public_key": [325052, 699180], "stack_small_id": 363417}
 generatedTests: {}

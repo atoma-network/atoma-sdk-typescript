@@ -8,16 +8,16 @@ import { ChatCompletionResponse } from "atoma-sdk/models/components";
 let value: ChatCompletionResponse = {
   choices: [
     {
-      index: 602763,
+      index: 548814,
       message: {
         content: "<value>",
         role: "<value>",
       },
     },
   ],
-  created: 544883,
+  created: 715190,
   id: "<id>",
-  model: "Escalade",
+  model: "Jetta",
 };
 ```
 
