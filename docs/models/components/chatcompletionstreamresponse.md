@@ -10,12 +10,12 @@ let value: ChatCompletionStreamResponse = {
     choices: [
       {
         delta: {},
-        index: 791725,
+        index: 963663,
       },
     ],
-    created: 528895,
+    created: 383441,
     id: "<id>",
-    model: "Grand Cherokee",
+    model: "PT Cruiser",
   },
 };
 ```

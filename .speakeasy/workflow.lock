@@ -2,8 +2,8 @@ speakeasyVersion: 1.463.1
 sources:
     atoma-proxy:
         sourceNamespace: atoma-proxy
-        sourceRevisionDigest: sha256:ecc8bb46f65bcddd8c4e00e5857c953ac81ad971c2af886ce3e1a3aada3a3009
-        sourceBlobDigest: sha256:9a831101cef0aa05cff9921e5657d5ad913ed712326f54e0a55fc7eef6cbb4fe
+        sourceRevisionDigest: sha256:dd3cafe46e626004f91ac17813f6bc1d9dbb6853f2046fd6ca7a36efb3a2af23
+        sourceBlobDigest: sha256:9759cf414a2bf142f310d4be7f7dd639d49d87a53f9e19fee431d23952e981ae
         tags:
             - latest
             - 0.1.0
@@ -11,10 +11,10 @@ targets:
     atoma-sdk:
         source: atoma-proxy
         sourceNamespace: atoma-proxy
-        sourceRevisionDigest: sha256:ecc8bb46f65bcddd8c4e00e5857c953ac81ad971c2af886ce3e1a3aada3a3009
-        sourceBlobDigest: sha256:9a831101cef0aa05cff9921e5657d5ad913ed712326f54e0a55fc7eef6cbb4fe
+        sourceRevisionDigest: sha256:dd3cafe46e626004f91ac17813f6bc1d9dbb6853f2046fd6ca7a36efb3a2af23
+        sourceBlobDigest: sha256:9759cf414a2bf142f310d4be7f7dd639d49d87a53f9e19fee431d23952e981ae
         codeSamplesNamespace: atoma-proxy-typescript-code-samples
-        codeSamplesRevisionDigest: sha256:2a236d1e2e87a0cb7c21a92f690cbb6a0ab883508a3fab9aaaf3906a4bb9082a
+        codeSamplesRevisionDigest: sha256:d08fa906c5293240121f7f8249220129e052118406526209df081e9671d62188
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest

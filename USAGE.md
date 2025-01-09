@@ -7,7 +7,15 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.health.health();
+  const result = await atomaSDK.chat.create({
+    messages: [
+      {
+        content: "<value>",
+        role: "<value>",
+      },
+    ],
+    model: "LeBaron",
+  });
 
   // Handle the result
   console.log(result);

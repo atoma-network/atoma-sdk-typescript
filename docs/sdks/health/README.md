@@ -72,7 +72,7 @@ run();
 
 ### Response
 
-**Promise\<[any](../../models/.md)\>**
+**Promise\<[components.HealthResponse](../../models/components/healthresponse.md)\>**
 
 ### Errors
 

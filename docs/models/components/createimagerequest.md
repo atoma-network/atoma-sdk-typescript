@@ -8,7 +8,7 @@ Request body for image generation
 import { CreateImageRequest } from "atoma-sdk/models/components";
 
 let value: CreateImageRequest = {
-  model: "Expedition",
+  model: "Mercielago",
   prompt: "<value>",
 };
 ```

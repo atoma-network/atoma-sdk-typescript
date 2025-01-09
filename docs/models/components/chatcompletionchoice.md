@@ -6,7 +6,7 @@
 import { ChatCompletionChoice } from "atoma-sdk/models/components";
 
 let value: ChatCompletionChoice = {
-  index: 963663,
+  index: 437587,
   message: {
     content: "<value>",
     role: "<value>",

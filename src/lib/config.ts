@@ -11,7 +11,7 @@ import { Params, pathToFunc } from "./url.js";
  * Contains the list of servers available to the SDK
  */
 export const ServerList = [
-  "https://api.atomacloud.com",
+  "https://api.atoma.network",
 ] as const;
 
 export type SDKOptions = {
@@ -54,7 +54,7 @@ export function serverURLFromOptions(options: SDKOptions): URL | null {
 export const SDK_METADATA = {
   language: "typescript",
   openapiDocVersion: "0.1.0",
-  sdkVersion: "0.1.0",
+  sdkVersion: "0.1.1",
   genVersion: "2.486.6",
-  userAgent: "speakeasy-sdk/typescript 0.1.0 2.486.6 0.1.0 atoma-sdk",
+  userAgent: "speakeasy-sdk/typescript 0.1.1 2.486.6 0.1.0 atoma-sdk",
 } as const;

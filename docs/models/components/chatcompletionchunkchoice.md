@@ -7,7 +7,7 @@ import { ChatCompletionChunkChoice } from "atoma-sdk/models/components";
 
 let value: ChatCompletionChunkChoice = {
   delta: {},
-  index: 20218,
+  index: 71036,
 };
 ```
 

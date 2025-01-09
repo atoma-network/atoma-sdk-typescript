@@ -3,7 +3,9 @@
  */
 
 import { AtomaSDKCore } from "../core.js";
+import { encodeSimple } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
+import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
@@ -17,17 +19,34 @@ import {
   UnexpectedClientError,
 } from "../models/errors/httpclienterrors.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
+import * as operations from "../models/operations/index.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Health
+ * Retrieve node for a given model
+ *
+ * @remarks
+ * This endpoint attempts to find a suitable node and retrieve its public key for encryption
+ * through a two-step process:
+ *
+ * 1. First, it tries to select an existing node with a public key directly.
+ * 2. If no node is immediately available, it falls back to finding the cheapest compatible node
+ *    and acquiring a new stack entry for it.
+ *
+ * This endpoint is specifically designed for confidential compute scenarios where
+ * requests need to be encrypted before being processed by nodes.
+ *
+ * ## Errors
+ *   - `INTERNAL_SERVER_ERROR` - Communication errors or missing node public keys
+ *   - `SERVICE_UNAVAILABLE` - No nodes available for confidential compute
  */
-export async function healthHealth(
+export async function nodesNodesModelsRetrieve(
   client: AtomaSDKCore,
+  request: operations.NodesModelsRetrieveRequest,
   options?: RequestOptions,
 ): Promise<
   Result<
-    components.HealthResponse,
+    components.NodesModelsRetrieveResponse,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -37,7 +56,26 @@ export async function healthHealth(
     | ConnectionError
   >
 > {
-  const path = pathToFunc("/health")();
+  const parsed = safeParse(
+    request,
+    (value) =>
+      operations.NodesModelsRetrieveRequest$outboundSchema.parse(value),
+    "Input validation failed",
+  );
+  if (!parsed.ok) {
+    return parsed;
+  }
+  const payload = parsed.value;
+  const body = null;
+
+  const pathParams = {
+    model: encodeSimple("model", payload.model, {
+      explode: false,
+      charEncoding: "percent",
+    }),
+  };
+
+  const path = pathToFunc("/v1/nodes/models/{model}")(pathParams);
 
   const headers = new Headers({
     Accept: "application/json",
@@ -48,7 +86,7 @@ export async function healthHealth(
   const requestSecurity = resolveGlobalSecurity(securityInput);
 
   const context = {
-    operationID: "health",
+    operationID: "nodes_models_retrieve",
     oAuth2Scopes: [],
 
     resolvedSecurity: requestSecurity,
@@ -66,6 +104,7 @@ export async function healthHealth(
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
+    body: body,
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
   }, options);
   if (!requestRes.ok) {
@@ -75,7 +114,7 @@ export async function healthHealth(
 
   const doResult = await client._do(req, {
     context,
-    errorCodes: ["4XX", "500", "5XX"],
+    errorCodes: ["4XX", "500", "503", "5XX"],
     retryConfig: context.retryConfig,
     retryCodes: context.retryCodes,
   });
@@ -85,7 +124,7 @@ export async function healthHealth(
   const response = doResult.value;
 
   const [result] = await M.match<
-    components.HealthResponse,
+    components.NodesModelsRetrieveResponse,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -94,8 +133,8 @@ export async function healthHealth(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.json(200, components.HealthResponse$inboundSchema),
-    M.fail(["4XX", 500, "5XX"]),
+    M.json(200, components.NodesModelsRetrieveResponse$inboundSchema),
+    M.fail(["4XX", 500, 503, "5XX"]),
   )(response);
   if (!result.ok) {
     return result;
