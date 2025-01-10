@@ -11,8 +11,7 @@ targets:
         target: typescript
         source: atoma-proxy
         codeSamples:
+            output: codeSamples.yaml
             registry:
                 location: registry.speakeasyapi.dev/atoma/atoma-sdk/atoma-proxy-typescript-code-samples
-            labelOverride:
-                fixedValue: Typescript (SDK)
             blocking: false
