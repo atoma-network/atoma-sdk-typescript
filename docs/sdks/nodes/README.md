@@ -8,7 +8,7 @@ Nodes Management
 ### Available Operations
 
 * [nodesCreate](#nodescreate) - Create node
-* [nodesModelsRetrieve](#nodesmodelsretrieve) - Retrieve node for a given model
+* [nodesCreateLock](#nodescreatelock) - Create a node lock for confidential compute
 
 ## nodesCreate
 
@@ -113,7 +113,7 @@ run();
 | --------------- | --------------- | --------------- |
 | errors.APIError | 4XX, 5XX        | \*/\*           |
 
-## nodesModelsRetrieve
+## nodesCreateLock
 
 This endpoint attempts to find a suitable node and retrieve its public key for encryption
 through a two-step process:
@@ -139,8 +139,8 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.nodes.nodesModelsRetrieve({
-    model: "Charger",
+  const result = await atomaSDK.nodes.nodesCreateLock({
+    model: "Focus",
   });
 
   // Handle the result
@@ -156,7 +156,7 @@ The standalone function version of this method:
 
 ```typescript
 import { AtomaSDKCore } from "atoma-sdk/core.js";
-import { nodesNodesModelsRetrieve } from "atoma-sdk/funcs/nodesNodesModelsRetrieve.js";
+import { nodesNodesCreateLock } from "atoma-sdk/funcs/nodesNodesCreateLock.js";
 
 // Use `AtomaSDKCore` for best tree-shaking performance.
 // You can create one instance of it to use across an application.
@@ -165,8 +165,8 @@ const atomaSDK = new AtomaSDKCore({
 });
 
 async function run() {
-  const res = await nodesNodesModelsRetrieve(atomaSDK, {
-    model: "Charger",
+  const res = await nodesNodesCreateLock(atomaSDK, {
+    model: "Focus",
   });
 
   if (!res.ok) {
@@ -186,14 +186,14 @@ run();
 
 | Parameter                                                                                                                                                                      | Type                                                                                                                                                                           | Required                                                                                                                                                                       | Description                                                                                                                                                                    |
 | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `request`                                                                                                                                                                      | [operations.NodesModelsRetrieveRequest](../../models/operations/nodesmodelsretrieverequest.md)                                                                                 | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
+| `request`                                                                                                                                                                      | [components.NodesCreateLockRequest](../../models/components/nodescreatelockrequest.md)                                                                                         | :heavy_check_mark:                                                                                                                                                             | The request object to use for the request.                                                                                                                                     |
 | `options`                                                                                                                                                                      | RequestOptions                                                                                                                                                                 | :heavy_minus_sign:                                                                                                                                                             | Used to set various options for making HTTP requests.                                                                                                                          |
 | `options.fetchOptions`                                                                                                                                                         | [RequestInit](https://developer.mozilla.org/en-US/docs/Web/API/Request/Request#options)                                                                                        | :heavy_minus_sign:                                                                                                                                                             | Options that are passed to the underlying HTTP request. This can be used to inject extra headers for examples. All `Request` options, except `method` and `body`, are allowed. |
 | `options.retries`                                                                                                                                                              | [RetryConfig](../../lib/utils/retryconfig.md)                                                                                                                                  | :heavy_minus_sign:                                                                                                                                                             | Enables retrying HTTP requests under certain failure conditions.                                                                                                               |
 
 ### Response
 
-**Promise\<[components.NodesModelsRetrieveResponse](../../models/components/nodesmodelsretrieveresponse.md)\>**
+**Promise\<[components.NodesCreateLockResponse](../../models/components/nodescreatelockresponse.md)\>**
 
 ### Errors
 

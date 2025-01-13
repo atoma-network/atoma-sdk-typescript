@@ -1,6 +1,6 @@
 {
   "name": "atoma-sdk",
-  "version": "0.1.1",
+  "version": "0.1.0",
   "author": "Speakeasy",
   "main": "./index.js",
   "sideEffects": false,
@@ -11,9 +11,7 @@
   "scripts": {
     "lint": "eslint --max-warnings=0 src",
     "build": "tsc",
-    "prepublishOnly": "npm run build",
-    "prepare": "tsc",
-    "test": "jest"
+    "prepublishOnly": "npm run build"
   },
   "peerDependencies": {
     "zod": ">= 3"

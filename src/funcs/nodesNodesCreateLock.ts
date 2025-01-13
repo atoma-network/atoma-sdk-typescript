@@ -3,7 +3,7 @@
  */
 
 import { AtomaSDKCore } from "../core.js";
-import { encodeSimple } from "../lib/encodings.js";
+import { encodeJSON } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
 import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
@@ -19,11 +19,10 @@ import {
   UnexpectedClientError,
 } from "../models/errors/httpclienterrors.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
-import * as operations from "../models/operations/index.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Retrieve node for a given model
+ * Create a node lock for confidential compute
  *
  * @remarks
  * This endpoint attempts to find a suitable node and retrieve its public key for encryption
@@ -40,13 +39,13 @@ import { Result } from "../types/fp.js";
  *   - `INTERNAL_SERVER_ERROR` - Communication errors or missing node public keys
  *   - `SERVICE_UNAVAILABLE` - No nodes available for confidential compute
  */
-export async function nodesNodesModelsRetrieve(
+export async function nodesNodesCreateLock(
   client: AtomaSDKCore,
-  request: operations.NodesModelsRetrieveRequest,
+  request: components.NodesCreateLockRequest,
   options?: RequestOptions,
 ): Promise<
   Result<
-    components.NodesModelsRetrieveResponse,
+    components.NodesCreateLockResponse,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -58,26 +57,19 @@ export async function nodesNodesModelsRetrieve(
 > {
   const parsed = safeParse(
     request,
-    (value) =>
-      operations.NodesModelsRetrieveRequest$outboundSchema.parse(value),
+    (value) => components.NodesCreateLockRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
     return parsed;
   }
   const payload = parsed.value;
-  const body = null;
+  const body = encodeJSON("body", payload, { explode: true });
 
-  const pathParams = {
-    model: encodeSimple("model", payload.model, {
-      explode: false,
-      charEncoding: "percent",
-    }),
-  };
-
-  const path = pathToFunc("/v1/nodes/models/{model}")(pathParams);
+  const path = pathToFunc("/v1/nodes/lock")();
 
   const headers = new Headers({
+    "Content-Type": "application/json",
     Accept: "application/json",
   });
 
@@ -86,7 +78,7 @@ export async function nodesNodesModelsRetrieve(
   const requestSecurity = resolveGlobalSecurity(securityInput);
 
   const context = {
-    operationID: "nodes_models_retrieve",
+    operationID: "nodes_create_lock",
     oAuth2Scopes: [],
 
     resolvedSecurity: requestSecurity,
@@ -100,7 +92,7 @@ export async function nodesNodesModelsRetrieve(
 
   const requestRes = client._createRequest(context, {
     security: requestSecurity,
-    method: "GET",
+    method: "POST",
     baseURL: options?.serverURL,
     path: path,
     headers: headers,
@@ -124,7 +116,7 @@ export async function nodesNodesModelsRetrieve(
   const response = doResult.value;
 
   const [result] = await M.match<
-    components.NodesModelsRetrieveResponse,
+    components.NodesCreateLockResponse,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -133,7 +125,7 @@ export async function nodesNodesModelsRetrieve(
     | RequestTimeoutError
     | ConnectionError
   >(
-    M.json(200, components.NodesModelsRetrieveResponse$inboundSchema),
+    M.json(200, components.NodesCreateLockResponse$inboundSchema),
     M.fail(["4XX", 500, 503, "5XX"]),
   )(response);
   if (!result.ok) {

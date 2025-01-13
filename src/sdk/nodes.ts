@@ -3,10 +3,9 @@
  */
 
 import { nodesNodesCreate } from "../funcs/nodesNodesCreate.js";
-import { nodesNodesModelsRetrieve } from "../funcs/nodesNodesModelsRetrieve.js";
+import { nodesNodesCreateLock } from "../funcs/nodesNodesCreateLock.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as components from "../models/components/index.js";
-import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
 
 export class Nodes extends ClientSDK {
@@ -45,7 +44,7 @@ export class Nodes extends ClientSDK {
   }
 
   /**
-   * Retrieve node for a given model
+   * Create a node lock for confidential compute
    *
    * @remarks
    * This endpoint attempts to find a suitable node and retrieve its public key for encryption
@@ -62,11 +61,11 @@ export class Nodes extends ClientSDK {
    *   - `INTERNAL_SERVER_ERROR` - Communication errors or missing node public keys
    *   - `SERVICE_UNAVAILABLE` - No nodes available for confidential compute
    */
-  async nodesModelsRetrieve(
-    request: operations.NodesModelsRetrieveRequest,
+  async nodesCreateLock(
+    request: components.NodesCreateLockRequest,
     options?: RequestOptions,
-  ): Promise<components.NodesModelsRetrieveResponse> {
-    return unwrapAsync(nodesNodesModelsRetrieve(
+  ): Promise<components.NodesCreateLockResponse> {
+    return unwrapAsync(nodesNodesCreateLock(
       this,
       request,
       options,
