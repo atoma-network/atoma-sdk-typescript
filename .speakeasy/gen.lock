@@ -1,7 +1,7 @@
 lockVersion: 2.0.0
 id: 66f4e327-df0a-4274-a6cc-0c9758913098
 management:
-  docChecksum: ffd025ddb390be8e6e1f87e97da070e8
+  docChecksum: 325059753c8c4125e0d60b67d0532f31
   docVersion: 0.1.0
   speakeasyVersion: 1.463.1
   generationVersion: 2.486.6
@@ -27,6 +27,7 @@ features:
     retries: 2.83.0
     sdkHooks: 0.2.0
     serverEvents: 0.1.5
+    serverEventsSentinels: 0.1.0
     unions: 2.85.8
 generatedFiles:
   - .devcontainer/README.md
