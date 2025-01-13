@@ -122,6 +122,7 @@ export async function chatCreateStream(
           },
         });
       }),
+      { sseSentinel: "[DONE]" },
     ),
     M.fail([400, 401, "4XX", 500, "5XX"]),
   )(response);
