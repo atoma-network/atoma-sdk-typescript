@@ -199,7 +199,7 @@ run();
 ### [nodes](docs/sdks/nodes/README.md)
 
 * [nodesCreate](docs/sdks/nodes/README.md#nodescreate) - Create node
-* [nodesModelsRetrieve](docs/sdks/nodes/README.md#nodesmodelsretrieve) - Retrieve node for a given model
+* [nodesCreateLock](docs/sdks/nodes/README.md#nodescreatelock) - Create a node lock for confidential compute
 
 </details>
 <!-- End Available Resources and Operations [operations] -->
@@ -229,7 +229,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`imagesGenerate`](docs/sdks/images/README.md#generate) - Create image
 - [`modelsModelsList`](docs/sdks/models/README.md#modelslist) - List models
 - [`nodesNodesCreate`](docs/sdks/nodes/README.md#nodescreate) - Create node
-- [`nodesNodesModelsRetrieve`](docs/sdks/nodes/README.md#nodesmodelsretrieve) - Retrieve node for a given model
+- [`nodesNodesCreateLock`](docs/sdks/nodes/README.md#nodescreatelock) - Create a node lock for confidential compute
 
 </details>
 <!-- End Standalone functions [standalone-funcs] -->

@@ -16,7 +16,7 @@ import { SDKValidationError } from "../errors/sdkvalidationerror.js";
  * the request and send it back to the proxy. The proxy will then route this
  * request to the selected node.
  */
-export type NodesModelsRetrieveResponse = {
+export type NodesCreateLockResponse = {
   /**
    * The node small id for the selected node
    */
@@ -24,7 +24,7 @@ export type NodesModelsRetrieveResponse = {
   /**
    * The public key for the selected node, base64 encoded
    */
-  publicKey: Array<number>;
+  publicKey: string;
   /**
    * Transaction digest for the transaction that acquires the stack entry, if any
    */
@@ -36,13 +36,13 @@ export type NodesModelsRetrieveResponse = {
 };
 
 /** @internal */
-export const NodesModelsRetrieveResponse$inboundSchema: z.ZodType<
-  NodesModelsRetrieveResponse,
+export const NodesCreateLockResponse$inboundSchema: z.ZodType<
+  NodesCreateLockResponse,
   z.ZodTypeDef,
   unknown
 > = z.object({
   node_small_id: z.number().int(),
-  public_key: z.array(z.number().int()),
+  public_key: z.string(),
   stack_entry_digest: z.nullable(z.string()).optional(),
   stack_small_id: z.number().int(),
 }).transform((v) => {
@@ -55,21 +55,21 @@ export const NodesModelsRetrieveResponse$inboundSchema: z.ZodType<
 });
 
 /** @internal */
-export type NodesModelsRetrieveResponse$Outbound = {
+export type NodesCreateLockResponse$Outbound = {
   node_small_id: number;
-  public_key: Array<number>;
+  public_key: string;
   stack_entry_digest?: string | null | undefined;
   stack_small_id: number;
 };
 
 /** @internal */
-export const NodesModelsRetrieveResponse$outboundSchema: z.ZodType<
-  NodesModelsRetrieveResponse$Outbound,
+export const NodesCreateLockResponse$outboundSchema: z.ZodType<
+  NodesCreateLockResponse$Outbound,
   z.ZodTypeDef,
-  NodesModelsRetrieveResponse
+  NodesCreateLockResponse
 > = z.object({
   nodeSmallId: z.number().int(),
-  publicKey: z.array(z.number().int()),
+  publicKey: z.string(),
   stackEntryDigest: z.nullable(z.string()).optional(),
   stackSmallId: z.number().int(),
 }).transform((v) => {
@@ -85,31 +85,29 @@ export const NodesModelsRetrieveResponse$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace NodesModelsRetrieveResponse$ {
-  /** @deprecated use `NodesModelsRetrieveResponse$inboundSchema` instead. */
-  export const inboundSchema = NodesModelsRetrieveResponse$inboundSchema;
-  /** @deprecated use `NodesModelsRetrieveResponse$outboundSchema` instead. */
-  export const outboundSchema = NodesModelsRetrieveResponse$outboundSchema;
-  /** @deprecated use `NodesModelsRetrieveResponse$Outbound` instead. */
-  export type Outbound = NodesModelsRetrieveResponse$Outbound;
+export namespace NodesCreateLockResponse$ {
+  /** @deprecated use `NodesCreateLockResponse$inboundSchema` instead. */
+  export const inboundSchema = NodesCreateLockResponse$inboundSchema;
+  /** @deprecated use `NodesCreateLockResponse$outboundSchema` instead. */
+  export const outboundSchema = NodesCreateLockResponse$outboundSchema;
+  /** @deprecated use `NodesCreateLockResponse$Outbound` instead. */
+  export type Outbound = NodesCreateLockResponse$Outbound;
 }
 
-export function nodesModelsRetrieveResponseToJSON(
-  nodesModelsRetrieveResponse: NodesModelsRetrieveResponse,
+export function nodesCreateLockResponseToJSON(
+  nodesCreateLockResponse: NodesCreateLockResponse,
 ): string {
   return JSON.stringify(
-    NodesModelsRetrieveResponse$outboundSchema.parse(
-      nodesModelsRetrieveResponse,
-    ),
+    NodesCreateLockResponse$outboundSchema.parse(nodesCreateLockResponse),
   );
 }
 
-export function nodesModelsRetrieveResponseFromJSON(
+export function nodesCreateLockResponseFromJSON(
   jsonString: string,
-): SafeParseResult<NodesModelsRetrieveResponse, SDKValidationError> {
+): SafeParseResult<NodesCreateLockResponse, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => NodesModelsRetrieveResponse$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'NodesModelsRetrieveResponse' from JSON`,
+    (x) => NodesCreateLockResponse$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'NodesCreateLockResponse' from JSON`,
   );
 }

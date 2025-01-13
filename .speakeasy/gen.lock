@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 66f4e327-df0a-4274-a6cc-0c9758913098
 management:
-  docChecksum: 8b43958c5807bd02b511ea1737673d76
+  docChecksum: ffd025ddb390be8e6e1f87e97da070e8
   docVersion: 0.1.0
   speakeasyVersion: 1.463.1
   generationVersion: 2.486.6
-  releaseVersion: 0.1.1
-  configChecksum: 296c1c0c5f047dfca9a6de3934751a96
+  releaseVersion: 0.1.0
+  configChecksum: 99dd9cad58772fb011ca19605d70f90a
   repoURL: https://github.com/atoma-network/atoma-sdk-typescript.git
   installationURL: https://github.com/atoma-network/atoma-sdk-typescript.git
 features:
@@ -64,12 +64,12 @@ generatedFiles:
   - docs/models/components/model.md
   - docs/models/components/modellist.md
   - docs/models/components/nodepublicaddressassignment.md
+  - docs/models/components/nodescreatelockrequest.md
+  - docs/models/components/nodescreatelockresponse.md
   - docs/models/components/nodescreaterequest.md
   - docs/models/components/nodescreateresponse.md
-  - docs/models/components/nodesmodelsretrieveresponse.md
   - docs/models/components/security.md
   - docs/models/components/usage.md
-  - docs/models/operations/nodesmodelsretrieverequest.md
   - docs/sdks/atomasdk/README.md
   - docs/sdks/chat/README.md
   - docs/sdks/confidentialchat/README.md
@@ -93,7 +93,7 @@ generatedFiles:
   - src/funcs/imagesGenerate.ts
   - src/funcs/modelsModelsList.ts
   - src/funcs/nodesNodesCreate.ts
-  - src/funcs/nodesNodesModelsRetrieve.ts
+  - src/funcs/nodesNodesCreateLock.ts
   - src/hooks/hooks.ts
   - src/hooks/index.ts
   - src/hooks/types.ts
@@ -140,17 +140,16 @@ generatedFiles:
   - src/models/components/model.ts
   - src/models/components/modellist.ts
   - src/models/components/nodepublicaddressassignment.ts
+  - src/models/components/nodescreatelockrequest.ts
+  - src/models/components/nodescreatelockresponse.ts
   - src/models/components/nodescreaterequest.ts
   - src/models/components/nodescreateresponse.ts
-  - src/models/components/nodesmodelsretrieveresponse.ts
   - src/models/components/security.ts
   - src/models/components/usage.ts
   - src/models/errors/apierror.ts
   - src/models/errors/httpclienterrors.ts
   - src/models/errors/index.ts
   - src/models/errors/sdkvalidationerror.ts
-  - src/models/operations/index.ts
-  - src/models/operations/nodesmodelsretrieve.ts
   - src/sdk/chat.ts
   - src/sdk/confidentialchat.ts
   - src/sdk/confidentialembeddings.ts
@@ -253,4 +252,11 @@ examples:
       responses:
         "200":
           application/json: {"node_small_id": 695945, "public_key": [325052, 699180], "stack_small_id": 363417}
+  nodes_create_lock:
+    speakeasy-default-nodes-create-lock:
+      requestBody:
+        application/json: {"model": "Focus"}
+      responses:
+        "200":
+          application/json: {"node_small_id": 248208, "public_key": "<value>", "stack_small_id": 863000}
 generatedTests: {}
