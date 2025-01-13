@@ -261,11 +261,11 @@ actions:
             }
 
             run();
-  - target: $["paths"]["/v1/nodes/models/{model}"]["get"]
+  - target: $["paths"]["/v1/nodes/lock"]["post"]
     update:
       x-codeSamples:
         - lang: typescript
-          label: nodes_models_retrieve
+          label: nodes_create_lock
           source: |-
             import { AtomaSDK } from "atoma-sdk";
 
@@ -274,8 +274,8 @@ actions:
             });
 
             async function run() {
-              const result = await atomaSDK.nodes.nodesModelsRetrieve({
-                model: "Charger",
+              const result = await atomaSDK.nodes.nodesCreateLock({
+                model: "Focus",
               });
 
               // Handle the result
