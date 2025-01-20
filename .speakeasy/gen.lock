@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 66f4e327-df0a-4274-a6cc-0c9758913098
 management:
-  docChecksum: 325059753c8c4125e0d60b67d0532f31
+  docChecksum: 57e7f8f620f9d7870ff67fb9340421aa
   docVersion: 0.1.0
   speakeasyVersion: 1.463.1
   generationVersion: 2.486.6
-  releaseVersion: 0.1.0
-  configChecksum: 99dd9cad58772fb011ca19605d70f90a
+  releaseVersion: 0.1.1
+  configChecksum: 296c1c0c5f047dfca9a6de3934751a96
   repoURL: https://github.com/atoma-network/atoma-sdk-typescript.git
   installationURL: https://github.com/atoma-network/atoma-sdk-typescript.git
 features:
@@ -51,6 +51,7 @@ generatedFiles:
   - docs/models/components/completionusage.md
   - docs/models/components/confidentialcomputerequest.md
   - docs/models/components/confidentialcomputeresponse.md
+  - docs/models/components/confidentialcomputestreamresponse.md
   - docs/models/components/createchatcompletionrequest.md
   - docs/models/components/createchatcompletionstreamrequest.md
   - docs/models/components/createembeddingrequest.md
@@ -87,6 +88,7 @@ generatedFiles:
   - src/funcs/chatCreate.ts
   - src/funcs/chatCreateStream.ts
   - src/funcs/confidentialChatCreate.ts
+  - src/funcs/confidentialChatCreateStream.ts
   - src/funcs/confidentialEmbeddingsCreate.ts
   - src/funcs/confidentialImagesGenerate.ts
   - src/funcs/embeddingsCreate.ts
@@ -126,6 +128,7 @@ generatedFiles:
   - src/models/components/completionusage.ts
   - src/models/components/confidentialcomputerequest.ts
   - src/models/components/confidentialcomputeresponse.ts
+  - src/models/components/confidentialcomputestreamresponse.ts
   - src/models/components/createchatcompletionrequest.ts
   - src/models/components/createchatcompletionstreamrequest.ts
   - src/models/components/createembeddingrequest.ts
@@ -260,4 +263,8 @@ examples:
       responses:
         "200":
           application/json: {"node_small_id": 248208, "public_key": "<value>", "stack_small_id": 863000}
+  confidential_chat_completions_create_stream:
+    speakeasy-default-confidential-chat-completions-create-stream:
+      requestBody:
+        application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 180107}
 generatedTests: {}

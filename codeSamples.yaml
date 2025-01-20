@@ -110,6 +110,37 @@ actions:
             }
 
             run();
+  - target: $["paths"]["/v1/confidential/chat/completions#stream"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: confidential_chat_completions_create_stream
+          source: |-
+            import { AtomaSDK } from "atoma-sdk";
+
+            const atomaSDK = new AtomaSDK({
+              bearerAuth: process.env["ATOMASDK_BEARER_AUTH"] ?? "",
+            });
+
+            async function run() {
+              const result = await atomaSDK.confidentialChat.createStream({
+                ciphertext: "<value>",
+                clientDhPublicKey: "<value>",
+                modelName: "<value>",
+                nodeDhPublicKey: "<value>",
+                nonce: "<value>",
+                plaintextBodyHash: "<value>",
+                salt: "<value>",
+                stackSmallId: 180107,
+              });
+
+              for await (const event of result) {
+                // Handle the event
+                console.log(event);
+              }
+            }
+
+            run();
   - target: $["paths"]["/v1/confidential/embeddings"]["post"]
     update:
       x-codeSamples:

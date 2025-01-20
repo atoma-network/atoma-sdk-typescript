@@ -171,6 +171,7 @@ run();
 ### [confidentialChat](docs/sdks/confidentialchat/README.md)
 
 * [create](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completion
+* [createStream](docs/sdks/confidentialchat/README.md#createstream)
 
 ### [confidentialEmbeddings](docs/sdks/confidentialembeddings/README.md)
 
@@ -222,6 +223,7 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 - [`chatCreate`](docs/sdks/chat/README.md#create) - Create chat completion
 - [`chatCreateStream`](docs/sdks/chat/README.md#createstream)
 - [`confidentialChatCreate`](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completion
+- [`confidentialChatCreateStream`](docs/sdks/confidentialchat/README.md#createstream)
 - [`confidentialEmbeddingsCreate`](docs/sdks/confidentialembeddings/README.md#create) - Create confidential embeddings
 - [`confidentialImagesGenerate`](docs/sdks/confidentialimages/README.md#generate) - Create confidential image
 - [`embeddingsCreate`](docs/sdks/embeddings/README.md#create) - Create embeddings
