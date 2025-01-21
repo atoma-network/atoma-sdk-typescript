@@ -12,6 +12,7 @@ export * from "./chatcompletionstreamresponse.js";
 export * from "./completionusage.js";
 export * from "./confidentialcomputerequest.js";
 export * from "./confidentialcomputeresponse.js";
+export * from "./confidentialcomputestreamresponse.js";
 export * from "./createchatcompletionrequest.js";
 export * from "./createchatcompletionstreamrequest.js";
 export * from "./createembeddingrequest.js";

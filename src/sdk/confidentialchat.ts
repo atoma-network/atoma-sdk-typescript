@@ -3,6 +3,8 @@
  */
 
 import { confidentialChatCreate } from "../funcs/confidentialChatCreate.js";
+import { confidentialChatCreateStream } from "../funcs/confidentialChatCreateStream.js";
+import { EventStream } from "../lib/event-streams.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as components from "../models/components/index.js";
 import { unwrapAsync } from "../types/fp.js";
@@ -46,6 +48,17 @@ export class ConfidentialChat extends ClientSDK {
     options?: RequestOptions,
   ): Promise<components.ConfidentialComputeResponse> {
     return unwrapAsync(confidentialChatCreate(
+      this,
+      request,
+      options,
+    ));
+  }
+
+  async createStream(
+    request: components.ConfidentialComputeRequest,
+    options?: RequestOptions,
+  ): Promise<EventStream<components.ConfidentialComputeStreamResponse>> {
+    return unwrapAsync(confidentialChatCreateStream(
       this,
       request,
       options,

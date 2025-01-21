@@ -13,8 +13,6 @@ targets:
         sourceNamespace: atoma-proxy
         sourceRevisionDigest: sha256:298ea4ccb62d2ffe24d6d9aefa23adcadd258f4e1fc2fc7644fa493562b3465f
         sourceBlobDigest: sha256:07b2f53225a55e163a6b47120c7c5ff3a1d4b0fe9fd4f2b59c60481c6b638039
-        codeSamplesNamespace: atoma-proxy-typescript-code-samples
-        codeSamplesRevisionDigest: sha256:4b224fdf28bec0832a3b67fe2725cfa9dd2e643891565d8bf98203f9e0e24161
 workflow:
     workflowVersion: 1.0.0
     speakeasyVersion: latest
