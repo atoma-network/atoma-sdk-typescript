@@ -51,7 +51,7 @@ export async function encryptMessage(
   clientDhPrivateKey: Uint8Array,
   requestBody: any,
   model: string
-): Promise<[Uint8Array, Uint8Array, components.ConfidentialComputeRequest]> {
+): Promise<[Uint8Array, Uint8Array, components.ConfidentialComputeRequest$Outbound]> {
   // Generate our public key
   const clientDhPublicKey = box.before(clientDhPrivateKey, clientDhPrivateKey);
 
@@ -82,19 +82,19 @@ export async function encryptMessage(
     cipher.getAuthTag()
   ]);
 
-  // Return the encrypted request
+  // Return the encrypted request with snake_case fields
   return [
     nodeDhPublicKeyBytes,
     salt,
     {
       ciphertext: encrypted.toString('base64'),
-      clientDhPublicKey: Buffer.from(clientDhPublicKey).toString('base64'),
-      modelName: model,
-      nodeDhPublicKey: nodeRes.value.publicKey,
+      client_dh_public_key: Buffer.from(clientDhPublicKey).toString('base64'),
+      model_name: model,
+      node_dh_public_key: nodeRes.value.publicKey,
       nonce: Buffer.from(nonce).toString('base64'),
-      plaintextBodyHash: Buffer.from(plaintextBodyHash).toString('base64'),
+      plaintext_body_hash: Buffer.from(plaintextBodyHash).toString('base64'),
       salt: Buffer.from(salt).toString('base64'),
-      stackSmallId: stackSmallId,
+      stack_small_id: stackSmallId,
       stream: requestBody.stream || false
     }
   ];
