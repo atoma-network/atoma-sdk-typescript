@@ -1,5 +1,6 @@
 import { box, randomBytes } from 'tweetnacl';
-import { createHash, createHmac, createCipheriv, createDecipheriv } from 'crypto';
+import { createHmac, createCipheriv, createDecipheriv } from 'crypto';
+import { createHash as createBlake2Hash } from 'blake2';
 // import { encodeBase64, decodeBase64 } from 'tweetnacl-util';
 // import { BLAKE2b } from '@stablelib/blake2b';
 import { AtomaSDKCore } from '../core.js';
@@ -33,9 +34,9 @@ export function deriveKey(sharedSecret: Uint8Array, salt: Uint8Array): Uint8Arra
  * @returns A 32-byte hash
  */
 export function calculateHash(data: Uint8Array): Uint8Array {
-    const hash = createHash('blake2b512');
+    const hash = createBlake2Hash('blake2b', { digestLength: 32 });  // Use BLAKE2b with 32-byte digest
     hash.update(data);
-    return new Uint8Array(hash.digest().slice(0, 32));  // Take first 32 bytes
+    return new Uint8Array(hash.digest());
 }
 
 /**
@@ -52,8 +53,10 @@ export async function encryptMessage(
   requestBody: any,
   model: string
 ): Promise<[Uint8Array, Uint8Array, components.ConfidentialComputeRequest$Outbound]> {
-  // Generate our public key
-  const clientDhPublicKey = box.before(clientDhPrivateKey, clientDhPrivateKey);
+  // Generate our public key from private key
+  const keyPair = box.keyPair();
+  keyPair.secretKey.set(clientDhPrivateKey);
+  const clientDhPublicKey = keyPair.publicKey;
 
   // Get node's public key
   const nodeRes = await nodesNodesCreateLock(sdk, { model }, undefined);
@@ -72,6 +75,8 @@ export async function encryptMessage(
 
   // Encrypt the message
   const message = Buffer.from(JSON.stringify(requestBody));
+  console.log('=== TypeScript Message to Hash ===');
+  console.log(message.toString('utf8'));
   const plaintextBodyHash = calculateHash(message);
 
   // Create cipher

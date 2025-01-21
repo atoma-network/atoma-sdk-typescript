@@ -36,6 +36,7 @@
     "zod": "^3.23.4"
   },
   "dependencies": {
+    "blake2": "^5.0.0",
     "tweetnacl": "^1.0.3"
   }
 }
