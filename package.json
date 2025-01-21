@@ -38,6 +38,7 @@
   "dependencies": {
     "@stablelib/blake2b": "^2.0.1",
     "@stablelib/hkdf": "^2.0.1",
-    "tweetnacl": "^1.0.3"
+    "tweetnacl": "^1.0.3",
+    "tweetnacl-ts": "^1.0.3"
   }
 }
