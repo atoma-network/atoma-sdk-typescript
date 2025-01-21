@@ -1,6 +1,7 @@
 import { box, randomBytes } from 'tweetnacl';
 import { createHmac, createCipheriv, createDecipheriv } from 'crypto';
 import { createHash as createBlake2Hash } from 'blake2';
+import { x25519 } from '@noble/curves/ed25519';
 // import { encodeBase64, decodeBase64 } from 'tweetnacl-util';
 // import { BLAKE2b } from '@stablelib/blake2b';
 import { AtomaSDKCore } from '../core.js';
@@ -12,20 +13,25 @@ export const NONCE_SIZE = 12;  // AESGCM uses 12 bytes for nonce
 export const KEY_SIZE = 32;
 
 /**
- * Derives an encryption key using HMAC-based key derivation
+ * Derives an encryption key using HKDF (HMAC-based Key Derivation Function).
+ * This matches the Python implementation which uses HKDF with SHA-256.
  * @param sharedSecret The shared secret from which to derive the key
  * @param salt Random salt value used in the key derivation
  * @returns A 32-byte derived encryption key
  */
-export function deriveKey(sharedSecret: Uint8Array, salt: Uint8Array): Uint8Array {
-    if (!sharedSecret.length || !salt.length) {
-        throw new Error('sharedSecret and salt must be non-empty');
-    }
+function deriveKey(sharedSecret: Uint8Array, salt: Uint8Array): Uint8Array {
+    // HKDF-Extract
+    const prk = createHmac('sha256', salt)
+        .update(sharedSecret)
+        .digest();
 
-    // Simple key derivation using HMAC-SHA256
-    const hmac = createHmac('sha256', salt);
-    hmac.update(sharedSecret);
-    return new Uint8Array(hmac.digest());
+    // HKDF-Expand
+    const info = Buffer.from('');
+    const okm = createHmac('sha256', prk)
+        .update(Buffer.concat([info, Buffer.from([1])]))
+        .digest();
+
+    return new Uint8Array(okm);
 }
 
 /**
@@ -53,10 +59,8 @@ export async function encryptMessage(
   requestBody: any,
   model: string
 ): Promise<[Uint8Array, Uint8Array, components.ConfidentialComputeRequest$Outbound]> {
-  // Generate our public key from private key
-  const keyPair = box.keyPair();
-  keyPair.secretKey.set(clientDhPrivateKey);
-  const clientDhPublicKey = keyPair.publicKey;
+  // Generate our public key from private key using X25519
+  const clientDhPublicKey = x25519.getPublicKey(clientDhPrivateKey);
 
   // Get node's public key
   const nodeRes = await nodesNodesCreateLock(sdk, { model }, undefined);
@@ -67,32 +71,43 @@ export async function encryptMessage(
   const nodeDhPublicKeyBytes = Buffer.from(nodeRes.value.publicKey, 'base64');
   const stackSmallId = nodeRes.value.stackSmallId;
 
-  // Generate random salt and create shared secret
+  // Generate random salt and create shared secret using X25519
   const salt = generateRandomBytes(SALT_SIZE);
-  const sharedSecret = box.before(nodeDhPublicKeyBytes, clientDhPrivateKey);
+  const sharedSecret = x25519.getSharedSecret(clientDhPrivateKey, nodeDhPublicKeyBytes);
+  console.log('=== TypeScript Encryption Debug ===');
+  console.log('Shared Secret:', Buffer.from(sharedSecret).toString('base64'));
+
+  // Derive encryption key using HKDF
   const encryptionKey = deriveKey(sharedSecret, salt);
+  console.log('Encryption Key:', Buffer.from(encryptionKey).toString('base64'));
+
   const nonce = generateRandomBytes(NONCE_SIZE);
 
   // Encrypt the message
   const message = Buffer.from(JSON.stringify(requestBody));
-  console.log('=== TypeScript Message to Hash ===');
-  console.log(message.toString('utf8'));
+  console.log('Message Length:', message.length);
+  console.log('Message:', message.toString('utf8'));
   const plaintextBodyHash = calculateHash(message);
 
   // Create cipher
   const cipher = createCipheriv('aes-256-gcm', encryptionKey, nonce);
-  const encrypted = Buffer.concat([
-    cipher.update(message),
-    cipher.final(),
-    cipher.getAuthTag()
-  ]);
+  const ciphertext = cipher.update(message);
+  const final = cipher.final();
+  const authTag = cipher.getAuthTag();
+  console.log('Ciphertext Length:', ciphertext.length);
+  console.log('Final Length:', final.length);
+  console.log('Auth Tag Length:', authTag.length);
+  
+  // Concatenate in the order: ciphertext + final + auth tag
+  const encrypted = Buffer.concat([ciphertext, final, authTag]);
+  console.log('Total Length:', encrypted.length);
 
   // Return the encrypted request with snake_case fields
   return [
     nodeDhPublicKeyBytes,
     salt,
     {
-      ciphertext: encrypted.toString('base64'),
+      ciphertext: encrypted.toString('base64'),  // The entire encrypted message including auth tag
       client_dh_public_key: Buffer.from(clientDhPublicKey).toString('base64'),
       model_name: model,
       node_dh_public_key: nodeRes.value.publicKey,
