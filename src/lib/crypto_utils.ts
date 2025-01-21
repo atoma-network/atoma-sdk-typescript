@@ -137,10 +137,10 @@ export function decryptMessage(
     nonce: Uint8Array
 ): Uint8Array | null {
     try {
-        // Generate shared secret
-        const sharedSecret = box.before(nodePublicKey, clientPrivateKey);
+        // Generate shared secret using X25519
+        const sharedSecret = x25519.getSharedSecret(clientPrivateKey, nodePublicKey);
         
-        // Derive encryption key
+        // Derive encryption key using HKDF
         const encryptionKey = deriveKey(sharedSecret, salt);
         
         // Extract auth tag (last 16 bytes)
@@ -159,6 +159,7 @@ export function decryptMessage(
         
         return new Uint8Array(decrypted);
     } catch (error) {
+        console.error('Decryption error:', error);
         return null;
     }
 }
