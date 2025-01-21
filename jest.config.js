@@ -4,16 +4,10 @@ export default {
   testEnvironment: 'node',
   testMatch: ['**/tests/**/*.test.ts'],
   transform: {
-    '^.+\\.(t|j)sx?$': ['babel-jest', {
-      presets: [
-        '@babel/preset-env',
-        '@babel/preset-typescript'
-      ],
-    }],
+    '^.+\\.tsx?$': 'ts-jest',
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(tweetnacl|@stablelib)/)',
-  ],
-  setupFiles: ['<rootDir>/tests/setup.js'],
-  testTimeout: 10000,
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+  extensionsToTreatAsEsm: ['.ts'],
 }; 
