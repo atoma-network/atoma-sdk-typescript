@@ -56,11 +56,11 @@ import { Result } from "../types/fp.js";
  */
 export async function confidentialChatCreate(
   client: AtomaSDKCore,
-  request: components.ConfidentialComputeRequest,
+  request: components.CreateChatCompletionRequest,
   options?: RequestOptions,
 ): Promise<
   Result<
-    components.ConfidentialComputeResponse,
+    components.ChatCompletionResponse,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
