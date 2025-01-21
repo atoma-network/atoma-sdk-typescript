@@ -3,29 +3,9 @@ import { createHash, createHmac, createCipheriv, createDecipheriv } from 'crypto
 // import { encodeBase64, decodeBase64 } from 'tweetnacl-util';
 // import { BLAKE2b } from '@stablelib/blake2b';
 
-// Constants matching Python implementation
 export const SALT_SIZE = 16;
 export const NONCE_SIZE = 12;  // AESGCM uses 12 bytes for nonce
 export const KEY_SIZE = 32;
-
-export interface ConfidentialComputeRequest {
-    ciphertext: string;
-    client_dh_public_key: string;
-    model_name: string;
-    node_dh_public_key: string;
-    nonce: string;
-    plaintext_body_hash: string;
-    salt: string;
-    stack_small_id: string;
-    num_compute_uniths?: number;
-    stream?: boolean;
-}
-
-export interface ConfidentialComputeResponse {
-    ciphertext: string;
-    nonce: string;
-    response_hash?: string;
-}
 
 /**
  * Derives an encryption key using HMAC-based key derivation
