@@ -23,7 +23,7 @@ describe('Chat Completions Integration Tests', () => {
       messages: [
         {
           role: 'user',
-          content: 'What is 2+2?',
+          content: 'Tell me exactly 1 word.',
         },
       ],
     });

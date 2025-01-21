@@ -1,6 +1,6 @@
 import { config } from 'dotenv';
 import { AtomaSDK } from '../../src';
-import { expect, test, describe } from "@jest/globals";
+import { expect, describe } from "@jest/globals";
 
 config();
 
@@ -23,7 +23,7 @@ describe('Confidential Chat Integration Tests', () => {
       messages: [
         {
           role: 'user',
-          content: 'Hello, how are you?',
+          content: 'Tell me exactly 1 word.',
         },
       ],
       model: requireEnvVar('CHAT_COMPLETIONS_MODEL'),
