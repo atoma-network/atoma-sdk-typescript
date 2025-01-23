@@ -19,9 +19,13 @@
     "zod": ">= 3"
   },
   "devDependencies": {
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-typescript": "^7.26.0",
     "@types/jest": "^29.5.14",
     "@typescript-eslint/eslint-plugin": "^7.7.1",
     "@typescript-eslint/parser": "^7.7.1",
+    "babel-jest": "^29.7.0",
     "dotenv": "^16.4.7",
     "eslint": "^8.57.0",
     "eslint-import-resolver-typescript": "^3.6.1",
@@ -32,6 +36,8 @@
     "zod": "^3.23.4"
   },
   "dependencies": {
-    
+    "@noble/curves": "^1.8.1",
+    "blake2": "^5.0.0",
+    "tweetnacl": "^1.0.3"
   }
 }
