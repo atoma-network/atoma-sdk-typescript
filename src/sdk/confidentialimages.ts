@@ -18,9 +18,9 @@ export class ConfidentialImages extends ClientSDK {
    * for full private AI compute.
    */
   async generate(
-    request: components.ConfidentialComputeRequest,
+    request: components.CreateImageRequest,
     options?: RequestOptions,
-  ): Promise<components.ConfidentialComputeResponse> {
+  ): Promise<components.CreateImageResponse> {
     return unwrapAsync(confidentialImagesGenerate(
       this,
       request,
