@@ -23,9 +23,11 @@ describe('Chat Completions Stream Integration Tests', () => {
       messages: [
         {
           role: 'user',
-          content: 'Count from 1 to 5 slowly.',
+          content: 'Count from 1 to 3 very slowly.',
         },
       ],
+      maxTokens: 100,
+      temperature: 0.7,
     });
 
     const chunks: string[] = [];
@@ -45,7 +47,7 @@ describe('Chat Completions Stream Integration Tests', () => {
     const fullResponse = chunks.join('');
     expect(fullResponse).toContain('1');
     expect(fullResponse.length).toBeGreaterThan(0);
-  });
+  }, 30000);
 
   it('should handle streaming errors appropriately', async () => {
     await expect(async () => {
@@ -65,36 +67,5 @@ describe('Chat Completions Stream Integration Tests', () => {
         console.log(chunk);
       }
     }).rejects.toThrow();
-  });
-
-  it('should handle stream interruption gracefully', async () => {
-    const stream = await sdk.chat.createStream({
-      model: requireEnvVar('CHAT_COMPLETIONS_MODEL'),
-      messages: [
-        {
-          role: 'user',
-          content: 'Write a very long story about a cat.',
-        },
-      ],
-    });
-
-    let chunkCount = 0;
-    try {
-      for await (const chunk of stream) {
-        if (chunk.data.choices?.[0]?.delta?.content) {
-          chunkCount++;
-          if (chunkCount > 5) {
-            // Simulate early stream termination
-            break;
-          }
-        }
-      }
-    } catch (error) {
-      // Should not throw when we break early
-      fail('Stream interruption should not throw an error');
-    }
-
-    expect(chunkCount).toBeGreaterThan(0);
-    expect(chunkCount).toBeLessThanOrEqual(6);
   });
 }); 

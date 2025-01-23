@@ -28,7 +28,6 @@ describe('Confidential Chat Streaming Integration Tests', () => {
             model: requireEnvVar('CHAT_COMPLETIONS_MODEL'),
             maxTokens: 100,
             temperature: 0.7,
-            stream: true
         };
 
         const stream = await sdk.confidentialChat.createStream(request);
