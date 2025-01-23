@@ -55,13 +55,13 @@ export class ConfidentialChat extends ClientSDK {
   }
 
   async createStream(
-    request: components.ConfidentialComputeRequest,
+    request: components.CreateChatCompletionRequest,
     options?: RequestOptions,
-  ): Promise<EventStream<components.ConfidentialComputeStreamResponse>> {
-    return unwrapAsync(confidentialChatCreateStream(
+  ): Promise<EventStream<components.ChatCompletionStreamResponse>> {
+    return confidentialChatCreateStream(
       this,
       request,
       options,
-    ));
+    );
   }
 }
