@@ -25,9 +25,9 @@ export class ConfidentialEmbeddings extends ClientSDK {
    * * `INTERNAL_SERVER_ERROR` - Processing or node communication failures
    */
   async create(
-    request: components.ConfidentialComputeRequest,
+    request: components.CreateEmbeddingRequest,
     options?: RequestOptions,
-  ): Promise<components.ConfidentialComputeResponse> {
+  ): Promise<components.CreateEmbeddingResponse> {
     return unwrapAsync(confidentialEmbeddingsCreate(
       this,
       request,
