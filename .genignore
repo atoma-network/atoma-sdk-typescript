@@ -1,0 +1,9 @@
+src/funcs/confidentialChatCreate.ts
+src/funcs/confidentialChatCreateStream.ts
+src/funcs/confidentialEmbeddingsCreate.ts
+src/funcs/confidentialImagesGenerate.ts
+
+src/sdk/confidentialchat.ts
+src/sdk/confidentialembeddings.ts
+src/sdk/confidentialimages.ts
+
