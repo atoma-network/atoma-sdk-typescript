@@ -1,7 +1,5 @@
 import { config } from 'dotenv';
-import { AtomaSDK } from '../../src';
-import { CreateChatCompletionRequest } from '../../src/models/components';
-import { expect, describe } from "@jest/globals";
+import { AtomaSDK } from '../../src/sdk/sdk';
 
 config();
 
@@ -13,74 +11,93 @@ const requireEnvVar = (name: string): string => {
   return value;
 };
 
-describe('Confidential Chat Integration Tests', () => {
-  const sdk = new AtomaSDK({
+describe('Chat Completions Integration Tests', () => {
+  const atomaSDK = new AtomaSDK({
     bearerAuth: requireEnvVar('ATOMASDK_BEARER_AUTH'),
     serverURL: requireEnvVar('CHAT_COMPLETIONS_URL'),
   });
 
-  it('should successfully encrypt, send, and decrypt a chat request', async () => {
-    const request = {
+  it('should successfully generate a chat completion', async () => {
+    const completion = await atomaSDK.confidentialChat.create({
+      messages: [
+        {"role": "developer", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Hello!"}
+      ],
+      model: requireEnvVar('CHAT_COMPLETIONS_MODEL')
+    });
+
+    console.log(completion.choices[0]);
+
+    expect(completion).toBeDefined();
+    expect(completion.choices).toBeDefined();
+    expect(completion.choices.length).toBeGreaterThan(0);
+    expect(completion.choices[0]?.message).toBeDefined();
+    expect(completion.choices[0]?.message.content).toBeDefined();
+  });
+
+  it('should handle invalid requests appropriately', async () => {
+    await expect(
+      atomaSDK.confidentialChat.create({
+        model: 'invalid-model',
+        messages: [
+          {
+            role: 'user',
+            content: 'Test message',
+          },
+        ],
+      })
+    ).rejects.toThrow();
+  });
+
+  it('should successfully stream chat completion chunks', async () => {
+    const stream = await atomaSDK.confidentialChat.createStream({
+      model: requireEnvVar('CHAT_COMPLETIONS_MODEL'),
       messages: [
         {
           role: 'user',
-          content: 'Tell me exactly 1 word.',
+          content: 'Count from 1 to 3 very slowly.',
         },
       ],
-      model: requireEnvVar('CHAT_COMPLETIONS_MODEL'),
-      temperature: 0.7,
-      maxTokens: 100,
-    };
-
-    const result = await sdk.confidentialChat.create(request);
-    expect(result.choices).toBeDefined();
-    expect(result.choices.length).toBeGreaterThan(0);
-    expect(result.choices[0]?.message).toBeDefined();
-    expect(result.choices[0]?.message?.content).toBeDefined();
-    expect(result.choices[0]?.message?.role).toBe('assistant');
-  });
-
-  it('should successfully stream encrypted chat responses', async () => {
-    const request: CreateChatCompletionRequest = {
-      messages: [{
-        role: 'user',
-        content: 'Count from 1 to 3 very slowly.'
-      }],
-      model: requireEnvVar('CHAT_COMPLETIONS_MODEL'),
       maxTokens: 100,
       temperature: 0.7,
-    };
+    });
 
-    const stream = await sdk.confidentialChat.createStream(request);
     const chunks: string[] = [];
+    let contentReceived = false;
 
     for await (const chunk of stream) {
-      const content = chunk.data.choices?.[0]?.delta?.content;
-      if (content) {
-        chunks.push(content);
+      if (chunk.data.choices?.[0]?.delta?.content) {
+        chunks.push(chunk.data.choices[0].delta.content);
+        contentReceived = true;
       }
     }
 
-    const fullResponse = chunks.join('');
-    
-    // Verify streaming functionality works
+    expect(contentReceived).toBe(true);
     expect(chunks.length).toBeGreaterThan(0);
+    
+    // Join chunks to verify the complete response
+    const fullResponse = chunks.join('');
+    expect(fullResponse).toContain('1');
     expect(fullResponse.length).toBeGreaterThan(0);
   }, 30000);
 
-//   it('should handle invalid requests appropriately', async () => {
-//     await expect(
-//       sdk.confidentialChat.create({
-//         messages: [
-//           {
-//             role: 'user',
-//             content: 'Hello',
-//           },
-//         ],
-//         model: 'invalid-model',
-//         temperature: 0.7,
-//         maxTokens: 100,
-//       })
-//     ).rejects.toThrow();
-//   });
+  it('should handle streaming errors appropriately', async () => {
+    await expect(async () => {
+      const stream = await atomaSDK.confidentialChat.createStream({
+        model: 'invalid-model',
+        messages: [
+          {
+            role: 'user',
+            content: 'This should fail',
+          },
+        ],
+      });
+
+      // Try to consume the stream
+      for await (const chunk of stream) {
+        // This should throw before we get here
+        console.log(chunk);
+      }
+    }).rejects.toThrow();
+  });
 }); 

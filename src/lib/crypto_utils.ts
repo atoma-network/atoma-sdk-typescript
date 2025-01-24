@@ -74,19 +74,13 @@ export async function encryptMessage(
   // Generate random salt and create shared secret using X25519
   const salt = generateRandomBytes(SALT_SIZE);
   const sharedSecret = x25519.getSharedSecret(clientDhPrivateKey, nodeDhPublicKeyBytes);
-  console.log('=== TypeScript Encryption Debug ===');
-  console.log('Shared Secret:', Buffer.from(sharedSecret).toString('base64'));
 
   // Derive encryption key using HKDF
   const encryptionKey = deriveKey(sharedSecret, salt);
-  console.log('Encryption Key:', Buffer.from(encryptionKey).toString('base64'));
-
   const nonce = generateRandomBytes(NONCE_SIZE);
 
   // Encrypt the message
   const message = Buffer.from(JSON.stringify(requestBody));
-  console.log('Message Length:', message.length);
-  console.log('Message:', message.toString('utf8'));
   const plaintextBodyHash = calculateHash(message);
 
   // Create cipher
@@ -94,13 +88,9 @@ export async function encryptMessage(
   const ciphertext = cipher.update(message);
   const final = cipher.final();
   const authTag = cipher.getAuthTag();
-  console.log('Ciphertext Length:', ciphertext.length);
-  console.log('Final Length:', final.length);
-  console.log('Auth Tag Length:', authTag.length);
   
   // Concatenate in the order: ciphertext + final + auth tag
   const encrypted = Buffer.concat([ciphertext, final, authTag]);
-  console.log('Total Length:', encrypted.length);
 
   // Return the encrypted request with snake_case fields
   return [

@@ -23,7 +23,7 @@ describe('Chat Completions Integration Tests', () => {
         {"role": "developer", "content": "You are a helpful assistant."},
         {"role": "user", "content": "Hello!"}
       ],
-      model: "meta-llama/Llama-3.3-70B-Instruct"
+      model: requireEnvVar('CHAT_COMPLETIONS_MODEL')
     });
 
     console.log(completion.choices[0]);
