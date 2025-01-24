@@ -33,8 +33,8 @@ const atomaSDK = new AtomaSDK({
 
 async function run() {
   const result = await atomaSDK.embeddings.create({
-    input: "<value>",
-    model: "LeBaron",
+    input: "The quick brown fox jumped over the lazy dog",
+    model: "intfloat/multilingual-e5-large-instruct",
   });
 
   // Handle the result
@@ -60,8 +60,8 @@ const atomaSDK = new AtomaSDKCore({
 
 async function run() {
   const res = await embeddingsCreate(atomaSDK, {
-    input: "<value>",
-    model: "LeBaron",
+    input: "The quick brown fox jumped over the lazy dog",
+    model: "intfloat/multilingual-e5-large-instruct",
   });
 
   if (!res.ok) {

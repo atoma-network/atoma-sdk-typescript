@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 66f4e327-df0a-4274-a6cc-0c9758913098
 management:
-  docChecksum: 57e7f8f620f9d7870ff67fb9340421aa
+  docChecksum: 3c9aba47fd12560f82f7cbdf82bbf7d1
   docVersion: 0.1.0
   speakeasyVersion: 1.463.1
   generationVersion: 2.486.6
   releaseVersion: 0.1.0
-  configChecksum: 295d58d9bf4d0c60b2555806b0e921ae
+  configChecksum: eaa6781e6e55cfea82de1f7bb1616129
   repoURL: https://github.com/atoma-network/atoma-sdk-typescript.git
   installationURL: https://github.com/atoma-network/atoma-sdk-typescript.git
 features:
@@ -87,10 +87,6 @@ generatedFiles:
   - src/core.ts
   - src/funcs/chatCreate.ts
   - src/funcs/chatCreateStream.ts
-  - src/funcs/confidentialChatCreate.ts
-  - src/funcs/confidentialChatCreateStream.ts
-  - src/funcs/confidentialEmbeddingsCreate.ts
-  - src/funcs/confidentialImagesGenerate.ts
   - src/funcs/embeddingsCreate.ts
   - src/funcs/healthHealth.ts
   - src/funcs/imagesGenerate.ts
@@ -155,9 +151,6 @@ generatedFiles:
   - src/models/errors/index.ts
   - src/models/errors/sdkvalidationerror.ts
   - src/sdk/chat.ts
-  - src/sdk/confidentialchat.ts
-  - src/sdk/confidentialembeddings.ts
-  - src/sdk/confidentialimages.ts
   - src/sdk/embeddings.ts
   - src/sdk/health.ts
   - src/sdk/images.ts
@@ -193,14 +186,14 @@ examples:
   chat_completions_create:
     speakeasy-default-chat-completions-create:
       requestBody:
-        application/json: {"messages": [{"content": "<value>", "role": "<value>"}], "model": "LeBaron"}
+        application/json: {"messages": [{"content": "Hello! How can you help me today?", "role": "user"}], "model": "meta-llama/Llama-3.3-70B-Instruct"}
       responses:
         "200":
-          application/json: {"choices": [{"index": 134365, "message": {"content": "<value>", "role": "<value>"}}], "created": 69025, "id": "<id>", "model": "PT Cruiser"}
+          application/json: {"choices": [{"index": 0, "message": {"content": "Hello! How can you help me today?", "role": "user"}}], "created": 1677652288, "id": "chatcmpl-123", "model": "meta-llama/Llama-3.3-70B-Instruct"}
   chat_completions_create_stream:
     speakeasy-default-chat-completions-create-stream:
       requestBody:
-        application/json: {"messages": [], "model": "Impala"}
+        application/json: {"messages": [], "model": "meta-llama/Llama-3.3-70B-Instruct"}
   confidential_chat_completions_create:
     speakeasy-default-confidential-chat-completions-create:
       requestBody:
@@ -211,10 +204,10 @@ examples:
   embeddings_create:
     speakeasy-default-embeddings-create:
       requestBody:
-        application/json: {"input": "<value>", "model": "LeBaron"}
+        application/json: {"input": "The quick brown fox jumped over the lazy dog", "model": "intfloat/multilingual-e5-large-instruct"}
       responses:
         "200":
-          application/json: {"data": [{"embedding": [], "index": 69025, "object": "<value>"}], "model": "PT Cruiser", "object": "<value>", "usage": {"prompt_tokens": 951062, "total_tokens": 86}}
+          application/json: {"data": [{"embedding": ["[0.0023064255, -0.009327292]"], "index": 0, "object": "embedding"}], "model": "intfloat/multilingual-e5-large-instruct", "object": "list", "usage": {"prompt_tokens": 8, "total_tokens": 8}}
   confidential_embeddings_create:
     speakeasy-default-confidential-embeddings-create:
       requestBody:
@@ -225,10 +218,10 @@ examples:
   image_generations_create:
     speakeasy-default-image-generations-create:
       requestBody:
-        application/json: {"model": "Model X", "prompt": "<value>"}
+        application/json: {"model": "black-forest-labs/FLUX.1-schnell", "prompt": "A cute baby sea otter floating on its back"}
       responses:
         "200":
-          application/json: {"created": 447445, "data": [{"url": "https://prudent-defendant.com/"}]}
+          application/json: {"created": 1677649420, "data": [{"url": "https://oaidalleapiprodscus.blob.core.windows.net/private/image.png"}]}
   confidential_image_generations_create:
     speakeasy-default-confidential-image-generations-create:
       requestBody:

@@ -20,9 +20,6 @@ import {
 export type CreateEmbeddingRequest = {
   /**
    * The number of dimensions the resulting output embeddings should have.
-   *
-   * @remarks
-   * Only supported in text-embedding-3 models.
    */
   dimensions?: number | null | undefined;
   /**

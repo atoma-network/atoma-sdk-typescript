@@ -37,13 +37,25 @@ actions:
 
             async function run() {
               const result = await atomaSDK.chat.create({
+                frequencyPenalty: 0,
+                maxTokens: 2048,
                 messages: [
                   {
-                    content: "<value>",
-                    role: "<value>",
+                    content: "Hello! How can you help me today?",
+                    name: "john_doe",
+                    role: "user",
                   },
                 ],
-                model: "LeBaron",
+                model: "meta-llama/Llama-3.3-70B-Instruct",
+                n: 1,
+                presencePenalty: 0,
+                seed: 123,
+                stop: [
+                  "json([\"stop\", \"halt\"])",
+                ],
+                temperature: 0.7,
+                topP: 1,
+                user: "user-1234",
               });
 
               // Handle the result
@@ -65,13 +77,25 @@ actions:
 
             async function run() {
               const result = await atomaSDK.chat.createStream({
+                frequencyPenalty: 0,
+                maxTokens: 2048,
                 messages: [
                   {
-                    content: "<value>",
-                    role: "<value>",
+                    content: "Hello! How can you help me today?",
+                    name: "john_doe",
+                    role: "user",
                   },
                 ],
-                model: "Impala",
+                model: "meta-llama/Llama-3.3-70B-Instruct",
+                n: 1,
+                presencePenalty: 0,
+                seed: 123,
+                stop: [
+                  "json([\"stop\", \"halt\"])",
+                ],
+                temperature: 0.7,
+                topP: 1,
+                user: "user-1234",
               });
 
               for await (const event of result) {
@@ -213,8 +237,10 @@ actions:
 
             async function run() {
               const result = await atomaSDK.embeddings.create({
-                input: "<value>",
-                model: "LeBaron",
+                encodingFormat: "float",
+                input: "The quick brown fox jumped over the lazy dog",
+                model: "intfloat/multilingual-e5-large-instruct",
+                user: "user-1234",
               });
 
               // Handle the result
@@ -236,8 +262,14 @@ actions:
 
             async function run() {
               const result = await atomaSDK.images.generate({
-                model: "Model X",
-                prompt: "<value>",
+                model: "black-forest-labs/FLUX.1-schnell",
+                n: 1,
+                prompt: "A cute baby sea otter floating on its back",
+                quality: "hd",
+                responseFormat: "url",
+                size: "1024x1024",
+                style: "vivid",
+                user: "user-1234",
               });
 
               // Handle the result

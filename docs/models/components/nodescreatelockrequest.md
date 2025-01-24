@@ -8,7 +8,7 @@ Request body for creating a node lock
 import { NodesCreateLockRequest } from "atoma-sdk/models/components";
 
 let value: NodesCreateLockRequest = {
-  model: "Colorado",
+  model: "Grand Cherokee",
 };
 ```
 
