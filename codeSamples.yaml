@@ -36,30 +36,16 @@ actions:
             });
 
             async function run() {
-              const result = await atomaSDK.chat.create({
-                frequencyPenalty: 0,
-                maxTokens: 2048,
+              const completion = await atomaSDK.chat.create({
                 messages: [
-                  {
-                    content: "Hello! How can you help me today?",
-                    name: "john_doe",
-                    role: "user",
-                  },
+                  {"role": "developer", "content": "You are a helpful assistant."},
+                  {"role": "user", "content": "Hello!"}
                 ],
                 model: "meta-llama/Llama-3.3-70B-Instruct",
-                n: 1,
-                presencePenalty: 0,
-                seed: 123,
-                stop: [
-                  "json([\"stop\", \"halt\"])",
-                ],
-                temperature: 0.7,
-                topP: 1,
-                user: "user-1234",
+                store: true
               });
 
-              // Handle the result
-              console.log(result);
+              console.log(completion.choices[0]);
             }
 
             run();
@@ -76,31 +62,17 @@ actions:
             });
 
             async function run() {
-              const result = await atomaSDK.chat.createStream({
-                frequencyPenalty: 0,
-                maxTokens: 2048,
+              const completion = await atomaSDK.chat.createStream({
                 messages: [
-                  {
-                    content: "Hello! How can you help me today?",
-                    name: "john_doe",
-                    role: "user",
-                  },
+                  {"role": "developer", "content": "You are a helpful assistant."},
+                  {"role": "user", "content": "Hello!"}
                 ],
                 model: "meta-llama/Llama-3.3-70B-Instruct",
-                n: 1,
-                presencePenalty: 0,
-                seed: 123,
-                stop: [
-                  "json([\"stop\", \"halt\"])",
-                ],
-                temperature: 0.7,
-                topP: 1,
-                user: "user-1234",
+                store: true
               });
 
-              for await (const event of result) {
-                // Handle the event
-                console.log(event);
+              for await (const chunk of completion) {
+                console.log(chunk.choices[0].delta.content);
               }
             }
 
@@ -118,19 +90,16 @@ actions:
             });
 
             async function run() {
-              const result = await atomaSDK.confidentialChat.create({
-                ciphertext: "<value>",
-                clientDhPublicKey: "<value>",
-                modelName: "<value>",
-                nodeDhPublicKey: "<value>",
-                nonce: "<value>",
-                plaintextBodyHash: "<value>",
-                salt: "<value>",
-                stackSmallId: 486589,
+              const completion = await atomaSDK.confidentialChat.create({
+                messages: [
+                  {"role": "developer", "content": "You are a helpful assistant."},
+                  {"role": "user", "content": "Hello!"}
+                ],
+                model: "meta-llama/Llama-3.3-70B-Instruct",
+                store: true
               });
 
-              // Handle the result
-              console.log(result);
+              console.log(completion.choices[0]);
             }
 
             run();
@@ -147,20 +116,17 @@ actions:
             });
 
             async function run() {
-              const result = await atomaSDK.confidentialChat.createStream({
-                ciphertext: "<value>",
-                clientDhPublicKey: "<value>",
-                modelName: "<value>",
-                nodeDhPublicKey: "<value>",
-                nonce: "<value>",
-                plaintextBodyHash: "<value>",
-                salt: "<value>",
-                stackSmallId: 180107,
+              const completion = await atomaSDK.confidentialChat.createStream({
+                messages: [
+                  {"role": "developer", "content": "You are a helpful assistant."},
+                  {"role": "user", "content": "Hello!"}
+                ],
+                model: "meta-llama/Llama-3.3-70B-Instruct",
+                store: true
               });
 
-              for await (const event of result) {
-                // Handle the event
-                console.log(event);
+              for await (const chunk of completion) {
+                console.log(chunk.choices[0].delta.content);
               }
             }
 
@@ -179,14 +145,9 @@ actions:
 
             async function run() {
               const result = await atomaSDK.confidentialEmbeddings.create({
-                ciphertext: "<value>",
-                clientDhPublicKey: "<value>",
-                modelName: "<value>",
-                nodeDhPublicKey: "<value>",
-                nonce: "<value>",
-                plaintextBodyHash: "<value>",
-                salt: "<value>",
-                stackSmallId: 486589,
+                model: "intfloat/multilingual-e5-large-instruct",
+                input: "The quick brown fox jumped over the lazy dog",
+                encoding_format: "float",
               });
 
               // Handle the result
@@ -208,14 +169,10 @@ actions:
 
             async function run() {
               const result = await atomaSDK.confidentialImages.generate({
-                ciphertext: "<value>",
-                clientDhPublicKey: "<value>",
-                modelName: "<value>",
-                nodeDhPublicKey: "<value>",
-                nonce: "<value>",
-                plaintextBodyHash: "<value>",
-                salt: "<value>",
-                stackSmallId: 740198,
+                model: "black-forest-labs/FLUX.1-schnell",
+                prompt: "A cute baby sea otter",
+                n: 1,
+                size: "1024x1024"
               });
 
               // Handle the result
@@ -237,10 +194,9 @@ actions:
 
             async function run() {
               const result = await atomaSDK.embeddings.create({
-                encodingFormat: "float",
-                input: "The quick brown fox jumped over the lazy dog",
                 model: "intfloat/multilingual-e5-large-instruct",
-                user: "user-1234",
+                input: "The quick brown fox jumped over the lazy dog",
+                encoding_format: "float",
               });
 
               // Handle the result
@@ -263,13 +219,9 @@ actions:
             async function run() {
               const result = await atomaSDK.images.generate({
                 model: "black-forest-labs/FLUX.1-schnell",
+                prompt: "A cute baby sea otter",
                 n: 1,
-                prompt: "A cute baby sea otter floating on its back",
-                quality: "hd",
-                responseFormat: "url",
-                size: "1024x1024",
-                style: "vivid",
-                user: "user-1234",
+                size: "1024x1024"
               });
 
               // Handle the result
