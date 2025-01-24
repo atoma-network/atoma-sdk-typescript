@@ -41,8 +41,7 @@ actions:
                   {"role": "developer", "content": "You are a helpful assistant."},
                   {"role": "user", "content": "Hello!"}
                 ],
-                model: "meta-llama/Llama-3.3-70B-Instruct",
-                store: true
+                model: "meta-llama/Llama-3.3-70B-Instruct"
               });
 
               console.log(completion.choices[0]);
@@ -67,8 +66,7 @@ actions:
                   {"role": "developer", "content": "You are a helpful assistant."},
                   {"role": "user", "content": "Hello!"}
                 ],
-                model: "meta-llama/Llama-3.3-70B-Instruct",
-                store: true
+                model: "meta-llama/Llama-3.3-70B-Instruct"
               });
 
               for await (const chunk of completion) {
@@ -95,8 +93,7 @@ actions:
                   {"role": "developer", "content": "You are a helpful assistant."},
                   {"role": "user", "content": "Hello!"}
                 ],
-                model: "meta-llama/Llama-3.3-70B-Instruct",
-                store: true
+                model: "meta-llama/Llama-3.3-70B-Instruct"
               });
 
               console.log(completion.choices[0]);
@@ -121,8 +118,7 @@ actions:
                   {"role": "developer", "content": "You are a helpful assistant."},
                   {"role": "user", "content": "Hello!"}
                 ],
-                model: "meta-llama/Llama-3.3-70B-Instruct",
-                store: true
+                model: "meta-llama/Llama-3.3-70B-Instruct"
               });
 
               for await (const chunk of completion) {

@@ -12,32 +12,32 @@ const requireEnvVar = (name: string): string => {
 };
 
 describe('Chat Completions Integration Tests', () => {
-  const sdk = new AtomaSDK({
+  const atomaSDK = new AtomaSDK({
     bearerAuth: requireEnvVar('ATOMASDK_BEARER_AUTH'),
     serverURL: requireEnvVar('CHAT_COMPLETIONS_URL'),
   });
 
   it('should successfully generate a chat completion', async () => {
-    const response = await sdk.chat.create({
-      model: requireEnvVar('CHAT_COMPLETIONS_MODEL'),
+    const completion = await atomaSDK.chat.create({
       messages: [
-        {
-          role: 'user',
-          content: 'Tell me exactly 1 word.',
-        },
+        {"role": "developer", "content": "You are a helpful assistant."},
+        {"role": "user", "content": "Hello!"}
       ],
+      model: "meta-llama/Llama-3.3-70B-Instruct"
     });
 
-    expect(response).toBeDefined();
-    expect(response.choices).toBeDefined();
-    expect(response.choices.length).toBeGreaterThan(0);
-    expect(response.choices[0]?.message).toBeDefined();
-    expect(response.choices[0]?.message?.content).toBeDefined();
+    console.log(completion.choices[0]);
+
+    expect(completion).toBeDefined();
+    expect(completion.choices).toBeDefined();
+    expect(completion.choices.length).toBeGreaterThan(0);
+    expect(completion.choices[0]?.message).toBeDefined();
+    expect(completion.choices[0]?.message.content).toBeDefined();
   });
 
   it('should handle invalid requests appropriately', async () => {
     await expect(
-      sdk.chat.create({
+      atomaSDK.chat.create({
         model: 'invalid-model',
         messages: [
           {
@@ -50,7 +50,7 @@ describe('Chat Completions Integration Tests', () => {
   });
 
   it('should successfully stream chat completion chunks', async () => {
-    const stream = await sdk.chat.createStream({
+    const stream = await atomaSDK.chat.createStream({
       model: requireEnvVar('CHAT_COMPLETIONS_MODEL'),
       messages: [
         {
@@ -83,7 +83,7 @@ describe('Chat Completions Integration Tests', () => {
 
   it('should handle streaming errors appropriately', async () => {
     await expect(async () => {
-      const stream = await sdk.chat.createStream({
+      const stream = await atomaSDK.chat.createStream({
         model: 'invalid-model',
         messages: [
           {
