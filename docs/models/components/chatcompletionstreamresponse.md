@@ -9,13 +9,17 @@ let value: ChatCompletionStreamResponse = {
   data: {
     choices: [
       {
-        delta: {},
-        index: 963663,
+        delta: {
+          content: "Hello",
+          role: "assistant",
+        },
+        finishReason: "stop",
+        index: 0,
       },
     ],
-    created: 383441,
-    id: "<id>",
-    model: "PT Cruiser",
+    created: 1677652288,
+    id: "chatcmpl-123",
+    model: "meta-llama/Llama-3.3-70B-Instruct",
   },
 };
 ```

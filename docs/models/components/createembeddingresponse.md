@@ -11,26 +11,26 @@ let value: CreateEmbeddingResponse = {
   data: [
     {
       embedding: [
-        8700.12,
+        [0.0023064255, -0.009327292],
       ],
-      index: 978619,
-      object: "<value>",
+      index: 0,
+      object: "embedding",
     },
   ],
-  model: "PT Cruiser",
-  object: "<value>",
+  model: "intfloat/multilingual-e5-large-instruct",
+  object: "list",
   usage: {
-    promptTokens: 461479,
-    totalTokens: 780529,
+    promptTokens: 8,
+    totalTokens: 8,
   },
 };
 ```
 
 ## Fields
 
-| Field                                                                      | Type                                                                       | Required                                                                   | Description                                                                |
-| -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
-| `data`                                                                     | [components.EmbeddingObject](../../models/components/embeddingobject.md)[] | :heavy_check_mark:                                                         | List of embedding objects                                                  |
-| `model`                                                                    | *string*                                                                   | :heavy_check_mark:                                                         | The model used for generating embeddings                                   |
-| `object`                                                                   | *string*                                                                   | :heavy_check_mark:                                                         | The object type, which is always "list"                                    |
-| `usage`                                                                    | [components.EmbeddingUsage](../../models/components/embeddingusage.md)     | :heavy_check_mark:                                                         | Usage information for the embeddings request                               |
+| Field                                                                      | Type                                                                       | Required                                                                   | Description                                                                | Example                                                                    |
+| -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| `data`                                                                     | [components.EmbeddingObject](../../models/components/embeddingobject.md)[] | :heavy_check_mark:                                                         | List of embedding objects                                                  |                                                                            |
+| `model`                                                                    | *string*                                                                   | :heavy_check_mark:                                                         | The model used for generating embeddings                                   | intfloat/multilingual-e5-large-instruct                                    |
+| `object`                                                                   | *string*                                                                   | :heavy_check_mark:                                                         | The object type, which is always "list"                                    | list                                                                       |
+| `usage`                                                                    | [components.EmbeddingUsage](../../models/components/embeddingusage.md)     | :heavy_check_mark:                                                         | Usage information for the embeddings request                               |                                                                            |

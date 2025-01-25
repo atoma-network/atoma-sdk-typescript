@@ -30,8 +30,8 @@ const atomaSDK = new AtomaSDK({
 
 async function run() {
   const result = await atomaSDK.images.generate({
-    model: "Model X",
-    prompt: "<value>",
+    model: "black-forest-labs/FLUX.1-schnell",
+    prompt: "A cute baby sea otter floating on its back",
   });
 
   // Handle the result
@@ -57,8 +57,8 @@ const atomaSDK = new AtomaSDKCore({
 
 async function run() {
   const res = await imagesGenerate(atomaSDK, {
-    model: "Model X",
-    prompt: "<value>",
+    model: "black-forest-labs/FLUX.1-schnell",
+    prompt: "A cute baby sea otter floating on its back",
   });
 
   if (!res.ok) {

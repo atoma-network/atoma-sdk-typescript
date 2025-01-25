@@ -101,11 +101,11 @@ async function run() {
   const result = await atomaSDK.chat.create({
     messages: [
       {
-        content: "<value>",
-        role: "<value>",
+        content: "Hello! How can you help me today?",
+        role: "user",
       },
     ],
-    model: "LeBaron",
+    model: "meta-llama/Llama-3.3-70B-Instruct",
   });
 
   // Handle the result
@@ -140,11 +140,11 @@ async function run() {
   const result = await atomaSDK.chat.create({
     messages: [
       {
-        content: "<value>",
-        role: "<value>",
+        content: "Hello! How can you help me today?",
+        role: "user",
       },
     ],
-    model: "LeBaron",
+    model: "meta-llama/Llama-3.3-70B-Instruct",
   });
 
   // Handle the result
@@ -256,11 +256,12 @@ async function run() {
   const result = await atomaSDK.chat.createStream({
     messages: [
       {
-        content: "<value>",
-        role: "<value>",
+        content: "Hello! How can you help me today?",
+        name: "john_doe",
+        role: "user",
       },
     ],
-    model: "Impala",
+    model: "meta-llama/Llama-3.3-70B-Instruct",
   });
 
   for await (const event of result) {
@@ -294,11 +295,11 @@ async function run() {
   const result = await atomaSDK.chat.create({
     messages: [
       {
-        content: "<value>",
-        role: "<value>",
+        content: "Hello! How can you help me today?",
+        role: "user",
       },
     ],
-    model: "LeBaron",
+    model: "meta-llama/Llama-3.3-70B-Instruct",
   }, {
     retries: {
       strategy: "backoff",
@@ -342,11 +343,11 @@ async function run() {
   const result = await atomaSDK.chat.create({
     messages: [
       {
-        content: "<value>",
-        role: "<value>",
+        content: "Hello! How can you help me today?",
+        role: "user",
       },
     ],
-    model: "LeBaron",
+    model: "meta-llama/Llama-3.3-70B-Instruct",
   });
 
   // Handle the result
@@ -381,11 +382,11 @@ async function run() {
     result = await atomaSDK.chat.create({
       messages: [
         {
-          content: "<value>",
-          role: "<value>",
+          content: "Hello! How can you help me today?",
+          role: "user",
         },
       ],
-      model: "LeBaron",
+      model: "meta-llama/Llama-3.3-70B-Instruct",
     });
 
     // Handle the result
@@ -451,11 +452,11 @@ async function run() {
   const result = await atomaSDK.chat.create({
     messages: [
       {
-        content: "<value>",
-        role: "<value>",
+        content: "Hello! How can you help me today?",
+        role: "user",
       },
     ],
-    model: "LeBaron",
+    model: "meta-llama/Llama-3.3-70B-Instruct",
   });
 
   // Handle the result

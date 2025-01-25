@@ -6,14 +6,14 @@
 ### `string`
 
 ```typescript
-const value: string = "<value>";
+const value: string = "The quick brown fox jumped over the lazy dog";
 ```
 
 ### `string[]`
 
 ```typescript
 const value: string[] = [
-  "<value>",
+  "[\"The quick brown fox\", \"jumped over the lazy dog\"]",
 ];
 ```
 

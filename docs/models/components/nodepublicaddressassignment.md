@@ -10,8 +10,8 @@ This struct represents the payload for the node public address registration requ
 import { NodePublicAddressAssignment } from "atoma-sdk/models/components";
 
 let value: NodePublicAddressAssignment = {
-  country: "Norway",
-  nodeSmallId: 670638,
+  country: "Vanuatu",
+  nodeSmallId: 383441,
   publicAddress: "<value>",
 };
 ```

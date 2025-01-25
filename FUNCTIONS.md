@@ -33,11 +33,11 @@ async function run() {
   const res = await chatCreate(atomaSDK, {
     messages: [
       {
-        content: "<value>",
-        role: "<value>",
+        content: "Hello! How can you help me today?",
+        role: "user",
       },
     ],
-    model: "LeBaron",
+    model: "meta-llama/Llama-3.3-70B-Instruct",
   });
 
   switch (true) {

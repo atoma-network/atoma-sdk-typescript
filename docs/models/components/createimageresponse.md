@@ -8,10 +8,13 @@ Response format for image generation
 import { CreateImageResponse } from "atoma-sdk/models/components";
 
 let value: CreateImageResponse = {
-  created: 264555,
+  created: 1677649420,
   data: [
     {
-      url: "https://lasting-metabolite.com",
+      revisedPrompt:
+        "A stunning image of a baby sea otter floating on its back in crystal clear blue water, with gentle ripples surrounding it. The otter's fur appears soft and well-detailed, and its expression is peaceful and content.",
+      url:
+        "https://oaidalleapiprodscus.blob.core.windows.net/private/image.png",
     },
   ],
 };
@@ -19,7 +22,7 @@ let value: CreateImageResponse = {
 
 ## Fields
 
-| Field                                                          | Type                                                           | Required                                                       | Description                                                    |
-| -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- |
-| `created`                                                      | *number*                                                       | :heavy_check_mark:                                             | N/A                                                            |
-| `data`                                                         | [components.ImageData](../../models/components/imagedata.md)[] | :heavy_check_mark:                                             | N/A                                                            |
+| Field                                                          | Type                                                           | Required                                                       | Description                                                    | Example                                                        |
+| -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------- |
+| `created`                                                      | *number*                                                       | :heavy_check_mark:                                             | N/A                                                            | 1677649420                                                     |
+| `data`                                                         | [components.ImageData](../../models/components/imagedata.md)[] | :heavy_check_mark:                                             | N/A                                                            |                                                                |
