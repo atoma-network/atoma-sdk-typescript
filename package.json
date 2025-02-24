@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@noble/curves": "^1.8.1",
+    "@noble/hashes": "^1.7.1",
     "blake2": "^5.0.0",
     "tweetnacl": "^1.0.3"
   }
