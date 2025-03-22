@@ -92,7 +92,6 @@ async function $do(
       request.model
     );
     const body = encodeJSON("body", confidentialRequest, { explode: true });
-
     const path = pathToFunc("/v1/confidential/chat/completions#stream")();
 
     const headers = new Headers(compactMap({
@@ -126,7 +125,7 @@ async function $do(
       timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
     }, options);
     if (!requestRes.ok) {
-      return [requestRes, { status: "invalid" }];
+      throw [requestRes, { status: "invalid" }];
     }
     const req = requestRes.value;
 
@@ -137,7 +136,7 @@ async function $do(
       retryCodes: context.retryCodes,
     });
     if (!doResult.ok) {
-      return [doResult, { status: "request-error", request: req }];
+      throw [doResult, { status: "request-error", request: req }];
     }
     const response = doResult.value;
 

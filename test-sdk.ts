@@ -33,7 +33,9 @@ async function testChatCompletion() {
 
 		const chatCompletions = await atomaSDK.confidentialChat.createStream(chatCompletionsRequest)
 
-		console.log("Chat completion response:", chatCompletions);
+		for await (const event of chatCompletions) {
+			console.log("Chat completion response:", event);
+		}
 
 	} catch (error) {
 		console.error("Error during chat completion:", error);
