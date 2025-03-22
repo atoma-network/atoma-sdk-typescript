@@ -91,7 +91,7 @@ async function $do(
       requestWithStream,
       request.modelName
     );
-    const body = encodeJSON("body", payload, { explode: true });
+    const body = encodeJSON("body", confidentialRequest, { explode: true });
 
     const path = pathToFunc("/v1/confidential/chat/completions#stream")();
 

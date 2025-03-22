@@ -44,9 +44,9 @@ export class ConfidentialChat extends ClientSDK {
    * * Maintains confidentiality throughout the request lifecycle
    */
   async create(
-    request: components.CreateChatCompletionRequest,
+    request: components.ConfidentialComputeRequest,
     options?: RequestOptions,
-  ): Promise<components.ChatCompletionResponse> {
+  ): Promise<components.ConfidentialComputeResponse> {
     return unwrapAsync(confidentialChatCreate(
       this,
       request,
@@ -55,13 +55,13 @@ export class ConfidentialChat extends ClientSDK {
   }
 
   async createStream(
-    request: components.CreateChatCompletionRequest,
+    request: components.ConfidentialComputeRequest,
     options?: RequestOptions,
-  ): Promise<EventStream<components.ChatCompletionStreamResponse>> {
-    return confidentialChatCreateStream(
+  ): Promise<EventStream<components.ConfidentialComputeStreamResponse>> {
+    return unwrapAsync(confidentialChatCreateStream(
       this,
       request,
       options,
-    );
+    ));
   }
 }

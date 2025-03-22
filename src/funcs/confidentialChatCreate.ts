@@ -5,6 +5,7 @@
 import { AtomaSDKCore } from "../core.js";
 import { encodeJSON } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
+import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
@@ -19,8 +20,8 @@ import {
   UnexpectedClientError,
 } from "../models/errors/httpclienterrors.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
+import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
-import { generateKeyPair, encryptMessage, decryptMessage } from "../lib/crypto_utils.js";
 
 /**
  * Create confidential chat completion
@@ -55,13 +56,13 @@ import { generateKeyPair, encryptMessage, decryptMessage } from "../lib/crypto_u
  * * Implements secure key exchange using X25519
  * * Maintains confidentiality throughout the request lifecycle
  */
-export async function confidentialChatCreate(
+export function confidentialChatCreate(
   client: AtomaSDKCore,
-  request: components.CreateChatCompletionRequest,
+  request: components.ConfidentialComputeRequest,
   options?: RequestOptions,
-): Promise<
+): APIPromise<
   Result<
-    components.ChatCompletionResponse,
+    components.ConfidentialComputeResponse,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -71,77 +72,20 @@ export async function confidentialChatCreate(
     | ConnectionError
   >
 > {
-  const parsed = safeParse(
+  return new APIPromise($do(
+    client,
     request,
-    (value) =>
-      components.CreateChatCompletionRequest$outboundSchema.parse(value),
-    "Input validation failed",
-  );
-  if (!parsed.ok) {
-    return parsed;
-  }
+    options,
+  ));
+}
 
-  // Generate client keypair for encryption
-  const clientKeyPair = generateKeyPair();
-
-  try {
-    // Encrypt the request
-    const [nodePublicKey, salt, confidentialRequest] = await encryptMessage(
-      client,
-      clientKeyPair.privateKey,
-      parsed.value,
-      request.model
-    );
-
-    const body = encodeJSON("body", confidentialRequest, { explode: true });
-    const path = pathToFunc("/v1/confidential/chat/completions")();
-
-    const headers = new Headers({
-      "Content-Type": "application/json",
-      Accept: "application/json",
-    });
-
-    const secConfig = await extractSecurity(client._options.bearerAuth);
-    const securityInput = secConfig == null ? {} : { bearerAuth: secConfig };
-    const requestSecurity = resolveGlobalSecurity(securityInput);
-
-    const context = {
-      operationID: "confidential_chat_completions_create",
-      oAuth2Scopes: [],
-      resolvedSecurity: requestSecurity,
-      securitySource: client._options.bearerAuth,
-      retryConfig: options?.retries
-        || client._options.retryConfig
-        || { strategy: "none" },
-      retryCodes: options?.retryCodes || ["429", "500", "502", "503", "504"],
-    };
-
-    const requestRes = client._createRequest(context, {
-      security: requestSecurity,
-      method: "POST",
-      baseURL: options?.serverURL,
-      path: path,
-      headers: headers,
-      body: body,
-      timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
-    }, options);
-    if (!requestRes.ok) {
-      return requestRes;
-    }
-    const req = requestRes.value;
-
-    const doResult = await client._do(req, {
-      context,
-      errorCodes: ["400", "401", "4XX", "500", "5XX"],
-      retryConfig: context.retryConfig,
-      retryCodes: context.retryCodes,
-    });
-    if (!doResult.ok) {
-      return doResult;
-    }
-    const response = doResult.value;
-
-    const [encryptedResult] = await M.match<
+async function $do(
+  client: AtomaSDKCore,
+  request: components.ConfidentialComputeRequest,
+  options?: RequestOptions,
+): Promise<
+  [
+    Result<
       components.ConfidentialComputeResponse,
       | APIError
       | SDKValidationError
@@ -150,48 +94,89 @@ export async function confidentialChatCreate(
       | RequestAbortedError
       | RequestTimeoutError
       | ConnectionError
-    >(
-      M.json(200, components.ConfidentialComputeResponse$inboundSchema),
-      M.fail([400, 401, "4XX", 500, "5XX"]),
-    )(response);
-    if (!encryptedResult.ok) {
-      return encryptedResult;
-    }
-
-    // Decrypt the response
-    const decryptedData = decryptMessage(
-      Buffer.from(encryptedResult.value.ciphertext, 'base64'),
-      clientKeyPair.privateKey,
-      nodePublicKey,
-      salt,
-      Buffer.from(encryptedResult.value.nonce, 'base64')
-    );
-
-    if (!decryptedData) {
-      return {
-        ok: false,
-        error: new APIError("Failed to decrypt response", response)
-      };
-    }
-
-    // Parse decrypted response
-    try {
-      const decryptedJson = JSON.parse(new TextDecoder().decode(decryptedData));
-      const chatResponse = components.ChatCompletionResponse$inboundSchema.parse(decryptedJson);
-      return {
-        ok: true,
-        value: chatResponse
-      };
-    } catch (e) {
-      return {
-        ok: false,
-        error: new APIError("Failed to parse decrypted response", response)
-      };
-    }
-  } catch (e) {
-    return {
-      ok: false,
-      error: new APIError("Failed to prepare confidential request: " + String(e), new Response())
-    };
+    >,
+    APICall,
+  ]
+> {
+  const parsed = safeParse(
+    request,
+    (value) =>
+      components.ConfidentialComputeRequest$outboundSchema.parse(value),
+    "Input validation failed",
+  );
+  if (!parsed.ok) {
+    return [parsed, { status: "invalid" }];
   }
+  const payload = parsed.value;
+  const body = encodeJSON("body", payload, { explode: true });
+
+  const path = pathToFunc("/v1/confidential/chat/completions")();
+
+  const headers = new Headers(compactMap({
+    "Content-Type": "application/json",
+    Accept: "application/json",
+  }));
+
+  const secConfig = await extractSecurity(client._options.bearerAuth);
+  const securityInput = secConfig == null ? {} : { bearerAuth: secConfig };
+  const requestSecurity = resolveGlobalSecurity(securityInput);
+
+  const context = {
+    baseURL: options?.serverURL ?? client._baseURL ?? "",
+    operationID: "confidential_chat_completions_create",
+    oAuth2Scopes: [],
+
+    resolvedSecurity: requestSecurity,
+
+    securitySource: client._options.bearerAuth,
+    retryConfig: options?.retries
+      || client._options.retryConfig
+      || { strategy: "none" },
+    retryCodes: options?.retryCodes || ["429", "500", "502", "503", "504"],
+  };
+
+  const requestRes = client._createRequest(context, {
+    security: requestSecurity,
+    method: "POST",
+    baseURL: options?.serverURL,
+    path: path,
+    headers: headers,
+    body: body,
+    timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
+  }, options);
+  if (!requestRes.ok) {
+    return [requestRes, { status: "invalid" }];
+  }
+  const req = requestRes.value;
+
+  const doResult = await client._do(req, {
+    context,
+    errorCodes: ["400", "401", "4XX", "500", "5XX"],
+    retryConfig: context.retryConfig,
+    retryCodes: context.retryCodes,
+  });
+  if (!doResult.ok) {
+    return [doResult, { status: "request-error", request: req }];
+  }
+  const response = doResult.value;
+
+  const [result] = await M.match<
+    components.ConfidentialComputeResponse,
+    | APIError
+    | SDKValidationError
+    | UnexpectedClientError
+    | InvalidRequestError
+    | RequestAbortedError
+    | RequestTimeoutError
+    | ConnectionError
+  >(
+    M.json(200, components.ConfidentialComputeResponse$inboundSchema),
+    M.fail([400, 401, "4XX"]),
+    M.fail([500, "5XX"]),
+  )(response);
+  if (!result.ok) {
+    return [result, { status: "complete", request: req, response }];
+  }
+
+  return [result, { status: "complete", request: req, response }];
 }
