@@ -1,3 +1,4 @@
+import { CreateChatCompletionRequest } from "./src/models/components/createchatcompletionrequest.js";
 import { AtomaSDK } from "./src/sdk/sdk.js";
 
 // Initialize the SDK with bearer token from environment variable
@@ -18,21 +19,22 @@ async function testHealthCheck() {
 async function testChatCompletion() {
 	try {
 		console.log("\nTesting chat completion...");
-		const result = await atomaSDK.chat.create({
+		const chatCompletionsRequest: CreateChatCompletionRequest = {
+			model: 'neuralmagic/Qwen2-72B-Instruct-FP8',
 			messages: [
 				{
-					role: "system",
-					content: "You are a helpful AI assistant"
+					role: 'user',
+					content: 'Tell me a funny joke',
 				},
-				{
-					role: "user",
-					content: "What is the capital of France?"
-				}
 			],
-			model: "meta-llama/Llama-3.1-8B-Instruct",
-			temperature: 0.7,
-		});
-		console.log("Chat completion response:", result);
+			stream: false,
+			maxTokens: 256,
+		};
+
+		const chatCompletions = await atomaSDK.confidentialChat.createStream(chatCompletionsRequest)
+
+		console.log("Chat completion response:", chatCompletions);
+
 	} catch (error) {
 		console.error("Error during chat completion:", error);
 	}

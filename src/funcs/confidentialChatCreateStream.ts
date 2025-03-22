@@ -26,11 +26,11 @@ import { decryptMessage, encryptMessage } from '../lib/crypto_utils.js';
 
 export function confidentialChatCreateStream(
   client: AtomaSDKCore,
-  request: components.ConfidentialComputeRequest,
+  request: components.CreateChatCompletionRequest,
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    EventStream<components.ConfidentialComputeStreamResponse>,
+    EventStream<components.ChatCompletionStreamResponse>,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -49,12 +49,12 @@ export function confidentialChatCreateStream(
 
 async function $do(
   client: AtomaSDKCore,
-  request: components.ConfidentialComputeRequest,
+  request: components.CreateChatCompletionRequest,
   options?: RequestOptions,
 ): Promise<
   [
     Result<
-      EventStream<components.ConfidentialComputeStreamResponse>,
+      EventStream<components.ChatCompletionStreamResponse>,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -69,7 +69,7 @@ async function $do(
   const parsed = safeParse(
     request,
     (value) =>
-      components.ConfidentialComputeRequest$outboundSchema.parse(value),
+      components.CreateChatCompletionRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
@@ -89,7 +89,7 @@ async function $do(
       client,
       clientKeyPair.privateKey,
       requestWithStream,
-      request.modelName
+      request.model
     );
     const body = encodeJSON("body", confidentialRequest, { explode: true });
 
@@ -100,8 +100,6 @@ async function $do(
       Accept: "text/event-stream",
     }));
 
-
-
     const secConfig = await extractSecurity(client._options.bearerAuth);
     const securityInput = secConfig == null ? {} : { bearerAuth: secConfig };
     const requestSecurity = resolveGlobalSecurity(securityInput);
@@ -110,9 +108,7 @@ async function $do(
       baseURL: options?.serverURL ?? client._baseURL ?? "",
       operationID: "confidential_chat_completions_create_stream",
       oAuth2Scopes: [],
-
       resolvedSecurity: requestSecurity,
-
       securitySource: client._options.bearerAuth,
       retryConfig: options?.retries
         || client._options.retryConfig
@@ -146,7 +142,7 @@ async function $do(
     const response = doResult.value;
 
     const [result] = await M.match<
-      EventStream<components.ConfidentialComputeStreamResponse>,
+      EventStream<components.ChatCompletionStreamResponse>,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -161,12 +157,15 @@ async function $do(
           return new EventStream({
             stream,
             decoder(rawEvent) {
-              // Decrypt the encrypted event data
-              const encryptedResponse = components.ConfidentialComputeStreamResponse$inboundSchema.parse(rawEvent);
-
-              if (encryptedResponse.data.ciphertext === 'DONE') {
-                return encryptedResponse;
+              // Check if this is a raw event with a special "DONE" message
+              if (rawEvent.data === 'DONE') {
+                return components.ChatCompletionStreamResponse$inboundSchema.parse({
+                  data: JSON.stringify({ finish_reason: "stop" })
+                });
               }
+
+              // Parse the encrypted event data
+              const encryptedResponse = components.ConfidentialComputeStreamResponse$inboundSchema.parse(rawEvent);
 
               // Decrypt the response data
               const decryptedData = decryptMessage(
@@ -184,7 +183,7 @@ async function $do(
               // Parse decrypted response
               const decryptedJson = JSON.parse(new TextDecoder().decode(decryptedData));
 
-              return components.ConfidentialComputeStreamResponse$inboundSchema.parse(decryptedJson)
+              return components.ChatCompletionStreamResponse$inboundSchema.parse(decryptedJson)
             },
           });
         }),
