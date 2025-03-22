@@ -1,6 +1,5 @@
-// This file is manually editted by us in order to ensure that the response is properly
-// encrypted and decrypted.
-
+// This is manually edited to ensure that the response is properly encrypted and decrypted.
+import { box, randomBytes } from 'tweetnacl';
 import * as z from "zod";
 import { AtomaSDKCore } from "../core.js";
 import { encodeJSON } from "../lib/encodings.js";
@@ -23,7 +22,7 @@ import {
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
-import { decryptMessage } from "../lib/crypto_utils.js";
+import { decryptMessage, encryptMessage } from '../lib/crypto_utils.js';
 
 export function confidentialChatCreateStream(
   client: AtomaSDKCore,
@@ -76,106 +75,150 @@ async function $do(
   if (!parsed.ok) {
     return [parsed, { status: "invalid" }];
   }
-  const payload = parsed.value;
-  const body = encodeJSON("body", payload, { explode: true });
 
-  const path = pathToFunc("/v1/confidential/chat/completions#stream")();
+  // Generate client keypair for encryption
+  const clientKeyPair = generateKeyPair();
 
-  const headers = new Headers(compactMap({
-    "Content-Type": "application/json",
-    Accept: "text/event-stream",
-  }));
+  try {
+    // Encrypt the request with stream flag set to true
 
-  const secConfig = await extractSecurity(client._options.bearerAuth);
-  const securityInput = secConfig == null ? {} : { bearerAuth: secConfig };
-  const requestSecurity = resolveGlobalSecurity(securityInput);
+    const payload = parsed.value;
 
-  const context = {
-    baseURL: options?.serverURL ?? client._baseURL ?? "",
-    operationID: "confidential_chat_completions_create_stream",
-    oAuth2Scopes: [],
+    const requestWithStream = { payload, stream: true };
+    const [nodePublicKey, salt, confidentialRequest] = await encryptMessage(
+      client,
+      clientKeyPair.privateKey,
+      requestWithStream,
+      request.modelName
+    );
+    const body = encodeJSON("body", payload, { explode: true });
 
-    resolvedSecurity: requestSecurity,
+    const path = pathToFunc("/v1/confidential/chat/completions#stream")();
 
-    securitySource: client._options.bearerAuth,
-    retryConfig: options?.retries
-      || client._options.retryConfig
-      || { strategy: "none" },
-    retryCodes: options?.retryCodes || ["429", "500", "502", "503", "504"],
+    const headers = new Headers(compactMap({
+      "Content-Type": "application/json",
+      Accept: "text/event-stream",
+    }));
+
+
+
+    const secConfig = await extractSecurity(client._options.bearerAuth);
+    const securityInput = secConfig == null ? {} : { bearerAuth: secConfig };
+    const requestSecurity = resolveGlobalSecurity(securityInput);
+
+    const context = {
+      baseURL: options?.serverURL ?? client._baseURL ?? "",
+      operationID: "confidential_chat_completions_create_stream",
+      oAuth2Scopes: [],
+
+      resolvedSecurity: requestSecurity,
+
+      securitySource: client._options.bearerAuth,
+      retryConfig: options?.retries
+        || client._options.retryConfig
+        || { strategy: "none" },
+      retryCodes: options?.retryCodes || ["429", "500", "502", "503", "504"],
+    };
+
+    const requestRes = client._createRequest(context, {
+      security: requestSecurity,
+      method: "POST",
+      baseURL: options?.serverURL,
+      path: path,
+      headers: headers,
+      body: body,
+      timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
+    }, options);
+    if (!requestRes.ok) {
+      return [requestRes, { status: "invalid" }];
+    }
+    const req = requestRes.value;
+
+    const doResult = await client._do(req, {
+      context,
+      errorCodes: ["400", "401", "4XX", "500", "5XX"],
+      retryConfig: context.retryConfig,
+      retryCodes: context.retryCodes,
+    });
+    if (!doResult.ok) {
+      return [doResult, { status: "request-error", request: req }];
+    }
+    const response = doResult.value;
+
+    const [result] = await M.match<
+      EventStream<components.ConfidentialComputeStreamResponse>,
+      | APIError
+      | SDKValidationError
+      | UnexpectedClientError
+      | InvalidRequestError
+      | RequestAbortedError
+      | RequestTimeoutError
+      | ConnectionError
+    >(
+      M.sse(
+        200,
+        z.instanceof(ReadableStream<Uint8Array>).transform(stream => {
+          return new EventStream({
+            stream,
+            decoder(rawEvent) {
+              // Decrypt the encrypted event data
+              const encryptedResponse = components.ConfidentialComputeStreamResponse$inboundSchema.parse(rawEvent);
+
+              if (encryptedResponse.data.ciphertext === 'DONE') {
+                return encryptedResponse;
+              }
+
+              // Decrypt the response data
+              const decryptedData = decryptMessage(
+                Buffer.from(encryptedResponse.data.ciphertext, 'base64'),
+                clientKeyPair.privateKey,
+                nodePublicKey,
+                salt,
+                Buffer.from(encryptedResponse.data.nonce, 'base64')
+              );
+
+              if (!decryptedData) {
+                throw new Error('Failed to decrypt stream response');
+              }
+
+              // Parse decrypted response
+              const decryptedJson = JSON.parse(new TextDecoder().decode(decryptedData));
+
+              return components.ConfidentialComputeStreamResponse$inboundSchema.parse(decryptedJson)
+            },
+          });
+        }),
+      ),
+      M.fail([400, 401, "4XX"]),
+      M.fail([500, "5XX"]),
+    )(response);
+    if (!result.ok) {
+      throw result.error;
+    }
+
+    return [result, { status: "complete", request: req, response }];
+  } catch (error) {
+    throw new APIError("Failed to prepare confidential stream request: " + String(error), new Response());
+  }
+}
+
+/**
+ * Helper function to generate a random keypair
+ * @returns An object containing the keypair
+ */
+export function generateKeyPair() {
+  const keypair = box.keyPair();
+  return {
+    publicKey: keypair.publicKey,
+    privateKey: keypair.secretKey
   };
+}
 
-  const requestRes = client._createRequest(context, {
-    security: requestSecurity,
-    method: "POST",
-    baseURL: options?.serverURL,
-    path: path,
-    headers: headers,
-    body: body,
-    timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
-  }, options);
-  if (!requestRes.ok) {
-    return [requestRes, { status: "invalid" }];
-  }
-  const req = requestRes.value;
-
-  const doResult = await client._do(req, {
-    context,
-    errorCodes: ["400", "401", "4XX", "500", "5XX"],
-    retryConfig: context.retryConfig,
-    retryCodes: context.retryCodes,
-  });
-  if (!doResult.ok) {
-    return [doResult, { status: "request-error", request: req }];
-  }
-  const response = doResult.value;
-
-  const [result] = await M.match<
-    EventStream<components.ConfidentialComputeStreamResponse>,
-    | APIError
-    | SDKValidationError
-    | UnexpectedClientError
-    | InvalidRequestError
-    | RequestAbortedError
-    | RequestTimeoutError
-    | ConnectionError
-  >(
-    M.sse(
-      200,
-      z.instanceof(ReadableStream<Uint8Array>).transform(stream => {
-        return new EventStream({
-          stream,
-          decoder(rawEvent) {
-            // Decrypt the encrypted event data
-            const encryptedResponse = components.ConfidentialComputeStreamResponse$inboundSchema.parse(rawEvent);
-
-            // Decrypt the response data
-            const decryptedData = decryptMessage(
-              Buffer.from(encryptedResponse.data.ciphertext, 'base64'),
-              clientKeyPair.privateKey,
-              nodePublicKey,
-              salt,
-              Buffer.from(encryptedResponse.data.nonce, 'base64')
-            );
-
-            if (!decryptedData) {
-              throw new Error('Failed to decrypt stream response');
-            }
-
-            // Parse decrypted response
-            const decryptedJson = JSON.parse(new TextDecoder().decode(decryptedData));
-            return {
-              data: components.ChatCompletionChunk$inboundSchema.parse(decryptedJson)
-            };
-          },
-        });
-      }),
-      { err: true }
-    ),
-    M.fail([400, 401, "4XX", 500, "5XX"]),
-  )(response);
-  if (!result.ok) {
-    throw result.error;
-  }
-
-  return [result, { status: "complete", request: req, response }];
+/**
+ * Helper function to generate random bytes
+ * @param length Number of bytes to generate
+ * @returns Random bytes
+ */
+export function generateRandomBytes(length: number): Uint8Array {
+  return randomBytes(length);
 }
