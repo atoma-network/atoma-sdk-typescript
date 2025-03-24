@@ -5,7 +5,6 @@ import { AtomaSDKCore } from "../core.js";
 import { encodeJSON } from "../lib/encodings.js";
 import { EventStream } from "../lib/event-streams.js";
 import * as M from "../lib/matchers.js";
-import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
@@ -94,10 +93,10 @@ async function $do(
     const body = encodeJSON("body", confidentialRequest, { explode: true });
     const path = pathToFunc("/v1/confidential/chat/completions#stream")();
 
-    const headers = new Headers(compactMap({
+    const headers = new Headers({
       "Content-Type": "application/json",
       Accept: "text/event-stream",
-    }));
+    });
 
     const secConfig = await extractSecurity(client._options.bearerAuth);
     const securityInput = secConfig == null ? {} : { bearerAuth: secConfig };
@@ -182,7 +181,7 @@ async function $do(
               // Parse decrypted response
               const decryptedJson = JSON.parse(new TextDecoder().decode(decryptedData));
 
-              return components.ChatCompletionStreamResponse$inboundSchema.parse(decryptedJson)
+              return { data: components.ChatCompletionChunk$inboundSchema.parse(decryptedJson) }
             },
           });
         }),
