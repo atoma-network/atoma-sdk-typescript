@@ -117,7 +117,7 @@ export async function confidentialChatCreateStream(
             decoder(rawEvent) {
               // Decrypt the encrypted event data
               const encryptedResponse = components.ConfidentialComputeStreamResponse$inboundSchema.parse(rawEvent);
-
+              
               // Decrypt the response data
               const decryptedData = decryptMessage(
                 Buffer.from(encryptedResponse.data.ciphertext, 'base64'),
