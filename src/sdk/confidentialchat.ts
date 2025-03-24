@@ -8,7 +8,6 @@ import { EventStream } from "../lib/event-streams.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as components from "../models/components/index.js";
 import { unwrapAsync } from "../types/fp.js";
-
 export class ConfidentialChat extends ClientSDK {
   /**
    * Create confidential chat completion
@@ -58,10 +57,10 @@ export class ConfidentialChat extends ClientSDK {
     request: components.CreateChatCompletionRequest,
     options?: RequestOptions,
   ): Promise<EventStream<components.ChatCompletionStreamResponse>> {
-    return unwrapAsync(confidentialChatCreateStream(
+    return confidentialChatCreateStream(
       this,
       request,
       options,
-    ));
+    );
   }
 }
