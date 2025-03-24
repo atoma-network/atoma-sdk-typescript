@@ -1,6 +1,6 @@
 import { box, randomBytes } from 'tweetnacl';
 import { createHmac, createCipheriv, createDecipheriv } from 'crypto';
-import { createHash as createBlake2Hash } from 'blake2';
+import { blake2b } from '@noble/hashes/blake2b';
 import { x25519 } from '@noble/curves/ed25519';
 // import { encodeBase64, decodeBase64 } from 'tweetnacl-util';
 // import { BLAKE2b } from '@stablelib/blake2b';
@@ -40,9 +40,7 @@ function deriveKey(sharedSecret: Uint8Array, salt: Uint8Array): Uint8Array {
  * @returns A 32-byte hash
  */
 export function calculateHash(data: Uint8Array): Uint8Array {
-    const hash = createBlake2Hash('blake2b', { digestLength: 32 });  // Use BLAKE2b with 32-byte digest
-    hash.update(data);
-    return new Uint8Array(hash.digest());
+    return blake2b(data, { dkLen: 32 }); // 32 bytes = 256 bits
 }
 
 /**
