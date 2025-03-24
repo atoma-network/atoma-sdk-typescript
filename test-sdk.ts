@@ -16,9 +16,31 @@ async function testHealthCheck() {
 	}
 }
 
-async function testChatCompletion() {
+async function testConfidentialChat() {
 	try {
-		console.log("\nTesting chat completion...");
+		console.log("\nTesting confidential chat completion...");
+		const chatCompletionsRequest: CreateChatCompletionRequest = {
+			model: 'neuralmagic/Qwen2-72B-Instruct-FP8',
+			messages: [
+				{
+					role: 'user',
+					content: 'Tell me a funny joke',
+				},
+			],
+			stream: false,
+			maxTokens: 256,
+		};
+
+		const chatCompletions = await atomaSDK.confidentialChat.create(chatCompletionsRequest)
+		console.log("Chat completion response:", chatCompletions.choices[0].message.content);
+	} catch (error) {
+		console.error("Error during confidential chat completion:", error);
+	}
+}
+
+async function testConfidentialChatStream() {
+	try {
+		console.log("\nTesting confidential chat stream completion...");
 		const chatCompletionsRequest: CreateChatCompletionRequest = {
 			model: 'neuralmagic/Qwen2-72B-Instruct-FP8',
 			messages: [
@@ -45,7 +67,8 @@ async function testChatCompletion() {
 // Run both tests
 async function runTests() {
 	await testHealthCheck();
-	await testChatCompletion();
+	await testConfidentialChat();
+	await testConfidentialChatStream();
 }
 
 runTests();
