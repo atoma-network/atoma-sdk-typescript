@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
@@ -12,6 +13,12 @@ import {
   ChatCompletionChunkChoice$Outbound,
   ChatCompletionChunkChoice$outboundSchema,
 } from "./chatcompletionchunkchoice.js";
+import {
+  CompletionUsage,
+  CompletionUsage$inboundSchema,
+  CompletionUsage$Outbound,
+  CompletionUsage$outboundSchema,
+} from "./completionusage.js";
 
 export type ChatCompletionChunk = {
   /**
@@ -30,6 +37,14 @@ export type ChatCompletionChunk = {
    * The model used for the chat completion.
    */
   model: string;
+  /**
+   * The system fingerprint for the completion, if applicable.
+   */
+  systemFingerprint?: string | null | undefined;
+  /**
+   * Usage statistics for the completion request.
+   */
+  usage?: CompletionUsage | null | undefined;
 };
 
 /** @internal */
@@ -37,12 +52,29 @@ export const ChatCompletionChunk$inboundSchema: z.ZodType<
   ChatCompletionChunk,
   z.ZodTypeDef,
   unknown
-> = z.object({
-  choices: z.array(ChatCompletionChunkChoice$inboundSchema),
-  created: z.number().int(),
-  id: z.string(),
-  model: z.string(),
-});
+> = z
+  .object({
+    choices: z.array(ChatCompletionChunkChoice$inboundSchema),
+    created: z.number().int(),
+    id: z.string(),
+    model: z.string(),
+    system_fingerprint: z.nullable(z.string()).optional(),
+    usage: z.nullable(CompletionUsage$inboundSchema).optional(),
+  })
+  .transform(
+    (v: {
+      choices: Array<ChatCompletionChunkChoice>;
+      created: number;
+      id: string;
+      model: string;
+      system_fingerprint?: string | null | undefined;
+      usage?: CompletionUsage | null | undefined;
+    }) => {
+      return remap$(v, {
+        system_fingerprint: "systemFingerprint",
+      });
+    },
+  );
 
 /** @internal */
 export type ChatCompletionChunk$Outbound = {
@@ -50,6 +82,8 @@ export type ChatCompletionChunk$Outbound = {
   created: number;
   id: string;
   model: string;
+  system_fingerprint?: string | null | undefined;
+  usage?: CompletionUsage$Outbound | null | undefined;
 };
 
 /** @internal */
@@ -57,12 +91,29 @@ export const ChatCompletionChunk$outboundSchema: z.ZodType<
   ChatCompletionChunk$Outbound,
   z.ZodTypeDef,
   ChatCompletionChunk
-> = z.object({
-  choices: z.array(ChatCompletionChunkChoice$outboundSchema),
-  created: z.number().int(),
-  id: z.string(),
-  model: z.string(),
-});
+> = z
+  .object({
+    choices: z.array(ChatCompletionChunkChoice$outboundSchema),
+    created: z.number().int(),
+    id: z.string(),
+    model: z.string(),
+    systemFingerprint: z.nullable(z.string()).optional(),
+    usage: z.nullable(CompletionUsage$outboundSchema).optional(),
+  })
+  .transform(
+    (v: {
+      choices: Array<ChatCompletionChunkChoice$Outbound>;
+      created: number;
+      id: string;
+      model: string;
+      systemFingerprint?: string | null | undefined;
+      usage?: CompletionUsage$Outbound | null | undefined;
+    }) => {
+      return remap$(v, {
+        systemFingerprint: "system_fingerprint",
+      });
+    },
+  );
 
 /**
  * @internal
