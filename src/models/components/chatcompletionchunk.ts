@@ -38,7 +38,7 @@ export type ChatCompletionChunk = {
    */
   model: string;
   /**
-   * The system fingerprint for the completion, if applicable.
+   * The system fingerprint for the completion
    */
   systemFingerprint?: string | null | undefined;
   /**
