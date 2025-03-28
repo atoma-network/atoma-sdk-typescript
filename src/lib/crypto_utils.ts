@@ -1,15 +1,14 @@
 import { box, randomBytes } from 'tweetnacl';
-import { createHmac, createCipheriv, createDecipheriv } from 'crypto';
 import { createHash as createBlake2Hash } from 'blake2';
 import { x25519 } from '@noble/curves/ed25519';
-// import { encodeBase64, decodeBase64 } from 'tweetnacl-util';
-// import { BLAKE2b } from '@stablelib/blake2b';
 import { AtomaSDKCore } from '../core.js';
 import { nodesNodesCreateLock } from '../funcs/nodesNodesCreateLock.js';
 import * as components from '../models/components/index.js';
+import { hmac } from '@noble/hashes/hmac';
+import { sha256 } from '@noble/hashes/sha256';
 
 export const SALT_SIZE = 16;
-export const NONCE_SIZE = 12;  // AESGCM uses 12 bytes for nonce
+export const NONCE_SIZE = 12; // AESGCM uses 12 bytes for nonce
 export const KEY_SIZE = 32;
 
 /**
@@ -20,18 +19,14 @@ export const KEY_SIZE = 32;
  * @returns A 32-byte derived encryption key
  */
 function deriveKey(sharedSecret: Uint8Array, salt: Uint8Array): Uint8Array {
-    // HKDF-Extract
-    const prk = createHmac('sha256', salt)
-        .update(sharedSecret)
-        .digest();
+  // HKDF-Extract
+  const prk = hmac(sha256, salt, sharedSecret);
 
-    // HKDF-Expand
-    const info = Buffer.from('');
-    const okm = createHmac('sha256', prk)
-        .update(Buffer.concat([info, Buffer.from([1])]))
-        .digest();
+  // HKDF-Expand
+  const info = new Uint8Array(0);
+  const okm = hmac(sha256, prk, new Uint8Array([...info, 1]));
 
-    return new Uint8Array(okm);
+  return okm;
 }
 
 /**
@@ -40,9 +35,9 @@ function deriveKey(sharedSecret: Uint8Array, salt: Uint8Array): Uint8Array {
  * @returns A 32-byte hash
  */
 export function calculateHash(data: Uint8Array): Uint8Array {
-    const hash = createBlake2Hash('blake2b', { digestLength: 32 });  // Use BLAKE2b with 32-byte digest
-    hash.update(data);
-    return new Uint8Array(hash.digest());
+  const hash = createBlake2Hash('blake2b', { digestLength: 32 }); // Use BLAKE2b with 32-byte digest
+  hash.update(data);
+  return new Uint8Array(hash.digest());
 }
 
 /**
@@ -88,7 +83,7 @@ export async function encryptMessage(
   const ciphertext = cipher.update(message);
   const final = cipher.final();
   const authTag = cipher.getAuthTag();
-  
+
   // Concatenate in the order: ciphertext + final + auth tag
   const encrypted = Buffer.concat([ciphertext, final, authTag]);
 
@@ -97,7 +92,7 @@ export async function encryptMessage(
     nodeDhPublicKeyBytes,
     salt,
     {
-      ciphertext: encrypted.toString('base64'),  // The entire encrypted message including auth tag
+      ciphertext: encrypted.toString('base64'), // The entire encrypted message including auth tag
       client_dh_public_key: Buffer.from(clientDhPublicKey).toString('base64'),
       model_name: model,
       node_dh_public_key: nodeRes.value.publicKey,
@@ -105,8 +100,8 @@ export async function encryptMessage(
       plaintext_body_hash: Buffer.from(plaintextBodyHash).toString('base64'),
       salt: Buffer.from(salt).toString('base64'),
       stack_small_id: stackSmallId,
-      stream: requestBody.stream || false
-    }
+      stream: requestBody.stream || false,
+    },
   ];
 }
 
@@ -120,38 +115,35 @@ export async function encryptMessage(
  * @returns The decrypted message
  */
 export function decryptMessage(
-    ciphertext: Uint8Array,
-    clientPrivateKey: Uint8Array,
-    nodePublicKey: Uint8Array,
-    salt: Uint8Array,
-    nonce: Uint8Array
+  ciphertext: Uint8Array,
+  clientPrivateKey: Uint8Array,
+  nodePublicKey: Uint8Array,
+  salt: Uint8Array,
+  nonce: Uint8Array
 ): Uint8Array | null {
-    try {
-        // Generate shared secret using X25519
-        const sharedSecret = x25519.getSharedSecret(clientPrivateKey, nodePublicKey);
-        
-        // Derive encryption key using HKDF
-        const encryptionKey = deriveKey(sharedSecret, salt);
-        
-        // Extract auth tag (last 16 bytes)
-        const authTag = ciphertext.slice(-16);
-        const encryptedData = ciphertext.slice(0, -16);
-        
-        // Create decipher
-        const decipher = createDecipheriv('aes-256-gcm', encryptionKey, nonce);
-        decipher.setAuthTag(authTag);
-        
-        // Decrypt
-        const decrypted = Buffer.concat([
-            decipher.update(encryptedData),
-            decipher.final()
-        ]);
-        
-        return new Uint8Array(decrypted);
-    } catch (error) {
-        console.error('Decryption error:', error);
-        return null;
-    }
+  try {
+    // Generate shared secret using X25519
+    const sharedSecret = x25519.getSharedSecret(clientPrivateKey, nodePublicKey);
+
+    // Derive encryption key using HKDF
+    const encryptionKey = deriveKey(sharedSecret, salt);
+
+    // Extract auth tag (last 16 bytes)
+    const authTag = ciphertext.slice(-16);
+    const encryptedData = ciphertext.slice(0, -16);
+
+    // Create decipher
+    const decipher = createDecipheriv('aes-256-gcm', encryptionKey, nonce);
+    decipher.setAuthTag(authTag);
+
+    // Decrypt
+    const decrypted = Buffer.concat([decipher.update(encryptedData), decipher.final()]);
+
+    return new Uint8Array(decrypted);
+  } catch (error) {
+    console.error('Decryption error:', error);
+    return null;
+  }
 }
 
 /**
@@ -159,11 +151,11 @@ export function decryptMessage(
  * @returns An object containing the keypair
  */
 export function generateKeyPair() {
-    const keypair = box.keyPair();
-    return {
-        publicKey: keypair.publicKey,
-        privateKey: keypair.secretKey
-    };
+  const keypair = box.keyPair();
+  return {
+    publicKey: keypair.publicKey,
+    privateKey: keypair.secretKey,
+  };
 }
 
 /**
@@ -172,5 +164,5 @@ export function generateKeyPair() {
  * @returns Random bytes
  */
 export function generateRandomBytes(length: number): Uint8Array {
-    return randomBytes(length);
-} 
+  return randomBytes(length);
+}
