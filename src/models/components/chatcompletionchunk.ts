@@ -45,6 +45,16 @@ export type ChatCompletionChunk = {
    * Usage statistics for the completion request.
    */
   usage?: CompletionUsage | null | undefined;
+  /**
+   * Specifies the latency tier to use for processing the request. This parameter is relevant for customers subscribed to the scale tier service
+   */
+
+  serviceTier?: string | undefined;
+
+  /**
+   * The type of the o chunk.
+   */
+  object?: string;
 };
 
 /** @internal */
@@ -60,6 +70,8 @@ export const ChatCompletionChunk$inboundSchema: z.ZodType<
     model: z.string(),
     system_fingerprint: z.nullable(z.string()).optional(),
     usage: z.nullable(CompletionUsage$inboundSchema).optional(),
+    object: z.string(),
+    service_tier: z.string().optional(),
   })
   .transform(
     (v: {
@@ -69,9 +81,12 @@ export const ChatCompletionChunk$inboundSchema: z.ZodType<
       model: string;
       system_fingerprint?: string | null | undefined;
       usage?: CompletionUsage | null | undefined;
+      object: string;
+      service_tier?: string | undefined;
     }) => {
       return remap$(v, {
         system_fingerprint: "systemFingerprint",
+        service_tier: "serviceTier",
       });
     },
   );
