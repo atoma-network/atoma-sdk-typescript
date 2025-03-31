@@ -21,3 +21,4 @@
 .env
 .env.*
 !.env.example
+test-sdk.ts
