@@ -15,6 +15,15 @@ export type NodesCreateLockRequest = {
    * The model to lock a node for
    */
   model: string;
+  /**
+   * The maximum number of tokens that can be locked for the node
+   */
+  maxNumberOfTokens?: number;
+
+  /**
+   * The time the lock will be active for
+   */
+  timeout?: number;
 };
 
 /** @internal */
@@ -24,6 +33,8 @@ export const NodesCreateLockRequest$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   model: z.string(),
+  maxNumberOfTokens: z.number().optional().default(0),
+  timeout: z.number().optional().default(0),
 });
 
 /** @internal */
