@@ -4,12 +4,12 @@
 !/REACT_QUERY.md
 !/**/*.ts
 !/**/*.js
+!/**/*.mjs
+!/**/*.json
 !/**/*.map
 
-/.eslintrc.js
+/eslint.config.mjs
 /cjs
 /.tshy
 /.tshy-*
 /__tests__
-
-atoma-sdk-0.1.0.tgz

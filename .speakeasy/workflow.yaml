@@ -5,13 +5,14 @@ sources:
         inputs:
             - location: ../atoma-proxy/atoma-proxy/docs/openapi.yml
         registry:
-            location: registry.speakeasyapi.dev/atoma/atoma-sdk/atoma-proxy
+            location: registry.speakeasyapi.dev/atoma/test/atoma-proxy
 targets:
     atoma-sdk:
         target: typescript
         source: atoma-proxy
         codeSamples:
-            output: codeSamples.yaml
             registry:
-                location: registry.speakeasyapi.dev/atoma/atoma-sdk/atoma-proxy-typescript-code-samples
+                location: registry.speakeasyapi.dev/atoma/test/atoma-proxy-typescript-code-samples
+            labelOverride:
+                fixedValue: Typescript (SDK)
             blocking: false

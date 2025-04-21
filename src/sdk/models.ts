@@ -3,6 +3,7 @@
  */
 
 import { modelsModelsList } from "../funcs/modelsModelsList.js";
+import { modelsOpenRouterModelsList } from "../funcs/modelsOpenRouterModelsList.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as components from "../models/components/index.js";
 import { unwrapAsync } from "../types/fp.js";
@@ -20,6 +21,23 @@ export class Models extends ClientSDK {
     options?: RequestOptions,
   ): Promise<components.ModelList> {
     return unwrapAsync(modelsModelsList(
+      this,
+      options,
+    ));
+  }
+
+  /**
+   * OpenRouter models listing endpoint
+   *
+   * @remarks
+   * This endpoint returns a list of available models from the OpenRouter
+   * models file. The file is expected to be in JSON format and contains
+   * information about the models, including their IDs and other metadata.
+   */
+  async openRouterModelsList(
+    options?: RequestOptions,
+  ): Promise<any> {
+    return unwrapAsync(modelsOpenRouterModelsList(
       this,
       options,
     ));

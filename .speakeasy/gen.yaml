@@ -2,7 +2,7 @@ configVersion: 2.0.0
 generation:
   devContainers:
     enabled: true
-    schemaPath: ../atoma-proxy/atoma-proxy/docs/openapi.yml
+    schemaPath: docs/openapi.yml
   sdkClassName: AtomaSdk
   maintainOpenAPIOrder: true
   usageSnippets:
@@ -10,32 +10,25 @@ generation:
   useClassNamesForArrayFields: true
   fixes:
     nameResolutionDec2023: true
+    nameResolutionFeb2025: true
     parameterOrderingFeb2024: true
     requestResponseComponentNamesFeb2024: true
+    securityFeb2025: true
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
 typescript:
-  version: 0.1.0
+  version: 0.0.1
   additionalDependencies:
-    dependencies:
-      '@noble/curves': ^1.8.1
-      blake2: ^5.0.0
-      tweetnacl: ^1.0.3
-    devDependencies:
-      '@babel/core': ^7.26.0
-      '@babel/preset-env': ^7.26.0
-      '@babel/preset-typescript': ^7.26.0
-      '@types/jest': ^29.5.14
-      babel-jest: ^29.7.0
-      dotenv: ^16.4.7
-      jest: ^29.7.0
-      ts-jest: ^29.2.5
+    dependencies: {}
+    devDependencies: {}
     peerDependencies: {}
   additionalPackageJSON: {}
   author: Speakeasy
   clientServerStatusCodesAsErrors: true
   defaultErrorName: APIError
+  enableCustomCodeRegions: false
+  enableMCPServer: true
   enableReactQuery: false
   enumFormat: union
   envVarPrefix: ATOMASDK
@@ -50,9 +43,10 @@ typescript:
       shared: models/components
       webhooks: models/webhooks
   inputModelSuffix: input
+  jsonpath: rfc9535
   maxMethodParams: 0
   methodArguments: require-security-and-request
-  moduleFormat: commonjs
+  moduleFormat: dual
   outputModelSuffix: output
   packageName: atoma-sdk
   responseFormat: flat

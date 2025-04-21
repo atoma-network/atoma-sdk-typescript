@@ -7,16 +7,30 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
+import {
+  ChatCompletionChunkDeltaToolCall,
+  ChatCompletionChunkDeltaToolCall$inboundSchema,
+  ChatCompletionChunkDeltaToolCall$Outbound,
+  ChatCompletionChunkDeltaToolCall$outboundSchema,
+} from "./chatcompletionchunkdeltatoolcall.js";
 
+/**
+ * Represents the chat completion chunk delta.
+ *
+ * @remarks
+ *
+ * This is used to represent the chat completion chunk delta in the chat completion request.
+ * It can be either a chat completion chunk delta message or a chat completion chunk delta choice.
+ */
 export type ChatCompletionChunkDelta = {
   /**
    * The content of the message, if present in this chunk.
    */
   content?: string | null | undefined;
   /**
-   * The function call information, if present in this chunk.
+   * The reasoning content, if present in this chunk.
    */
-  functionCall?: any | undefined;
+  reasoningContent?: string | null | undefined;
   /**
    * The role of the message author, if present in this chunk.
    */
@@ -24,7 +38,7 @@ export type ChatCompletionChunkDelta = {
   /**
    * The tool calls information, if present in this chunk.
    */
-  toolCalls?: Array<any> | null | undefined;
+  toolCalls?: Array<ChatCompletionChunkDeltaToolCall> | null | undefined;
 };
 
 /** @internal */
@@ -34,12 +48,14 @@ export const ChatCompletionChunkDelta$inboundSchema: z.ZodType<
   unknown
 > = z.object({
   content: z.nullable(z.string()).optional(),
-  function_call: z.any().optional(),
+  reasoning_content: z.nullable(z.string()).optional(),
   role: z.nullable(z.string()).optional(),
-  tool_calls: z.nullable(z.array(z.any())).optional(),
+  tool_calls: z.nullable(
+    z.array(ChatCompletionChunkDeltaToolCall$inboundSchema),
+  ).optional(),
 }).transform((v) => {
   return remap$(v, {
-    "function_call": "functionCall",
+    "reasoning_content": "reasoningContent",
     "tool_calls": "toolCalls",
   });
 });
@@ -47,9 +63,12 @@ export const ChatCompletionChunkDelta$inboundSchema: z.ZodType<
 /** @internal */
 export type ChatCompletionChunkDelta$Outbound = {
   content?: string | null | undefined;
-  function_call?: any | undefined;
+  reasoning_content?: string | null | undefined;
   role?: string | null | undefined;
-  tool_calls?: Array<any> | null | undefined;
+  tool_calls?:
+    | Array<ChatCompletionChunkDeltaToolCall$Outbound>
+    | null
+    | undefined;
 };
 
 /** @internal */
@@ -59,12 +78,14 @@ export const ChatCompletionChunkDelta$outboundSchema: z.ZodType<
   ChatCompletionChunkDelta
 > = z.object({
   content: z.nullable(z.string()).optional(),
-  functionCall: z.any().optional(),
+  reasoningContent: z.nullable(z.string()).optional(),
   role: z.nullable(z.string()).optional(),
-  toolCalls: z.nullable(z.array(z.any())).optional(),
+  toolCalls: z.nullable(
+    z.array(ChatCompletionChunkDeltaToolCall$outboundSchema),
+  ).optional(),
 }).transform((v) => {
   return remap$(v, {
-    functionCall: "function_call",
+    reasoningContent: "reasoning_content",
     toolCalls: "tool_calls",
   });
 });
