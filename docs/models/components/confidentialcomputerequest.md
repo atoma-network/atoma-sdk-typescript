@@ -15,7 +15,7 @@ let value: ConfidentialComputeRequest = {
   nonce: "<value>",
   plaintextBodyHash: "<value>",
   salt: "<value>",
-  stackSmallId: 602763,
+  stackSmallId: 54860,
 };
 ```
 

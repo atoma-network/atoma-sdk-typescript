@@ -13,7 +13,23 @@ import {
   ChatCompletionChunk$outboundSchema,
 } from "./chatcompletionchunk.js";
 
+/**
+ * Represents the chat completion stream response.
+ *
+ * @remarks
+ *
+ * This is used to represent the chat completion stream response in the chat completion request.
+ * It can be either a chat completion chunk or a chat completion stream.
+ */
 export type ChatCompletionStreamResponse = {
+  /**
+   * Represents the chat completion chunk.
+   *
+   * @remarks
+   *
+   * This is used to represent the chat completion chunk in the chat completion request.
+   * It can be either a chat completion chunk or a chat completion chunk choice.
+   */
   data: ChatCompletionChunk;
 };
 
