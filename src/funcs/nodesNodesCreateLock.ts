@@ -5,6 +5,7 @@
 import { AtomaSDKCore } from "../core.js";
 import { encodeJSON } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
+import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
@@ -19,6 +20,7 @@ import {
   UnexpectedClientError,
 } from "../models/errors/httpclienterrors.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
+import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
@@ -39,11 +41,11 @@ import { Result } from "../types/fp.js";
  *   - `INTERNAL_SERVER_ERROR` - Communication errors or missing node public keys
  *   - `SERVICE_UNAVAILABLE` - No nodes available for confidential compute
  */
-export async function nodesNodesCreateLock(
+export function nodesNodesCreateLock(
   client: AtomaSDKCore,
   request: components.NodesCreateLockRequest,
   options?: RequestOptions,
-): Promise<
+): APIPromise<
   Result<
     components.NodesCreateLockResponse,
     | APIError
@@ -55,29 +57,56 @@ export async function nodesNodesCreateLock(
     | ConnectionError
   >
 > {
+  return new APIPromise($do(
+    client,
+    request,
+    options,
+  ));
+}
+
+async function $do(
+  client: AtomaSDKCore,
+  request: components.NodesCreateLockRequest,
+  options?: RequestOptions,
+): Promise<
+  [
+    Result<
+      components.NodesCreateLockResponse,
+      | APIError
+      | SDKValidationError
+      | UnexpectedClientError
+      | InvalidRequestError
+      | RequestAbortedError
+      | RequestTimeoutError
+      | ConnectionError
+    >,
+    APICall,
+  ]
+> {
   const parsed = safeParse(
     request,
     (value) => components.NodesCreateLockRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
-    return parsed;
+    return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
   const body = encodeJSON("body", payload, { explode: true });
 
   const path = pathToFunc("/v1/nodes/lock")();
 
-  const headers = new Headers({
+  const headers = new Headers(compactMap({
     "Content-Type": "application/json",
     Accept: "application/json",
-  });
+  }));
 
   const secConfig = await extractSecurity(client._options.bearerAuth);
   const securityInput = secConfig == null ? {} : { bearerAuth: secConfig };
   const requestSecurity = resolveGlobalSecurity(securityInput);
 
   const context = {
+    baseURL: options?.serverURL ?? client._baseURL ?? "",
     operationID: "nodes_create_lock",
     oAuth2Scopes: [],
 
@@ -100,7 +129,7 @@ export async function nodesNodesCreateLock(
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
   }, options);
   if (!requestRes.ok) {
-    return requestRes;
+    return [requestRes, { status: "invalid" }];
   }
   const req = requestRes.value;
 
@@ -111,7 +140,7 @@ export async function nodesNodesCreateLock(
     retryCodes: context.retryCodes,
   });
   if (!doResult.ok) {
-    return doResult;
+    return [doResult, { status: "request-error", request: req }];
   }
   const response = doResult.value;
 
@@ -126,11 +155,12 @@ export async function nodesNodesCreateLock(
     | ConnectionError
   >(
     M.json(200, components.NodesCreateLockResponse$inboundSchema),
-    M.fail(["4XX", 500, 503, "5XX"]),
+    M.fail("4XX"),
+    M.fail([500, 503, "5XX"]),
   )(response);
   if (!result.ok) {
-    return result;
+    return [result, { status: "complete", request: req, response }];
   }
 
-  return result;
+  return [result, { status: "complete", request: req, response }];
 }

@@ -11,9 +11,9 @@ request to the selected node.
 import { NodesCreateLockResponse } from "atoma-sdk/models/components";
 
 let value: NodesCreateLockResponse = {
-  nodeSmallId: 791725,
+  nodeSmallId: 817475,
   publicKey: "<value>",
-  stackSmallId: 528895,
+  stackSmallId: 881015,
 };
 ```
 

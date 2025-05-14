@@ -8,8 +8,8 @@ Represents usage statistics for a confidential compute request
 import { Usage } from "atoma-sdk/models/components";
 
 let value: Usage = {
-  promptTokens: 548814,
-  totalTokens: 715190,
+  promptTokens: 979796,
+  totalTokens: 787440,
 };
 ```
 

@@ -72,6 +72,7 @@ export async function confidentialChatCreateStream(
         || client._options.retryConfig
         || { strategy: "none" },
       retryCodes: options?.retryCodes || ["429", "500", "502", "503", "504"],
+      baseURL: options?.serverURL || client._options.serverURL || "",
     };
 
     const requestRes = client._createRequest(context, {
@@ -117,7 +118,7 @@ export async function confidentialChatCreateStream(
             decoder(rawEvent) {
               // Decrypt the encrypted event data
               const encryptedResponse = components.ConfidentialComputeStreamResponse$inboundSchema.parse(rawEvent);
-              
+
               // Decrypt the response data
               const decryptedData = decryptMessage(
                 Buffer.from(encryptedResponse.data.ciphertext, 'base64'),

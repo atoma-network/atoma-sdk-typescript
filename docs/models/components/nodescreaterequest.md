@@ -9,8 +9,8 @@ import { NodesCreateRequest } from "atoma-sdk/models/components";
 
 let value: NodesCreateRequest = {
   data: {
-    country: "Isle of Man",
-    nodeSmallId: 891773,
+    country: "Venezuela",
+    nodeSmallId: 338028,
     publicAddress: "<value>",
   },
   signature: "<value>",

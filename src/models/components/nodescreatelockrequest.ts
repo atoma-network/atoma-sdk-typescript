@@ -3,6 +3,7 @@
  */
 
 import * as z from "zod";
+import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
@@ -12,9 +13,20 @@ import { SDKValidationError } from "../errors/sdkvalidationerror.js";
  */
 export type NodesCreateLockRequest = {
   /**
+   * The number of tokens to be processed for confidential compute
+   *
+   * @remarks
+   * (including input and output tokens)
+   */
+  maxNumTokens?: number | null | undefined;
+  /**
    * The model to lock a node for
    */
   model: string;
+  /**
+   * An optional timeout period for the locked compute units, in seconds
+   */
+  timeout?: number | null | undefined;
 };
 
 /** @internal */
@@ -23,12 +35,20 @@ export const NodesCreateLockRequest$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
+  max_num_tokens: z.nullable(z.number().int()).optional(),
   model: z.string(),
+  timeout: z.nullable(z.number().int()).optional(),
+}).transform((v) => {
+  return remap$(v, {
+    "max_num_tokens": "maxNumTokens",
+  });
 });
 
 /** @internal */
 export type NodesCreateLockRequest$Outbound = {
+  max_num_tokens?: number | null | undefined;
   model: string;
+  timeout?: number | null | undefined;
 };
 
 /** @internal */
@@ -37,7 +57,13 @@ export const NodesCreateLockRequest$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   NodesCreateLockRequest
 > = z.object({
+  maxNumTokens: z.nullable(z.number().int()).optional(),
   model: z.string(),
+  timeout: z.nullable(z.number().int()).optional(),
+}).transform((v) => {
+  return remap$(v, {
+    maxNumTokens: "max_num_tokens",
+  });
 });
 
 /**

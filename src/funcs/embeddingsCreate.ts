@@ -5,6 +5,7 @@
 import { AtomaSDKCore } from "../core.js";
 import { encodeJSON } from "../lib/encodings.js";
 import * as M from "../lib/matchers.js";
+import { compactMap } from "../lib/primitives.js";
 import { safeParse } from "../lib/schemas.js";
 import { RequestOptions } from "../lib/sdks.js";
 import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
@@ -19,6 +20,7 @@ import {
   UnexpectedClientError,
 } from "../models/errors/httpclienterrors.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
+import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
@@ -36,11 +38,11 @@ import { Result } from "../types/fp.js";
  * ## Errors
  * * `INTERNAL_SERVER_ERROR` - Processing or node communication failures
  */
-export async function embeddingsCreate(
+export function embeddingsCreate(
   client: AtomaSDKCore,
   request: components.CreateEmbeddingRequest,
   options?: RequestOptions,
-): Promise<
+): APIPromise<
   Result<
     components.CreateEmbeddingResponse,
     | APIError
@@ -52,29 +54,56 @@ export async function embeddingsCreate(
     | ConnectionError
   >
 > {
+  return new APIPromise($do(
+    client,
+    request,
+    options,
+  ));
+}
+
+async function $do(
+  client: AtomaSDKCore,
+  request: components.CreateEmbeddingRequest,
+  options?: RequestOptions,
+): Promise<
+  [
+    Result<
+      components.CreateEmbeddingResponse,
+      | APIError
+      | SDKValidationError
+      | UnexpectedClientError
+      | InvalidRequestError
+      | RequestAbortedError
+      | RequestTimeoutError
+      | ConnectionError
+    >,
+    APICall,
+  ]
+> {
   const parsed = safeParse(
     request,
     (value) => components.CreateEmbeddingRequest$outboundSchema.parse(value),
     "Input validation failed",
   );
   if (!parsed.ok) {
-    return parsed;
+    return [parsed, { status: "invalid" }];
   }
   const payload = parsed.value;
   const body = encodeJSON("body", payload, { explode: true });
 
   const path = pathToFunc("/v1/embeddings")();
 
-  const headers = new Headers({
+  const headers = new Headers(compactMap({
     "Content-Type": "application/json",
     Accept: "application/json",
-  });
+  }));
 
   const secConfig = await extractSecurity(client._options.bearerAuth);
   const securityInput = secConfig == null ? {} : { bearerAuth: secConfig };
   const requestSecurity = resolveGlobalSecurity(securityInput);
 
   const context = {
+    baseURL: options?.serverURL ?? client._baseURL ?? "",
     operationID: "embeddings_create",
     oAuth2Scopes: [],
 
@@ -97,7 +126,7 @@ export async function embeddingsCreate(
     timeoutMs: options?.timeoutMs || client._options.timeoutMs || -1,
   }, options);
   if (!requestRes.ok) {
-    return requestRes;
+    return [requestRes, { status: "invalid" }];
   }
   const req = requestRes.value;
 
@@ -108,7 +137,7 @@ export async function embeddingsCreate(
     retryCodes: context.retryCodes,
   });
   if (!doResult.ok) {
-    return doResult;
+    return [doResult, { status: "request-error", request: req }];
   }
   const response = doResult.value;
 
@@ -123,11 +152,12 @@ export async function embeddingsCreate(
     | ConnectionError
   >(
     M.json(200, components.CreateEmbeddingResponse$inboundSchema),
-    M.fail([400, 401, "4XX", 500, "5XX"]),
+    M.fail([400, 401, "4XX"]),
+    M.fail([500, "5XX"]),
   )(response);
   if (!result.ok) {
-    return result;
+    return [result, { status: "complete", request: req, response }];
   }
 
-  return result;
+  return [result, { status: "complete", request: req, response }];
 }

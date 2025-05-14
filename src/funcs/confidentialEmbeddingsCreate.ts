@@ -97,6 +97,7 @@ export async function confidentialEmbeddingsCreate(
         || client._options.retryConfig
         || { strategy: "none" },
       retryCodes: options?.retryCodes || ["429", "500", "502", "503", "504"],
+      baseURL: options?.serverURL || client._options.serverURL || "",
     };
 
     const requestRes = client._createRequest(context, {
