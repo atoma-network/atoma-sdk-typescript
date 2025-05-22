@@ -23,11 +23,11 @@ actions:
             }
 
             run();
-  - target: $["paths"]["/v1/chat/completions"]["post"]
+  - target: $["paths"]["/v1/completions"]["post"]
     update:
       x-codeSamples:
         - lang: typescript
-          label: chat_completions_create
+          label: completions_create
           source: |-
             import { AtomaSDK } from "atoma-sdk";
 
@@ -36,15 +36,82 @@ actions:
             });
 
             async function run() {
-              const completion = await atomaSDK.chat.create({
-                messages: [
-                  {"role": "developer", "content": "You are a helpful assistant."},
-                  {"role": "user", "content": "Hello!"}
-                ],
-                model: "meta-llama/Llama-3.3-70B-Instruct"
+              const completion = await atomaSDK.completions.completionsCreate({
+                model: "meta-llama/Llama-3.3-70B-Instruct",
+                prompt: "Hello, world!",
               });
 
               console.log(completion.choices[0]);
+            }
+
+            run();
+  - target: $["paths"]["/v1/completions#stream"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: completions_create_stream
+          source: |-
+            import { AtomaSDK } from "atoma-sdk";
+
+            const atomaSDK = new AtomaSDK({
+              bearerAuth: process.env["ATOMASDK_BEARER_AUTH"] ?? "",
+            });
+
+            async function run() {
+              const completion = await atomaSDK.completions.completionsCreateStream({
+                model: "meta-llama/Llama-3.3-70B-Instruct",
+                prompt: "Hello, world!",
+              });
+
+              for await (const chunk of completion) {
+                console.log(chunk.choices[0].text);
+              }
+            }
+
+            run();
+  - target: $["paths"]["/v1/confidential/completions"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: confidential_completions_create
+          source: |-
+            import { AtomaSDK } from "atoma-sdk";
+
+            const atomaSDK = new AtomaSDK({
+              bearerAuth: process.env["ATOMASDK_BEARER_AUTH"] ?? "",
+            });
+
+            async function run() {
+              const completion = await atomaSDK.confidentialCompletions.create({
+                model: "meta-llama/Llama-3.3-70B-Instruct",
+                prompt: "Hello, world!",
+              });
+
+              console.log(completion.choices[0]);
+            }
+
+            run();
+  - target: $["paths"]["/v1/confidential/completions#stream"]["post"]
+    update:
+      x-codeSamples:
+        - lang: typescript
+          label: confidential_completions_create_stream
+          source: |-
+            import { AtomaSDK } from "atoma-sdk";
+
+            const atomaSDK = new AtomaSDK({
+              bearerAuth: process.env["ATOMASDK_BEARER_AUTH"] ?? "",
+            });
+
+            async function run() {
+              const completion = await atomaSDK.confidentialCompletions.createStream({
+                model: "meta-llama/Llama-3.3-70B-Instruct",
+                prompt: "Hello, world!",
+              });
+
+              for await (const chunk of completion) {
+                console.log(chunk.choices[0].text);
+              }
             }
 
             run();
