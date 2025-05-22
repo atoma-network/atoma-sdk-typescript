@@ -7,7 +7,7 @@ Atoma's API confidential chat completions v1 endpoint
 
 ### Available Operations
 
-* [create](#create) - Create confidential chat completion
+* [create](#create) - Create confidential chat completions
 * [createStream](#createstream)
 
 ## create
@@ -211,7 +211,7 @@ run();
 
 ### Response
 
-**Promise\<[EventStream<components.ConfidentialComputeStreamResponse>](../../models/.md)\>**
+**Promise\<[EventStream<operations.ConfidentialChatCompletionsCreateStreamResponseBody>](../../models/.md)\>**
 
 ### Errors
 

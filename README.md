@@ -192,7 +192,7 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.completionsCreate({
+  const result = await atomaSDK.completions.create({
     frequencyPenalty: 0,
     logitBias: {
       "1234567890": 0.5,
@@ -245,7 +245,7 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.completionsCreate({
+  const result = await atomaSDK.completions.create({
     frequencyPenalty: 0,
     logitBias: {
       "1234567890": 0.5,
@@ -287,14 +287,23 @@ run();
 
 ### [chat](docs/sdks/chat/README.md)
 
-* [completionsCreate](docs/sdks/chat/README.md#completionscreate) - Create completion
-* [create](docs/sdks/chat/README.md#create) - Create chat completion
+* [create](docs/sdks/chat/README.md#create) - Create chat completions
 * [createStream](docs/sdks/chat/README.md#createstream)
+
+### [completions](docs/sdks/completions/README.md)
+
+* [create](docs/sdks/completions/README.md#create) - Create completions
+* [createStream](docs/sdks/completions/README.md#createstream)
 
 ### [confidentialChat](docs/sdks/confidentialchat/README.md)
 
-* [create](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completion
+* [create](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completions
 * [createStream](docs/sdks/confidentialchat/README.md#createstream)
+
+### [confidentialCompletions](docs/sdks/confidentialcompletions/README.md)
+
+* [create](docs/sdks/confidentialcompletions/README.md#create) - Create confidential completions
+* [createStream](docs/sdks/confidentialcompletions/README.md#createstream)
 
 ### [confidentialEmbeddings](docs/sdks/confidentialembeddings/README.md)
 
@@ -344,11 +353,14 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 
 <summary>Available standalone functions</summary>
 
-- [`chatCompletionsCreate`](docs/sdks/chat/README.md#completionscreate) - Create completion
-- [`chatCreate`](docs/sdks/chat/README.md#create) - Create chat completion
+- [`chatCreate`](docs/sdks/chat/README.md#create) - Create chat completions
 - [`chatCreateStream`](docs/sdks/chat/README.md#createstream)
-- [`confidentialChatCreate`](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completion
+- [`completionsCreate`](docs/sdks/completions/README.md#create) - Create completions
+- [`completionsCreateStream`](docs/sdks/completions/README.md#createstream)
+- [`confidentialChatCreate`](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completions
 - [`confidentialChatCreateStream`](docs/sdks/confidentialchat/README.md#createstream)
+- [`confidentialCompletionsCreate`](docs/sdks/confidentialcompletions/README.md#create) - Create confidential completions
+- [`confidentialCompletionsCreateStream`](docs/sdks/confidentialcompletions/README.md#createstream)
 - [`confidentialEmbeddingsCreate`](docs/sdks/confidentialembeddings/README.md#create) - Create confidential embeddings
 - [`confidentialImagesGenerate`](docs/sdks/confidentialimages/README.md#generate) - Create confidential image
 - [`embeddingsCreate`](docs/sdks/embeddings/README.md#create) - Create embeddings
@@ -379,81 +391,23 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.createStream({
+  const result = await atomaSDK.completions.createStream({
     frequencyPenalty: 0,
-    functions: [
-      {
-        "name": "get_current_weather",
-        "description": "Get the current weather in a location",
-        "parameters": {
-          "type": "object",
-          "properties": {
-            "location": {
-              "type": "string",
-              "description": "The location to get the weather for",
-            },
-          },
-          "required": [
-            "location",
-          ],
-        },
-      },
-    ],
     logitBias: {
       "1234567890": 0.5,
       "1234567891": -0.5,
     },
-    maxCompletionTokens: 4096,
-    messages: [
-      {
-        content: "You are a helpful AI assistant",
-        name: "AI expert",
-        role: "system",
-      },
-      {
-        content: "Hello!",
-        name: "John Doe",
-        role: "user",
-      },
-      {
-        content:
-          "I'm here to help you with any questions you have. How can I assist you today?",
-        name: "AI",
-        role: "assistant",
-      },
-    ],
+    logprobs: 1,
     model: "meta-llama/Llama-3.3-70B-Instruct",
     n: 1,
-    parallelToolCalls: true,
     presencePenalty: 0,
+    prompt: "<value>",
     seed: 123,
-    serviceTier: "auto",
     stop: [
       "json([\"stop\", \"halt\"])",
     ],
+    suffix: "json(\"\n\")",
     temperature: 0.7,
-    tools: [
-      {
-        function: {
-          description: "Get the current weather in a location",
-          name: "get_current_weather",
-          parameters: {
-            "type": "object",
-            "properties": {
-              "location": {
-                "type": "string",
-                "description": "The location to get the weather for",
-              },
-            },
-            "required": [
-              "location",
-            ],
-          },
-        },
-        type: "function",
-      },
-    ],
-    topLogprobs: 1,
     topP: 1,
     user: "user-1234",
   });
@@ -486,7 +440,7 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.completionsCreate({
+  const result = await atomaSDK.completions.create({
     frequencyPenalty: 0,
     logitBias: {
       "1234567890": 0.5,
@@ -548,7 +502,7 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.completionsCreate({
+  const result = await atomaSDK.completions.create({
     frequencyPenalty: 0,
     logitBias: {
       "1234567890": 0.5,
@@ -601,7 +555,7 @@ const atomaSDK = new AtomaSDK({
 async function run() {
   let result;
   try {
-    result = await atomaSDK.chat.completionsCreate({
+    result = await atomaSDK.completions.create({
       frequencyPenalty: 0,
       logitBias: {
         "1234567890": 0.5,
@@ -685,7 +639,7 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.completionsCreate({
+  const result = await atomaSDK.completions.create({
     frequencyPenalty: 0,
     logitBias: {
       "1234567890": 0.5,

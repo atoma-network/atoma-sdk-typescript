@@ -12,7 +12,7 @@ const args = {
 
 export const tool$confidentialChatCreate: ToolDefinition<typeof args> = {
   name: "confidential-chat-create",
-  description: `Create confidential chat completion
+  description: `Create confidential chat completions
 
 This handler processes chat completion requests in a confidential manner, providing additional
 encryption and security measures for sensitive data processing. It supports both streaming and
@@ -57,6 +57,7 @@ Returns \`AtomaProxyError::InternalError\` if:
       };
     }
 
-    return formatResult(result.value, {});
+    const value = result.value;
+    return formatResult(value, {});
   },
 };

@@ -4,7 +4,7 @@
 
 import { confidentialChatCreateStream } from "../../funcs/confidentialChatCreateStream.js";
 import * as components from "../../models/components/index.js";
-import { ToolDefinition } from "../tools.js";
+import { formatResult, ToolDefinition } from "../tools.js";
 
 const args = {
   request: components.CreateChatCompletionRequest$inboundSchema,
@@ -15,15 +15,12 @@ export const tool$confidentialChatCreateStream: ToolDefinition<typeof args> = {
   description: ``,
   args,
   tool: async (client, args, ctx) => {
-    const stream = await confidentialChatCreateStream(
+    const result = await confidentialChatCreateStream(
       client,
       args.request,
       { fetchOptions: { signal: ctx.signal } },
     );
 
-    return {
-      content: [{ type: "text", text: "Stream started" }],
-      stream,
-    };
+    return formatResult(result, {});
   },
 };

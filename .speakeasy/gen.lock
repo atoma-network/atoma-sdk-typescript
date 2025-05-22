@@ -1,12 +1,12 @@
 lockVersion: 2.0.0
 id: 66f4e327-df0a-4274-a6cc-0c9758913098
 management:
-  docChecksum: 03e43916c2acbbe6d894f472cd02bc2a
+  docChecksum: d21bb4d542acd25eb9a944939b5498d9
   docVersion: 0.1.0
   speakeasyVersion: 1.537.0
   generationVersion: 2.588.0
-  releaseVersion: 0.0.1
-  configChecksum: 9abfb84d866111cf9ff6123d462b5499
+  releaseVersion: 0.0.2
+  configChecksum: 889898899051a52c8ccbf44fc94f0d6a
   repoURL: https://github.com/atoma-network/atoma-sdk-typescript.git
   installationURL: https://github.com/atoma-network/atoma-sdk-typescript.git
 features:
@@ -56,16 +56,21 @@ generatedFiles:
   - docs/models/components/chatcompletionnamedfunction.md
   - docs/models/components/chatcompletionnamedtoolchoiceparam.md
   - docs/models/components/chatcompletionresponse.md
-  - docs/models/components/chatcompletionstreamresponse.md
   - docs/models/components/chatcompletiontoolfunctionparam.md
   - docs/models/components/chatcompletiontoolsparam.md
-  - docs/models/components/completionrequest.md
+  - docs/models/components/completionchoice.md
+  - docs/models/components/completionsprompt.md
+  - docs/models/components/completionsrequest.md
+  - docs/models/components/completionsresponse.md
+  - docs/models/components/completionsstreamresponse.md
+  - docs/models/components/completiontokensdetails.md
   - docs/models/components/completionusage.md
   - docs/models/components/confidentialcomputerequest.md
   - docs/models/components/confidentialcomputeresponse.md
   - docs/models/components/confidentialcomputestreamresponse.md
   - docs/models/components/createchatcompletionrequest.md
   - docs/models/components/createchatcompletionstreamrequest.md
+  - docs/models/components/createcompletionsstreamrequest.md
   - docs/models/components/createembeddingrequest.md
   - docs/models/components/createembeddingresponse.md
   - docs/models/components/createimagerequest.md
@@ -76,6 +81,7 @@ generatedFiles:
   - docs/models/components/healthresponse.md
   - docs/models/components/imagedata.md
   - docs/models/components/jsonschemaresponseformat.md
+  - docs/models/components/logprobs.md
   - docs/models/components/messagecontent.md
   - docs/models/components/messagecontentpart1.md
   - docs/models/components/messagecontentpart2.md
@@ -108,9 +114,15 @@ generatedFiles:
   - docs/models/components/toolchoiceliteral.md
   - docs/models/components/usage.md
   - docs/models/components/user.md
+  - docs/models/operations/chatcompletionscreatestreamresponsebody.md
+  - docs/models/operations/completionscreatestreamresponsebody.md
+  - docs/models/operations/confidentialchatcompletionscreatestreamresponsebody.md
+  - docs/models/operations/confidentialcompletionscreatestreamresponsebody.md
   - docs/sdks/atomasdk/README.md
   - docs/sdks/chat/README.md
+  - docs/sdks/completions/README.md
   - docs/sdks/confidentialchat/README.md
+  - docs/sdks/confidentialcompletions/README.md
   - docs/sdks/confidentialembeddings/README.md
   - docs/sdks/confidentialimages/README.md
   - docs/sdks/embeddings/README.md
@@ -122,9 +134,12 @@ generatedFiles:
   - jsr.json
   - package.json
   - src/core.ts
-  - src/funcs/chatCompletionsCreate.ts
   - src/funcs/chatCreate.ts
   - src/funcs/chatCreateStream.ts
+  - src/funcs/completionsCreate.ts
+  - src/funcs/completionsCreateStream.ts
+  - src/funcs/confidentialCompletionsCreate.ts
+  - src/funcs/confidentialCompletionsCreateStream.ts
   - src/funcs/embeddingsCreate.ts
   - src/funcs/healthHealth.ts
   - src/funcs/imagesGenerate.ts
@@ -166,11 +181,14 @@ generatedFiles:
   - src/mcp-server/server.ts
   - src/mcp-server/shared.ts
   - src/mcp-server/tools.ts
-  - src/mcp-server/tools/chatCompletionsCreate.ts
   - src/mcp-server/tools/chatCreate.ts
   - src/mcp-server/tools/chatCreateStream.ts
+  - src/mcp-server/tools/completionsCreate.ts
+  - src/mcp-server/tools/completionsCreateStream.ts
   - src/mcp-server/tools/confidentialChatCreate.ts
   - src/mcp-server/tools/confidentialChatCreateStream.ts
+  - src/mcp-server/tools/confidentialCompletionsCreate.ts
+  - src/mcp-server/tools/confidentialCompletionsCreateStream.ts
   - src/mcp-server/tools/confidentialEmbeddingsCreate.ts
   - src/mcp-server/tools/confidentialImagesGenerate.ts
   - src/mcp-server/tools/embeddingsCreate.ts
@@ -193,16 +211,21 @@ generatedFiles:
   - src/models/components/chatcompletionnamedfunction.ts
   - src/models/components/chatcompletionnamedtoolchoiceparam.ts
   - src/models/components/chatcompletionresponse.ts
-  - src/models/components/chatcompletionstreamresponse.ts
   - src/models/components/chatcompletiontoolfunctionparam.ts
   - src/models/components/chatcompletiontoolsparam.ts
-  - src/models/components/completionrequest.ts
+  - src/models/components/completionchoice.ts
+  - src/models/components/completionsprompt.ts
+  - src/models/components/completionsrequest.ts
+  - src/models/components/completionsresponse.ts
+  - src/models/components/completionsstreamresponse.ts
+  - src/models/components/completiontokensdetails.ts
   - src/models/components/completionusage.ts
   - src/models/components/confidentialcomputerequest.ts
   - src/models/components/confidentialcomputeresponse.ts
   - src/models/components/confidentialcomputestreamresponse.ts
   - src/models/components/createchatcompletionrequest.ts
   - src/models/components/createchatcompletionstreamrequest.ts
+  - src/models/components/createcompletionsstreamrequest.ts
   - src/models/components/createembeddingrequest.ts
   - src/models/components/createembeddingresponse.ts
   - src/models/components/createimagerequest.ts
@@ -214,6 +237,7 @@ generatedFiles:
   - src/models/components/imagedata.ts
   - src/models/components/index.ts
   - src/models/components/jsonschemaresponseformat.ts
+  - src/models/components/logprobs.ts
   - src/models/components/messagecontent.ts
   - src/models/components/messagecontentpartimageurl.ts
   - src/models/components/messagecontentpartunion.ts
@@ -239,7 +263,14 @@ generatedFiles:
   - src/models/errors/httpclienterrors.ts
   - src/models/errors/index.ts
   - src/models/errors/sdkvalidationerror.ts
+  - src/models/operations/chatcompletionscreatestream.ts
+  - src/models/operations/completionscreatestream.ts
+  - src/models/operations/confidentialchatcompletionscreatestream.ts
+  - src/models/operations/confidentialcompletionscreatestream.ts
+  - src/models/operations/index.ts
   - src/sdk/chat.ts
+  - src/sdk/completions.ts
+  - src/sdk/confidentialcompletions.ts
   - src/sdk/embeddings.ts
   - src/sdk/health.ts
   - src/sdk/images.ts
@@ -264,14 +295,14 @@ examples:
         application/json: {"best_of": 1, "echo": false, "frequency_penalty": 0, "logit_bias": {"1234567890": 0.5, "1234567891": -0.5}, "logprobs": 1, "max_tokens": 4096, "model": "meta-llama/Llama-3.3-70B-Instruct", "n": 1, "presence_penalty": 0, "prompt": ["Hello!"], "seed": 123, "stop": ["json([\"stop\", \"halt\"])"], "stream": false, "suffix": "json(\"\\n\")", "temperature": 0.7, "top_p": 1, "user": "user-1234"}
       responses:
         "200":
-          application/json: {"choices": [{"finish_reason": "stop", "index": 0, "message": {"role": "tool"}}], "created": 1677652288, "id": "chatcmpl-123", "model": "meta-llama/Llama-3.3-70B-Instruct", "object": "chat.completion", "service_tier": "auto", "system_fingerprint": "fp_44709d6fcb", "usage": {"completion_tokens": 12, "prompt_tokens": 9, "prompt_tokens_details": {"cached_tokens": 1}, "total_tokens": 21}}
+          application/json: {"choices": [{"finish_reason": "stop", "index": 0, "logprobs": null, "text": "This is a test"}], "created": "2021-01-01T00:00:00Z", "id": "cmpl-1234567890", "model": "meta-llama/Llama-3.3-70B-Instruct", "object": "text_completion", "system_fingerprint": "system-fingerprint", "usage": {"completion_tokens": 10, "completion_tokens_details": {"accepted_prediction_tokens": 10, "audio_tokens": 0, "reasoning_tokens": 10, "rejected_prediction_tokens": 0}, "prompt_tokens": 10, "prompt_tokens_details": {"audio_tokens": 0, "cached_tokens": 10}, "total_tokens": 20}}
   chat_completions_create:
     speakeasy-default-chat-completions-create:
       requestBody:
         application/json: {"frequency_penalty": 0, "functions": [{"name": "get_current_weather", "description": "Get the current weather in a location", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "The location to get the weather for"}}, "required": ["location"]}}], "logit_bias": {"1234567890": 0.5, "1234567891": -0.5}, "max_completion_tokens": 4096, "messages": [{"content": "You are a helpful AI assistant", "name": "AI expert", "role": "system"}, {"content": "Hello!", "name": "John Doe", "role": "user"}, {"content": "I'm here to help you with any questions you have. How can I assist you today?", "name": "AI", "role": "assistant"}], "model": "meta-llama/Llama-3.3-70B-Instruct", "n": 1, "parallel_tool_calls": true, "presence_penalty": 0, "seed": 123, "service_tier": "auto", "stop": ["json([\"stop\", \"halt\"])"], "stream": false, "temperature": 0.7, "tools": [{"function": {"description": "Get the current weather in a location", "name": "get_current_weather", "parameters": {"type": "object", "properties": {"location": {"type": "string", "description": "The location to get the weather for"}}, "required": ["location"]}}, "type": "function"}], "top_logprobs": 1, "top_p": 1, "user": "user-1234"}
       responses:
         "200":
-          application/json: {"choices": [{"finish_reason": "stop", "index": 0, "message": {"name": "John Doe", "role": "user"}}], "created": 1677652288, "id": "chatcmpl-123", "model": "meta-llama/Llama-3.3-70B-Instruct", "object": "chat.completion", "service_tier": "auto", "system_fingerprint": "fp_44709d6fcb", "usage": {"completion_tokens": 12, "prompt_tokens": 9, "prompt_tokens_details": {"cached_tokens": 1}, "total_tokens": 21}}
+          application/json: {"choices": [{"finish_reason": "stop", "index": 0, "message": {"name": "John Doe", "role": "user"}}], "created": 1677652288, "id": "chatcmpl-123", "model": "meta-llama/Llama-3.3-70B-Instruct", "object": "chat.completion", "service_tier": "auto", "system_fingerprint": "fp_44709d6fcb", "usage": {"completion_tokens": 12, "prompt_tokens": 9, "prompt_tokens_details": {"audio_tokens": 0, "cached_tokens": 10}, "total_tokens": 21}}
   chat_completions_create_stream:
     speakeasy-default-chat-completions-create-stream:
       requestBody:
@@ -282,7 +313,7 @@ examples:
         application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 486589}
       responses:
         "200":
-          application/json: {"ciphertext": "<value>", "nonce": "<value>"}
+          application/json: {"ciphertext": "<value>", "nonce": "<value>", "usage": {"completion_tokens": 10, "completion_tokens_details": {"accepted_prediction_tokens": 10, "audio_tokens": 0, "reasoning_tokens": 10, "rejected_prediction_tokens": 0}, "prompt_tokens": 10, "prompt_tokens_details": {"audio_tokens": 0, "cached_tokens": 10}, "total_tokens": 20}}
   confidential_chat_completions_create_stream:
     speakeasy-default-confidential-chat-completions-create-stream:
       requestBody:
@@ -293,14 +324,14 @@ examples:
         application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 486589}
       responses:
         "200":
-          application/json: {"ciphertext": "<value>", "nonce": "<value>"}
+          application/json: {"ciphertext": "<value>", "nonce": "<value>", "usage": {"completion_tokens": 10, "completion_tokens_details": {"accepted_prediction_tokens": 10, "audio_tokens": 0, "reasoning_tokens": 10, "rejected_prediction_tokens": 0}, "prompt_tokens": 10, "prompt_tokens_details": {"audio_tokens": 0, "cached_tokens": 10}, "total_tokens": 20}}
   confidential_image_generations_create:
     speakeasy-default-confidential-image-generations-create:
       requestBody:
         application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 740198}
       responses:
         "200":
-          application/json: {"ciphertext": "<value>", "nonce": "<value>"}
+          application/json: {"ciphertext": "<value>", "nonce": "<value>", "usage": {"completion_tokens": 10, "completion_tokens_details": {"accepted_prediction_tokens": 10, "audio_tokens": 0, "reasoning_tokens": 10, "rejected_prediction_tokens": 0}, "prompt_tokens": 10, "prompt_tokens_details": {"audio_tokens": 0, "cached_tokens": 10}, "total_tokens": 20}}
   embeddings_create:
     speakeasy-default-embeddings-create:
       requestBody:
@@ -344,5 +375,20 @@ examples:
       responses:
         "200":
           application/json: {"node_small_id": 248208, "public_key": "<value>", "stack_small_id": 863000}
+  completions_create_stream:
+    speakeasy-default-completions-create-stream:
+      requestBody:
+        application/json: {"best_of": 1, "echo": false, "frequency_penalty": 0, "logit_bias": {"1234567890": 0.5, "1234567891": -0.5}, "logprobs": 1, "max_tokens": 4096, "model": "meta-llama/Llama-3.3-70B-Instruct", "n": 1, "presence_penalty": 0, "prompt": "<value>", "seed": 123, "stop": ["json([\"stop\", \"halt\"])"], "stream": true, "suffix": "json(\"\\n\")", "temperature": 0.7, "top_p": 1, "user": "user-1234"}
+  confidential_completions_create:
+    speakeasy-default-confidential-completions-create:
+      requestBody:
+        application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 486589}
+      responses:
+        "200":
+          application/json: {"ciphertext": "<value>", "nonce": "<value>", "usage": {"completion_tokens": 10, "completion_tokens_details": {"accepted_prediction_tokens": 10, "audio_tokens": 0, "reasoning_tokens": 10, "rejected_prediction_tokens": 0}, "prompt_tokens": 10, "prompt_tokens_details": {"audio_tokens": 0, "cached_tokens": 10}, "total_tokens": 20}}
+  confidential_completions_create_stream:
+    speakeasy-default-confidential-completions-create-stream:
+      requestBody:
+        application/json: {"ciphertext": "<value>", "client_dh_public_key": "<value>", "model_name": "<value>", "node_dh_public_key": "<value>", "nonce": "<value>", "plaintext_body_hash": "<value>", "salt": "<value>", "stack_small_id": 180107}
 examplesVersion: 1.0.1
 generatedTests: {}

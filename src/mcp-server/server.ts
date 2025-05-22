@@ -13,11 +13,14 @@ import {
 } from "./resources.js";
 import { MCPScope } from "./scopes.js";
 import { createRegisterTool } from "./tools.js";
-import { tool$chatCompletionsCreate } from "./tools/chatCompletionsCreate.js";
 import { tool$chatCreate } from "./tools/chatCreate.js";
 import { tool$chatCreateStream } from "./tools/chatCreateStream.js";
+import { tool$completionsCreate } from "./tools/completionsCreate.js";
+import { tool$completionsCreateStream } from "./tools/completionsCreateStream.js";
 import { tool$confidentialChatCreate } from "./tools/confidentialChatCreate.js";
 import { tool$confidentialChatCreateStream } from "./tools/confidentialChatCreateStream.js";
+import { tool$confidentialCompletionsCreate } from "./tools/confidentialCompletionsCreate.js";
+import { tool$confidentialCompletionsCreateStream } from "./tools/confidentialCompletionsCreateStream.js";
 import { tool$confidentialEmbeddingsCreate } from "./tools/confidentialEmbeddingsCreate.js";
 import { tool$confidentialImagesGenerate } from "./tools/confidentialImagesGenerate.js";
 import { tool$embeddingsCreate } from "./tools/embeddingsCreate.js";
@@ -38,7 +41,7 @@ export function createMCPServer(deps: {
 }) {
   const server = new McpServer({
     name: "AtomaSDK",
-    version: "0.0.1",
+    version: "0.0.2",
   });
 
   const client = new AtomaSDKCore({
@@ -68,7 +71,10 @@ export function createMCPServer(deps: {
   const register = { tool, resource, resourceTemplate, prompt };
   void register; // suppress unused warnings
 
-  tool(tool$chatCompletionsCreate);
+  tool(tool$completionsCreate);
+  tool(tool$completionsCreateStream);
+  tool(tool$confidentialCompletionsCreate);
+  tool(tool$confidentialCompletionsCreateStream);
   tool(tool$chatCreate);
   tool(tool$chatCreateStream);
   tool(tool$confidentialChatCreate);

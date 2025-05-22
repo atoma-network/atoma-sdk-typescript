@@ -40,6 +40,7 @@ the selected node.
       };
     }
 
-    return formatResult(result.value, {});
+    const value = result.value;
+    return formatResult(value, {});
   },
 };

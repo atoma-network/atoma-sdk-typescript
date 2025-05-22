@@ -22,12 +22,13 @@ import {
 } from "../models/errors/httpclienterrors.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import { generateKeyPair, encryptMessage, decryptMessage } from "../lib/crypto_utils.js";
+import * as operations from "../models/operations/index.js";
 
 export async function confidentialChatCreateStream(
   client: AtomaSDKCore,
   request: components.CreateChatCompletionRequest,
   options?: RequestOptions,
-): Promise<EventStream<components.ChatCompletionStreamResponse>> {
+): Promise<EventStream<operations.ConfidentialChatCompletionsCreateStreamResponseBody>> {
   const parsed = safeParse(
     request,
     (value) =>
@@ -101,7 +102,7 @@ export async function confidentialChatCreateStream(
     const response = doResult.value;
 
     const [result] = await M.match<
-      EventStream<components.ChatCompletionStreamResponse>,
+      EventStream<operations.ConfidentialChatCompletionsCreateStreamResponseBody>,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -135,13 +136,14 @@ export async function confidentialChatCreateStream(
               // Parse decrypted response
               const decryptedJson = JSON.parse(new TextDecoder().decode(decryptedData));
               return {
-                data: components.ChatCompletionChunk$inboundSchema.parse(decryptedJson)
+                data: components.ConfidentialComputeStreamResponse$inboundSchema.parse(decryptedJson)
               };
             },
           });
         }),
       ),
-      M.fail([400, 401, "4XX", 500, "5XX"]),
+      M.fail([400, 401, "4XX"]),
+      M.fail([500, "5XX"]),
     )(response);
     if (!result.ok) {
       throw result.error;

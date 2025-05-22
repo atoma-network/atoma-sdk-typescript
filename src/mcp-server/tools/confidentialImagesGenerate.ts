@@ -33,6 +33,8 @@ for full private AI compute.`,
       };
     }
 
-    return formatResult(result.value, {});
+    const value = result.value;
+
+    return formatResult(value, {});
   },
 };

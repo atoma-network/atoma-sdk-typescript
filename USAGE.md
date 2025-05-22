@@ -7,7 +7,7 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.completionsCreate({
+  const result = await atomaSDK.completions.create({
     frequencyPenalty: 0,
     logitBias: {
       "1234567890": 0.5,

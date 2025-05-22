@@ -1,16 +1,13 @@
-# ChatCompletionStreamResponse
+# ChatCompletionsCreateStreamResponseBody
 
-Represents the chat completion stream response.
-
-This is used to represent the chat completion stream response in the chat completion request.
-It can be either a chat completion chunk or a chat completion stream.
+Chat completions
 
 ## Example Usage
 
 ```typescript
-import { ChatCompletionStreamResponse } from "atoma-sdk/models/components";
+import { ChatCompletionsCreateStreamResponseBody } from "atoma-sdk/models/operations";
 
-let value: ChatCompletionStreamResponse = {
+let value: ChatCompletionsCreateStreamResponseBody = {
   data: {
     choices: [
       {
@@ -29,7 +26,8 @@ let value: ChatCompletionStreamResponse = {
       completionTokens: 12,
       promptTokens: 9,
       promptTokensDetails: {
-        cachedTokens: 1,
+        audioTokens: 0,
+        cachedTokens: 10,
       },
       totalTokens: 21,
     },

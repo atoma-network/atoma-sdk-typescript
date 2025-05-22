@@ -8,13 +8,19 @@ import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
+  CompletionsPrompt,
+  CompletionsPrompt$inboundSchema,
+  CompletionsPrompt$Outbound,
+  CompletionsPrompt$outboundSchema,
+} from "./completionsprompt.js";
+import {
   StreamOptions,
   StreamOptions$inboundSchema,
   StreamOptions$Outbound,
   StreamOptions$outboundSchema,
 } from "./streamoptions.js";
 
-export type CompletionRequest = {
+export type CreateCompletionsStreamRequest = {
   bestOf?: number | null | undefined;
   echo?: boolean | null | undefined;
   /**
@@ -38,9 +44,6 @@ export type CompletionRequest = {
   logitBias?: { [k: string]: number } | null | undefined;
   /**
    * An integer between 0 and 20 specifying the number of most likely tokens to return at each token position, each with an associated log probability.
-   *
-   * @remarks
-   * logprobs must be set to true if this parameter is used.
    */
   logprobs?: number | null | undefined;
   /**
@@ -62,10 +65,7 @@ export type CompletionRequest = {
    * whether they appear in the text so far
    */
   presencePenalty?: number | null | undefined;
-  /**
-   * The prompt to generate completions for
-   */
-  prompt: Array<string>;
+  prompt: CompletionsPrompt;
   /**
    * If specified, our system will make a best effort to sample deterministically
    */
@@ -75,9 +75,9 @@ export type CompletionRequest = {
    */
   stop?: Array<string> | null | undefined;
   /**
-   * Whether to stream back partial progress
+   * Whether to stream back partial progress. Must be true for this request type.
    */
-  stream?: boolean | null | undefined;
+  stream?: boolean | undefined;
   streamOptions?: StreamOptions | null | undefined;
   /**
    * The suffix that comes after a completion of inserted text.
@@ -98,8 +98,8 @@ export type CompletionRequest = {
 };
 
 /** @internal */
-export const CompletionRequest$inboundSchema: z.ZodType<
-  CompletionRequest,
+export const CreateCompletionsStreamRequest$inboundSchema: z.ZodType<
+  CreateCompletionsStreamRequest,
   z.ZodTypeDef,
   unknown
 > = z.object({
@@ -112,10 +112,10 @@ export const CompletionRequest$inboundSchema: z.ZodType<
   model: z.string(),
   n: z.nullable(z.number().int()).optional(),
   presence_penalty: z.nullable(z.number()).optional(),
-  prompt: z.array(z.string()),
+  prompt: CompletionsPrompt$inboundSchema,
   seed: z.nullable(z.number().int()).optional(),
   stop: z.nullable(z.array(z.string())).optional(),
-  stream: z.nullable(z.boolean()).optional(),
+  stream: z.boolean().default(true),
   stream_options: z.nullable(StreamOptions$inboundSchema).optional(),
   suffix: z.nullable(z.string()).optional(),
   temperature: z.nullable(z.number()).optional(),
@@ -134,7 +134,7 @@ export const CompletionRequest$inboundSchema: z.ZodType<
 });
 
 /** @internal */
-export type CompletionRequest$Outbound = {
+export type CreateCompletionsStreamRequest$Outbound = {
   best_of: number | null;
   echo: boolean | null;
   frequency_penalty?: number | null | undefined;
@@ -144,10 +144,10 @@ export type CompletionRequest$Outbound = {
   model: string;
   n?: number | null | undefined;
   presence_penalty?: number | null | undefined;
-  prompt: Array<string>;
+  prompt: CompletionsPrompt$Outbound;
   seed?: number | null | undefined;
   stop?: Array<string> | null | undefined;
-  stream?: boolean | null | undefined;
+  stream: boolean;
   stream_options?: StreamOptions$Outbound | null | undefined;
   suffix?: string | null | undefined;
   temperature?: number | null | undefined;
@@ -156,10 +156,10 @@ export type CompletionRequest$Outbound = {
 };
 
 /** @internal */
-export const CompletionRequest$outboundSchema: z.ZodType<
-  CompletionRequest$Outbound,
+export const CreateCompletionsStreamRequest$outboundSchema: z.ZodType<
+  CreateCompletionsStreamRequest$Outbound,
   z.ZodTypeDef,
-  CompletionRequest
+  CreateCompletionsStreamRequest
 > = z.object({
   bestOf: z.nullable(z.number().int().default(1)),
   echo: z.nullable(z.boolean().default(false)),
@@ -170,10 +170,10 @@ export const CompletionRequest$outboundSchema: z.ZodType<
   model: z.string(),
   n: z.nullable(z.number().int()).optional(),
   presencePenalty: z.nullable(z.number()).optional(),
-  prompt: z.array(z.string()),
+  prompt: CompletionsPrompt$outboundSchema,
   seed: z.nullable(z.number().int()).optional(),
   stop: z.nullable(z.array(z.string())).optional(),
-  stream: z.nullable(z.boolean()).optional(),
+  stream: z.boolean().default(true),
   streamOptions: z.nullable(StreamOptions$outboundSchema).optional(),
   suffix: z.nullable(z.string()).optional(),
   temperature: z.nullable(z.number()).optional(),
@@ -195,29 +195,31 @@ export const CompletionRequest$outboundSchema: z.ZodType<
  * @internal
  * @deprecated This namespace will be removed in future versions. Use schemas and types that are exported directly from this module.
  */
-export namespace CompletionRequest$ {
-  /** @deprecated use `CompletionRequest$inboundSchema` instead. */
-  export const inboundSchema = CompletionRequest$inboundSchema;
-  /** @deprecated use `CompletionRequest$outboundSchema` instead. */
-  export const outboundSchema = CompletionRequest$outboundSchema;
-  /** @deprecated use `CompletionRequest$Outbound` instead. */
-  export type Outbound = CompletionRequest$Outbound;
+export namespace CreateCompletionsStreamRequest$ {
+  /** @deprecated use `CreateCompletionsStreamRequest$inboundSchema` instead. */
+  export const inboundSchema = CreateCompletionsStreamRequest$inboundSchema;
+  /** @deprecated use `CreateCompletionsStreamRequest$outboundSchema` instead. */
+  export const outboundSchema = CreateCompletionsStreamRequest$outboundSchema;
+  /** @deprecated use `CreateCompletionsStreamRequest$Outbound` instead. */
+  export type Outbound = CreateCompletionsStreamRequest$Outbound;
 }
 
-export function completionRequestToJSON(
-  completionRequest: CompletionRequest,
+export function createCompletionsStreamRequestToJSON(
+  createCompletionsStreamRequest: CreateCompletionsStreamRequest,
 ): string {
   return JSON.stringify(
-    CompletionRequest$outboundSchema.parse(completionRequest),
+    CreateCompletionsStreamRequest$outboundSchema.parse(
+      createCompletionsStreamRequest,
+    ),
   );
 }
 
-export function completionRequestFromJSON(
+export function createCompletionsStreamRequestFromJSON(
   jsonString: string,
-): SafeParseResult<CompletionRequest, SDKValidationError> {
+): SafeParseResult<CreateCompletionsStreamRequest, SDKValidationError> {
   return safeParse(
     jsonString,
-    (x) => CompletionRequest$inboundSchema.parse(JSON.parse(x)),
-    `Failed to parse 'CompletionRequest' from JSON`,
+    (x) => CreateCompletionsStreamRequest$inboundSchema.parse(JSON.parse(x)),
+    `Failed to parse 'CreateCompletionsStreamRequest' from JSON`,
   );
 }

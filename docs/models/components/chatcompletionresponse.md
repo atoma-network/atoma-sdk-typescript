@@ -30,7 +30,8 @@ let value: ChatCompletionResponse = {
     completionTokens: 12,
     promptTokens: 9,
     promptTokensDetails: {
-      cachedTokens: 1,
+      audioTokens: 0,
+      cachedTokens: 10,
     },
     totalTokens: 21,
   },

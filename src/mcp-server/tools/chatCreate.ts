@@ -12,7 +12,7 @@ const args = {
 
 export const tool$chatCreate: ToolDefinition<typeof args> = {
   name: "chat-create",
-  description: `Create chat completion
+  description: `Create chat completions
 
 This function processes chat completion requests by determining whether to use streaming
 or non-streaming response handling based on the request payload. For streaming requests,

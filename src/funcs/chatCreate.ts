@@ -24,7 +24,7 @@ import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
 /**
- * Create chat completion
+ * Create chat completions
  *
  * @remarks
  * This function processes chat completion requests by determining whether to use streaming

@@ -8,17 +8,13 @@ import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 
-/**
- * Represents the prompt tokens details.
- *
- * @remarks
- *
- * This is used to represent the prompt tokens details in the chat completion request.
- * It can be either a prompt tokens details or a prompt tokens details choice.
- */
 export type PromptTokensDetails = {
   /**
-   * Number of tokens in the prompt that were cached.
+   * The number of audio tokens
+   */
+  audioTokens: number;
+  /**
+   * The number of cached tokens
    */
   cachedTokens: number;
 };
@@ -29,15 +25,18 @@ export const PromptTokensDetails$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
+  audio_tokens: z.number().int(),
   cached_tokens: z.number().int(),
 }).transform((v) => {
   return remap$(v, {
+    "audio_tokens": "audioTokens",
     "cached_tokens": "cachedTokens",
   });
 });
 
 /** @internal */
 export type PromptTokensDetails$Outbound = {
+  audio_tokens: number;
   cached_tokens: number;
 };
 
@@ -47,9 +46,11 @@ export const PromptTokensDetails$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   PromptTokensDetails
 > = z.object({
+  audioTokens: z.number().int(),
   cachedTokens: z.number().int(),
 }).transform((v) => {
   return remap$(v, {
+    audioTokens: "audio_tokens",
     cachedTokens: "cached_tokens",
   });
 });

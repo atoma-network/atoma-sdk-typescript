@@ -22,6 +22,7 @@ import {
   UnexpectedClientError,
 } from "../models/errors/httpclienterrors.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
+import * as operations from "../models/operations/index.js";
 import { APICall, APIPromise } from "../types/async.js";
 import { Result } from "../types/fp.js";
 
@@ -31,7 +32,7 @@ export function chatCreateStream(
   options?: RequestOptions,
 ): APIPromise<
   Result<
-    EventStream<components.ChatCompletionStreamResponse>,
+    EventStream<operations.ChatCompletionsCreateStreamResponseBody>,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -55,7 +56,7 @@ async function $do(
 ): Promise<
   [
     Result<
-      EventStream<components.ChatCompletionStreamResponse>,
+      EventStream<operations.ChatCompletionsCreateStreamResponseBody>,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -130,7 +131,7 @@ async function $do(
   const response = doResult.value;
 
   const [result] = await M.match<
-    EventStream<components.ChatCompletionStreamResponse>,
+    EventStream<operations.ChatCompletionsCreateStreamResponseBody>,
     | APIError
     | SDKValidationError
     | UnexpectedClientError
@@ -146,7 +147,7 @@ async function $do(
           stream,
           decoder(rawEvent) {
             const schema =
-              components.ChatCompletionStreamResponse$inboundSchema;
+              operations.ChatCompletionsCreateStreamResponseBody$inboundSchema;
             return schema.parse(rawEvent);
           },
         });
