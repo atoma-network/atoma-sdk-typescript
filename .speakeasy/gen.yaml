@@ -17,6 +17,8 @@ generation:
   auth:
     oAuth2ClientCredentialsEnabled: true
     oAuth2PasswordEnabled: true
+  tests:
+    generateNewTests: true
 typescript:
   version: 0.0.2
   additionalDependencies:

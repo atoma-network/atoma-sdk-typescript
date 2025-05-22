@@ -7,7 +7,7 @@ import * as components from "../../models/components/index.js";
 import { formatResult, ToolDefinition } from "../tools.js";
 
 const args = {
-  request: components.CreateImageRequest$inboundSchema,
+  request: components.ConfidentialComputeRequest$inboundSchema,
 };
 
 export const tool$confidentialImagesGenerate: ToolDefinition<typeof args> = {
@@ -20,11 +20,11 @@ non-streaming responses while maintaining data confidentiality through AEAD encr
 for full private AI compute.`,
   args,
   tool: async (client, args, ctx) => {
-    const result = await confidentialImagesGenerate(
+    const [result, apiCall] = await confidentialImagesGenerate(
       client,
       args.request,
       { fetchOptions: { signal: ctx.signal } },
-    );
+    ).$inspect();
 
     if (!result.ok) {
       return {
@@ -35,6 +35,6 @@ for full private AI compute.`,
 
     const value = result.value;
 
-    return formatResult(value, {});
+    return formatResult(value, apiCall);
   },
 };

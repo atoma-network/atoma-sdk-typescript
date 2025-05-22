@@ -7,7 +7,7 @@ import * as components from "../../models/components/index.js";
 import { formatResult, ToolDefinition } from "../tools.js";
 
 const args = {
-  request: components.CreateChatCompletionRequest$inboundSchema,
+  request: components.ConfidentialComputeRequest$inboundSchema,
 };
 
 export const tool$confidentialChatCreate: ToolDefinition<typeof args> = {
@@ -44,11 +44,11 @@ Returns \`AtomaProxyError::InternalError\` if:
 * Maintains confidentiality throughout the request lifecycle`,
   args,
   tool: async (client, args, ctx) => {
-    const result = await confidentialChatCreate(
+    const [result, apiCall] = await confidentialChatCreate(
       client,
       args.request,
       { fetchOptions: { signal: ctx.signal } },
-    );
+    ).$inspect();
 
     if (!result.ok) {
       return {
@@ -58,6 +58,7 @@ Returns \`AtomaProxyError::InternalError\` if:
     }
 
     const value = result.value;
-    return formatResult(value, {});
+
+    return formatResult(value, apiCall);
   },
 };

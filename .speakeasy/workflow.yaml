@@ -16,3 +16,5 @@ targets:
             labelOverride:
                 fixedValue: Typescript (SDK)
             blocking: false
+        testing:
+            enabled: true

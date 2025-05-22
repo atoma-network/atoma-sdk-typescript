@@ -7,7 +7,7 @@ import * as components from "../../models/components/index.js";
 import { formatResult, ToolDefinition } from "../tools.js";
 
 const args = {
-  request: components.CreateEmbeddingRequest$inboundSchema,
+  request: components.ConfidentialComputeRequest$inboundSchema,
 };
 
 export const tool$confidentialEmbeddingsCreate: ToolDefinition<typeof args> = {
@@ -27,11 +27,11 @@ the selected node.
 * \`INTERNAL_SERVER_ERROR\` - Processing or node communication failures`,
   args,
   tool: async (client, args, ctx) => {
-    const result = await confidentialEmbeddingsCreate(
+    const [result, apiCall] = await confidentialEmbeddingsCreate(
       client,
       args.request,
       { fetchOptions: { signal: ctx.signal } },
-    );
+    ).$inspect();
 
     if (!result.ok) {
       return {
@@ -41,6 +41,7 @@ the selected node.
     }
 
     const value = result.value;
-    return formatResult(value, {});
+
+    return formatResult(value, apiCall);
   },
 };
