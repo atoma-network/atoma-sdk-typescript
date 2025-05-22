@@ -18,34 +18,25 @@ test("Confidential Chat Confidential Chat Completions Create", async () => {
   });
 
   const result = await atomaSDK.confidentialChat.create({
-    ciphertext: "<value>",
-    clientDhPublicKey: "<value>",
-    modelName: "<value>",
-    nodeDhPublicKey: "<value>",
-    nonce: "<value>",
-    plaintextBodyHash: "<value>",
-    salt: "<value>",
-    stackSmallId: 486589,
+    messages: [{ role: "user", content: "Hello" }],
+    model: "gpt-3.5-turbo",
   });
   expect(result).toBeDefined();
   expect(result).toEqual({
-    ciphertext: "<value>",
-    nonce: "<value>",
+    id: "chatcmpl-123",
+    object: "chat.completion",
+    created: 1677652288,
+    model: "gpt-3.5-turbo",
+    choices: [{
+      index: 0,
+      message: { role: "assistant", content: "Hi there!" },
+      finish_reason: "stop"
+    }],
     usage: {
-      completionTokens: 10,
-      completionTokensDetails: {
-        acceptedPredictionTokens: 10,
-        audioTokens: 0,
-        reasoningTokens: 10,
-        rejectedPredictionTokens: 0,
-      },
-      promptTokens: 10,
-      promptTokensDetails: {
-        audioTokens: 0,
-        cachedTokens: 10,
-      },
-      totalTokens: 20,
-    },
+      prompt_tokens: 9,
+      completion_tokens: 12,
+      total_tokens: 21
+    }
   });
 });
 

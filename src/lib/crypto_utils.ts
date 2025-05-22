@@ -1,4 +1,4 @@
-import { box, randomBytes } from 'tweetnacl';
+import * as tweetnacl from 'tweetnacl';
 import { createHmac, createCipheriv, createDecipheriv } from 'crypto';
 import { BLAKE2b } from '@stablelib/blake2b';
 import { x25519 } from '@noble/curves/ed25519';
@@ -159,7 +159,7 @@ export function decryptMessage(
  * @returns An object containing the keypair
  */
 export function generateKeyPair() {
-    const keypair = box.keyPair();
+    const keypair = tweetnacl.box.keyPair();
     return {
         publicKey: keypair.publicKey,
         privateKey: keypair.secretKey
@@ -172,5 +172,5 @@ export function generateKeyPair() {
  * @returns Random bytes
  */
 export function generateRandomBytes(length: number): Uint8Array {
-    return randomBytes(length);
+    return tweetnacl.randomBytes(length);
 }

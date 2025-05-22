@@ -5,6 +5,7 @@
 import { confidentialImagesGenerate } from "../../funcs/confidentialImagesGenerate.js";
 import * as components from "../../models/components/index.js";
 import { formatResult, ToolDefinition } from "../tools.js";
+import { decryptMessage } from "../../lib/crypto_utils.js";
 
 const args = {
   request: components.ConfidentialComputeRequest$inboundSchema,
@@ -20,11 +21,28 @@ non-streaming responses while maintaining data confidentiality through AEAD encr
 for full private AI compute.`,
   args,
   tool: async (client, args, ctx) => {
-    const [result, apiCall] = await confidentialImagesGenerate(
+    // Decrypt the request
+    const decryptedData = decryptMessage(
+      Buffer.from(args.request.ciphertext, 'base64'),
+      Buffer.from(args.request.clientDhPublicKey, 'base64'),
+      Buffer.from(args.request.nodeDhPublicKey, 'base64'),
+      Buffer.from(args.request.salt, 'base64'),
+      Buffer.from(args.request.nonce, 'base64')
+    );
+
+    if (!decryptedData) {
+      return {
+        content: [{ type: "text", text: "Failed to decrypt request" }],
+        isError: true,
+      };
+    }
+
+    const decryptedRequest = JSON.parse(new TextDecoder().decode(decryptedData));
+    const result = await confidentialImagesGenerate(
       client,
-      args.request,
+      decryptedRequest,
       { fetchOptions: { signal: ctx.signal } },
-    ).$inspect();
+    );
 
     if (!result.ok) {
       return {
@@ -35,6 +53,6 @@ for full private AI compute.`,
 
     const value = result.value;
 
-    return formatResult(value, apiCall);
+    return formatResult(value, {});
   },
 };

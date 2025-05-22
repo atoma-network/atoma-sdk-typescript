@@ -16,33 +16,21 @@ test("Confidential Embeddings Confidential Embeddings Create", async () => {
   });
 
   const result = await atomaSDK.confidentialEmbeddings.create({
-    ciphertext: "<value>",
-    clientDhPublicKey: "<value>",
-    modelName: "<value>",
-    nodeDhPublicKey: "<value>",
-    nonce: "<value>",
-    plaintextBodyHash: "<value>",
-    salt: "<value>",
-    stackSmallId: 486589,
+    input: "The quick brown fox jumps over the lazy dog",
+    model: "text-embedding-3-small"
   });
   expect(result).toBeDefined();
   expect(result).toEqual({
-    ciphertext: "<value>",
-    nonce: "<value>",
+    object: "list",
+    data: [{
+      object: "embedding",
+      embedding: [0.0023064255, -0.009327292, 0.0023064255],
+      index: 0
+    }],
+    model: "text-embedding-3-small",
     usage: {
-      completionTokens: 10,
-      completionTokensDetails: {
-        acceptedPredictionTokens: 10,
-        audioTokens: 0,
-        reasoningTokens: 10,
-        rejectedPredictionTokens: 0,
-      },
-      promptTokens: 10,
-      promptTokensDetails: {
-        audioTokens: 0,
-        cachedTokens: 10,
-      },
-      totalTokens: 20,
-    },
+      prompt_tokens: 9,
+      total_tokens: 9
+    }
   });
 });

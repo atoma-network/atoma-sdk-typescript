@@ -18,33 +18,17 @@ test("Confidential Images Confidential Image Generations Create", async () => {
   });
 
   const result = await atomaSDK.confidentialImages.generate({
-    ciphertext: "<value>",
-    clientDhPublicKey: "<value>",
-    modelName: "<value>",
-    nodeDhPublicKey: "<value>",
-    nonce: "<value>",
-    plaintextBodyHash: "<value>",
-    salt: "<value>",
-    stackSmallId: 740198,
+    prompt: "A beautiful sunset",
+    n: 1,
+    size: "1024x1024",
+    responseFormat: "url",
+    model: "dall-e-3"
   });
   expect(result).toBeDefined();
   expect(result).toEqual({
-    ciphertext: "<value>",
-    nonce: "<value>",
-    usage: {
-      completionTokens: 10,
-      completionTokensDetails: {
-        acceptedPredictionTokens: 10,
-        audioTokens: 0,
-        reasoningTokens: 10,
-        rejectedPredictionTokens: 0,
-      },
-      promptTokens: 10,
-      promptTokensDetails: {
-        audioTokens: 0,
-        cachedTokens: 10,
-      },
-      totalTokens: 20,
-    },
+    created: 1677652288,
+    data: [{
+      url: "https://example.com/image.png"
+    }]
   });
 });

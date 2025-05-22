@@ -5,6 +5,7 @@
 import { confidentialChatCreateStream } from "../../funcs/confidentialChatCreateStream.js";
 import * as components from "../../models/components/index.js";
 import { formatResult, ToolDefinition } from "../tools.js";
+import { decryptMessage } from "../../lib/crypto_utils.js";
 
 const args = {
   request: components.ConfidentialComputeRequest$inboundSchema,
@@ -15,21 +16,29 @@ export const tool$confidentialChatCreateStream: ToolDefinition<typeof args> = {
   description: ``,
   args,
   tool: async (client, args, ctx) => {
-    const [result, apiCall] = await confidentialChatCreateStream(
-      client,
-      args.request,
-      { fetchOptions: { signal: ctx.signal } },
-    ).$inspect();
+    // Decrypt the request
+    const decryptedData = decryptMessage(
+      Buffer.from(args.request.ciphertext, 'base64'),
+      Buffer.from(args.request.clientDhPublicKey, 'base64'),
+      Buffer.from(args.request.nodeDhPublicKey, 'base64'),
+      Buffer.from(args.request.salt, 'base64'),
+      Buffer.from(args.request.nonce, 'base64')
+    );
 
-    if (!result.ok) {
+    if (!decryptedData) {
       return {
-        content: [{ type: "text", text: result.error.message }],
+        content: [{ type: "text", text: "Failed to decrypt request" }],
         isError: true,
       };
     }
 
-    const value = result.value;
+    const decryptedRequest = JSON.parse(new TextDecoder().decode(decryptedData));
+    const stream = await confidentialChatCreateStream(
+      client,
+      decryptedRequest,
+      { fetchOptions: { signal: ctx.signal } },
+    );
 
-    return formatResult(value, apiCall);
+    return formatResult(stream, {});
   },
 };
