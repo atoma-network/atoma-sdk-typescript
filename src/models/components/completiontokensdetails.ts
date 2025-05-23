@@ -15,19 +15,19 @@ export type CompletionTokensDetails = {
   /**
    * The number of tokens in the completion
    */
-  acceptedPredictionTokens: number;
+  acceptedPredictionTokens?: number | null | undefined;
   /**
    * The number of audio tokens
    */
-  audioTokens: number;
+  audioTokens?: number | null | undefined;
   /**
    * The number of reasoning tokens
    */
-  reasoningTokens: number;
+  reasoningTokens?: number | null | undefined;
   /**
    * The number of rejected prediction tokens
    */
-  rejectedPredictionTokens: number;
+  rejectedPredictionTokens?: number | null | undefined;
 };
 
 /** @internal */
@@ -36,10 +36,10 @@ export const CompletionTokensDetails$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  accepted_prediction_tokens: z.number().int(),
-  audio_tokens: z.number().int(),
-  reasoning_tokens: z.number().int(),
-  rejected_prediction_tokens: z.number().int(),
+  accepted_prediction_tokens: z.number().int().optional().nullable(),
+  audio_tokens: z.number().int().optional().nullable(),
+  reasoning_tokens: z.number().int().optional().nullable(),
+  rejected_prediction_tokens: z.number().int().optional().nullable(),
 }).transform((v) => {
   return remap$(v, {
     "accepted_prediction_tokens": "acceptedPredictionTokens",
@@ -51,10 +51,10 @@ export const CompletionTokensDetails$inboundSchema: z.ZodType<
 
 /** @internal */
 export type CompletionTokensDetails$Outbound = {
-  accepted_prediction_tokens: number;
-  audio_tokens: number;
-  reasoning_tokens: number;
-  rejected_prediction_tokens: number;
+  accepted_prediction_tokens?: number | null | undefined;
+  audio_tokens?: number | null | undefined;
+  reasoning_tokens?: number | null | undefined;
+  rejected_prediction_tokens?: number | null | undefined;
 };
 
 /** @internal */
@@ -63,10 +63,10 @@ export const CompletionTokensDetails$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   CompletionTokensDetails
 > = z.object({
-  acceptedPredictionTokens: z.number().int(),
-  audioTokens: z.number().int(),
-  reasoningTokens: z.number().int(),
-  rejectedPredictionTokens: z.number().int(),
+  acceptedPredictionTokens: z.number().int().optional().nullable(),
+  audioTokens: z.number().int().optional().nullable(),
+  reasoningTokens: z.number().int().optional().nullable(),
+  rejectedPredictionTokens: z.number().int().optional().nullable(),
 }).transform((v) => {
   return remap$(v, {
     acceptedPredictionTokens: "accepted_prediction_tokens",

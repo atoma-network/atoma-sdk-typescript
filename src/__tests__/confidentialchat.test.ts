@@ -35,7 +35,17 @@ test("Confidential Chat Confidential Chat Completions Create", async () => {
     usage: {
       prompt_tokens: 9,
       completion_tokens: 12,
-      total_tokens: 21
+      total_tokens: 21,
+      completion_tokens_details: {
+        accepted_prediction_tokens: 12,
+        audio_tokens: 0,
+        reasoning_tokens: 12,
+        rejected_prediction_tokens: 0
+      },
+      prompt_tokens_details: {
+        audio_tokens: 0,
+        cached_tokens: 9
+      }
     }
   });
 });

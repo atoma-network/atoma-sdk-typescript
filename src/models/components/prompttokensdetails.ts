@@ -12,11 +12,11 @@ export type PromptTokensDetails = {
   /**
    * The number of audio tokens
    */
-  audioTokens: number;
+  audioTokens?: number;
   /**
    * The number of cached tokens
    */
-  cachedTokens: number;
+  cachedTokens?: number;
 };
 
 /** @internal */

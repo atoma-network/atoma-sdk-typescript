@@ -28,12 +28,12 @@ export type Usage = {
   /**
    * The details of the completion tokens
    */
-  completionTokensDetails: CompletionTokensDetails;
+  completionTokensDetails?: CompletionTokensDetails | null | undefined;
   /**
    * The number of prompt tokens used
    */
   promptTokens: number;
-  promptTokensDetails: PromptTokensDetails;
+  promptTokensDetails?: PromptTokensDetails | null | undefined;
   /**
    * The total number of tokens used
    */
@@ -44,9 +44,9 @@ export type Usage = {
 export const Usage$inboundSchema: z.ZodType<Usage, z.ZodTypeDef, unknown> = z
   .object({
     completion_tokens: z.number().int(),
-    completion_tokens_details: CompletionTokensDetails$inboundSchema,
+    completion_tokens_details: CompletionTokensDetails$inboundSchema.optional().nullable(),
     prompt_tokens: z.number().int(),
-    prompt_tokens_details: PromptTokensDetails$inboundSchema,
+    prompt_tokens_details: PromptTokensDetails$inboundSchema.optional().nullable(),
     total_tokens: z.number().int(),
   }).transform((v) => {
     return remap$(v, {
@@ -61,9 +61,9 @@ export const Usage$inboundSchema: z.ZodType<Usage, z.ZodTypeDef, unknown> = z
 /** @internal */
 export type Usage$Outbound = {
   completion_tokens: number;
-  completion_tokens_details: CompletionTokensDetails$Outbound;
+  completion_tokens_details?: CompletionTokensDetails$Outbound;
   prompt_tokens: number;
-  prompt_tokens_details: PromptTokensDetails$Outbound;
+  prompt_tokens_details?: PromptTokensDetails$Outbound;
   total_tokens: number;
 };
 
