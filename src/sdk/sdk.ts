@@ -4,7 +4,9 @@
 
 import { ClientSDK } from "../lib/sdks.js";
 import { Chat } from "./chat.js";
+import { Completions } from "./completions.js";
 import { ConfidentialChat } from "./confidentialchat.js";
+import { ConfidentialCompletions } from "./confidentialcompletions.js";
 import { ConfidentialEmbeddings } from "./confidentialembeddings.js";
 import { ConfidentialImages } from "./confidentialimages.js";
 import { Embeddings } from "./embeddings.js";
@@ -14,6 +16,18 @@ import { Models } from "./models.js";
 import { Nodes } from "./nodes.js";
 
 export class AtomaSDK extends ClientSDK {
+  private _completions?: Completions;
+  get completions(): Completions {
+    return (this._completions ??= new Completions(this._options));
+  }
+
+  private _confidentialCompletions?: ConfidentialCompletions;
+  get confidentialCompletions(): ConfidentialCompletions {
+    return (this._confidentialCompletions ??= new ConfidentialCompletions(
+      this._options,
+    ));
+  }
+
   private _chat?: Chat;
   get chat(): Chat {
     return (this._chat ??= new Chat(this._options));

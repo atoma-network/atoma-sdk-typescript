@@ -1,0 +1,639 @@
+arazzo: 1.0.1
+info:
+  title: Test Suite
+  summary: Created from ../atoma-proxy/atoma-proxy/docs/openapi.yml
+  version: 0.0.1
+sourceDescriptions:
+  - name: ../atoma-proxy/atoma-proxy/docs/openapi.yml
+    url: https://TBD.com
+    type: openapi
+workflows:
+  - workflowId: completions_create
+    steps:
+      - stepId: test
+        operationId: completions_create
+        requestBody:
+          contentType: application/json
+          payload:
+            best_of: 1
+            echo: false
+            frequency_penalty: 0
+            logit_bias:
+              "1234567890": 0.5
+              "1234567891": -0.5
+            logprobs: 1
+            max_tokens: 4096
+            model: meta-llama/Llama-3.3-70B-Instruct
+            "n": 1
+            presence_penalty: 0
+            prompt:
+              - Hello!
+            seed: 123
+            stop:
+              - json(["stop", "halt"])
+            stream: false
+            suffix: json("\n")
+            temperature: 0.7
+            top_p: 1
+            user: user-1234
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "choices": [
+                  {
+                    "finish_reason": "stop",
+                    "index": 0,
+                    "logprobs": null,
+                    "text": "This is a test"
+                  }
+                ],
+                "created": "2021-01-01T00:00:00Z",
+                "id": "cmpl-1234567890",
+                "model": "meta-llama/Llama-3.3-70B-Instruct",
+                "object": "text_completion",
+                "system_fingerprint": "system-fingerprint",
+                "usage": {
+                  "completion_tokens": 10,
+                  "completion_tokens_details": {
+                    "accepted_prediction_tokens": 10,
+                    "audio_tokens": 0,
+                    "reasoning_tokens": 10,
+                    "rejected_prediction_tokens": 0
+                  },
+                  "prompt_tokens": 10,
+                  "prompt_tokens_details": {
+                    "audio_tokens": 0,
+                    "cached_tokens": 10
+                  },
+                  "total_tokens": 20
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Completions
+  - workflowId: completions_create_stream
+    steps:
+      - stepId: test
+        operationId: completions_create_stream
+        requestBody:
+          contentType: application/json
+          payload:
+            best_of: 1
+            echo: false
+            frequency_penalty: 0
+            logit_bias:
+              "1234567890": 0.5
+              "1234567891": -0.5
+            logprobs: 1
+            max_tokens: 4096
+            model: meta-llama/Llama-3.3-70B-Instruct
+            "n": 1
+            presence_penalty: 0
+            prompt: <value>
+            seed: 123
+            stop:
+              - json(["stop", "halt"])
+            stream: true
+            suffix: json("\n")
+            temperature: 0.7
+            top_p: 1
+            user: user-1234
+        successCriteria:
+          - condition: $statusCode == 200
+    x-speakeasy-test-group: Completions
+  - workflowId: confidential_completions_create
+    steps:
+      - stepId: test
+        operationId: confidential_completions_create
+        requestBody:
+          contentType: application/json
+          payload:
+            ciphertext: <value>
+            client_dh_public_key: <value>
+            model_name: <value>
+            node_dh_public_key: <value>
+            nonce: <value>
+            plaintext_body_hash: <value>
+            salt: <value>
+            stack_small_id: 486589
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "ciphertext": "\u003cvalue\u003e",
+                "nonce": "\u003cvalue\u003e",
+                "usage": {
+                  "completion_tokens": 10,
+                  "completion_tokens_details": {
+                    "accepted_prediction_tokens": 10,
+                    "audio_tokens": 0,
+                    "reasoning_tokens": 10,
+                    "rejected_prediction_tokens": 0
+                  },
+                  "prompt_tokens": 10,
+                  "prompt_tokens_details": {
+                    "audio_tokens": 0,
+                    "cached_tokens": 10
+                  },
+                  "total_tokens": 20
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Confidential Completions
+  - workflowId: confidential_completions_create_stream
+    steps:
+      - stepId: test
+        operationId: confidential_completions_create_stream
+        requestBody:
+          contentType: application/json
+          payload:
+            ciphertext: <value>
+            client_dh_public_key: <value>
+            model_name: <value>
+            node_dh_public_key: <value>
+            nonce: <value>
+            plaintext_body_hash: <value>
+            salt: <value>
+            stack_small_id: 180107
+        successCriteria:
+          - condition: $statusCode == 200
+    x-speakeasy-test-group: Confidential Completions
+  - workflowId: chat_completions_create
+    steps:
+      - stepId: test
+        operationId: chat_completions_create
+        requestBody:
+          contentType: application/json
+          payload:
+            frequency_penalty: 0
+            functions:
+              - description: Get the current weather in a location
+                name: get_current_weather
+                parameters:
+                  properties:
+                    location:
+                      description: The location to get the weather for
+                      type: string
+                  required:
+                    - location
+                  type: object
+            logit_bias:
+              "1234567890": 0.5
+              "1234567891": -0.5
+            max_completion_tokens: 4096
+            messages:
+              - content: You are a helpful AI assistant
+                name: AI expert
+                role: system
+              - content: Hello!
+                name: John Doe
+                role: user
+              - content: I'm here to help you with any questions you have. How can I assist you today?
+                name: AI
+                role: assistant
+            model: meta-llama/Llama-3.3-70B-Instruct
+            "n": 1
+            parallel_tool_calls: true
+            presence_penalty: 0
+            seed: 123
+            service_tier: auto
+            stop:
+              - json(["stop", "halt"])
+            stream: false
+            temperature: 0.7
+            tools:
+              - function:
+                  description: Get the current weather in a location
+                  name: get_current_weather
+                  parameters:
+                    properties:
+                      location:
+                        description: The location to get the weather for
+                        type: string
+                    required:
+                      - location
+                    type: object
+                type: function
+            top_logprobs: 1
+            top_p: 1
+            user: user-1234
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "choices": [
+                  {
+                    "finish_reason": "stop",
+                    "index": 0,
+                    "message": {
+                      "name": "John Doe",
+                      "role": "user"
+                    }
+                  }
+                ],
+                "created": 1677652288,
+                "id": "chatcmpl-123",
+                "model": "meta-llama/Llama-3.3-70B-Instruct",
+                "object": "chat.completion",
+                "service_tier": "auto",
+                "system_fingerprint": "fp_44709d6fcb",
+                "usage": {
+                  "completion_tokens": 12,
+                  "prompt_tokens": 9,
+                  "prompt_tokens_details": {
+                    "audio_tokens": 0,
+                    "cached_tokens": 10
+                  },
+                  "total_tokens": 21
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Chat
+  - workflowId: chat_completions_create_stream
+    steps:
+      - stepId: test
+        operationId: chat_completions_create_stream
+        requestBody:
+          contentType: application/json
+          payload:
+            frequency_penalty: 0
+            functions:
+              - description: Get the current weather in a location
+                name: get_current_weather
+                parameters:
+                  properties:
+                    location:
+                      description: The location to get the weather for
+                      type: string
+                  required:
+                    - location
+                  type: object
+            logit_bias:
+              "1234567890": 0.5
+              "1234567891": -0.5
+            max_completion_tokens: 4096
+            messages:
+              - content: You are a helpful AI assistant
+                name: AI expert
+                role: system
+              - content: Hello!
+                name: John Doe
+                role: user
+              - content: I'm here to help you with any questions you have. How can I assist you today?
+                name: AI
+                role: assistant
+            model: meta-llama/Llama-3.3-70B-Instruct
+            "n": 1
+            parallel_tool_calls: true
+            presence_penalty: 0
+            seed: 123
+            service_tier: auto
+            stop:
+              - json(["stop", "halt"])
+            stream: true
+            temperature: 0.7
+            tools:
+              - function:
+                  description: Get the current weather in a location
+                  name: get_current_weather
+                  parameters:
+                    properties:
+                      location:
+                        description: The location to get the weather for
+                        type: string
+                    required:
+                      - location
+                    type: object
+                type: function
+            top_logprobs: 1
+            top_p: 1
+            user: user-1234
+        successCriteria:
+          - condition: $statusCode == 200
+    x-speakeasy-test-group: Chat
+  - workflowId: confidential_chat_completions_create
+    steps:
+      - stepId: test
+        operationId: confidential_chat_completions_create
+        requestBody:
+          contentType: application/json
+          payload:
+            ciphertext: <value>
+            client_dh_public_key: <value>
+            model_name: <value>
+            node_dh_public_key: <value>
+            nonce: <value>
+            plaintext_body_hash: <value>
+            salt: <value>
+            stack_small_id: 486589
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "ciphertext": "\u003cvalue\u003e",
+                "nonce": "\u003cvalue\u003e",
+                "usage": {
+                  "completion_tokens": 10,
+                  "completion_tokens_details": {
+                    "accepted_prediction_tokens": 10,
+                    "audio_tokens": 0,
+                    "reasoning_tokens": 10,
+                    "rejected_prediction_tokens": 0
+                  },
+                  "prompt_tokens": 10,
+                  "prompt_tokens_details": {
+                    "audio_tokens": 0,
+                    "cached_tokens": 10
+                  },
+                  "total_tokens": 20
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Confidential Chat
+  - workflowId: confidential_chat_completions_create_stream
+    steps:
+      - stepId: test
+        operationId: confidential_chat_completions_create_stream
+        requestBody:
+          contentType: application/json
+          payload:
+            ciphertext: <value>
+            client_dh_public_key: <value>
+            model_name: <value>
+            node_dh_public_key: <value>
+            nonce: <value>
+            plaintext_body_hash: <value>
+            salt: <value>
+            stack_small_id: 180107
+        successCriteria:
+          - condition: $statusCode == 200
+    x-speakeasy-test-group: Confidential Chat
+  - workflowId: confidential_embeddings_create
+    steps:
+      - stepId: test
+        operationId: confidential_embeddings_create
+        requestBody:
+          contentType: application/json
+          payload:
+            ciphertext: <value>
+            client_dh_public_key: <value>
+            model_name: <value>
+            node_dh_public_key: <value>
+            nonce: <value>
+            plaintext_body_hash: <value>
+            salt: <value>
+            stack_small_id: 486589
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "ciphertext": "\u003cvalue\u003e",
+                "nonce": "\u003cvalue\u003e",
+                "usage": {
+                  "completion_tokens": 10,
+                  "completion_tokens_details": {
+                    "accepted_prediction_tokens": 10,
+                    "audio_tokens": 0,
+                    "reasoning_tokens": 10,
+                    "rejected_prediction_tokens": 0
+                  },
+                  "prompt_tokens": 10,
+                  "prompt_tokens_details": {
+                    "audio_tokens": 0,
+                    "cached_tokens": 10
+                  },
+                  "total_tokens": 20
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Confidential Embeddings
+  - workflowId: confidential_image_generations_create
+    steps:
+      - stepId: test
+        operationId: confidential_image_generations_create
+        requestBody:
+          contentType: application/json
+          payload:
+            ciphertext: <value>
+            client_dh_public_key: <value>
+            model_name: <value>
+            node_dh_public_key: <value>
+            nonce: <value>
+            plaintext_body_hash: <value>
+            salt: <value>
+            stack_small_id: 740198
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "ciphertext": "\u003cvalue\u003e",
+                "nonce": "\u003cvalue\u003e",
+                "usage": {
+                  "completion_tokens": 10,
+                  "completion_tokens_details": {
+                    "accepted_prediction_tokens": 10,
+                    "audio_tokens": 0,
+                    "reasoning_tokens": 10,
+                    "rejected_prediction_tokens": 0
+                  },
+                  "prompt_tokens": 10,
+                  "prompt_tokens_details": {
+                    "audio_tokens": 0,
+                    "cached_tokens": 10
+                  },
+                  "total_tokens": 20
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Confidential Images
+  - workflowId: embeddings_create
+    steps:
+      - stepId: test
+        operationId: embeddings_create
+        requestBody:
+          contentType: application/json
+          payload:
+            encoding_format: float
+            input: The quick brown fox jumped over the lazy dog
+            model: intfloat/multilingual-e5-large-instruct
+            user: user-1234
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "data": [
+                  {
+                    "embedding": [
+                      "[0.0023064255, -0.009327292]"
+                    ],
+                    "index": 0,
+                    "object": "embedding"
+                  },
+                  {
+                    "embedding": [
+                      "[0.0023064255, -0.009327292]"
+                    ],
+                    "index": 0,
+                    "object": "embedding"
+                  }
+                ],
+                "model": "intfloat/multilingual-e5-large-instruct",
+                "object": "list",
+                "usage": {
+                  "prompt_tokens": 8,
+                  "total_tokens": 8
+                }
+              }
+            type: simple
+    x-speakeasy-test-group: Embeddings
+  - workflowId: health
+    steps:
+      - stepId: test
+        operationId: health
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "message": "\u003cvalue\u003e"
+              }
+            type: simple
+    x-speakeasy-test-group: Health
+  - workflowId: image_generations_create
+    steps:
+      - stepId: test
+        operationId: image_generations_create
+        requestBody:
+          contentType: application/json
+          payload:
+            model: black-forest-labs/FLUX.1-schnell
+            "n": 1
+            prompt: A cute baby sea otter floating on its back
+            quality: hd
+            response_format: url
+            size: 1024x1024
+            style: vivid
+            user: user-1234
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "created": 1677649420,
+                "data": [
+                  {
+                    "revised_prompt": "A stunning image of a baby sea otter floating on its back in crystal clear blue water, with gentle ripples surrounding it. The otter's fur appears soft and well-detailed, and its expression is peaceful and content.",
+                    "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/image.png"
+                  },
+                  {
+                    "revised_prompt": "A stunning image of a baby sea otter floating on its back in crystal clear blue water, with gentle ripples surrounding it. The otter's fur appears soft and well-detailed, and its expression is peaceful and content.",
+                    "url": "https://oaidalleapiprodscus.blob.core.windows.net/private/image.png"
+                  }
+                ]
+              }
+            type: simple
+    x-speakeasy-test-group: Images
+  - workflowId: models_list
+    steps:
+      - stepId: test
+        operationId: models_list
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "data": [
+                  {
+                    "created": 640785,
+                    "id": "\u003cid\u003e",
+                    "object": "\u003cvalue\u003e",
+                    "owned_by": "\u003cvalue\u003e"
+                  },
+                  {
+                    "created": 744692,
+                    "id": "\u003cid\u003e",
+                    "object": "\u003cvalue\u003e",
+                    "owned_by": "\u003cvalue\u003e"
+                  },
+                  {
+                    "created": 941970,
+                    "id": "\u003cid\u003e",
+                    "object": "\u003cvalue\u003e",
+                    "owned_by": "\u003cvalue\u003e"
+                  }
+                ],
+                "object": "\u003cvalue\u003e"
+              }
+            type: simple
+    x-speakeasy-test-group: Models
+  - workflowId: open_router_models_list
+    steps:
+      - stepId: test
+        operationId: open_router_models_list
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              "\u003cvalue\u003e"
+            type: simple
+    x-speakeasy-test-group: Models
+  - workflowId: nodes_create
+    steps:
+      - stepId: test
+        operationId: nodes_create
+        requestBody:
+          contentType: application/json
+          payload:
+            data:
+              country: Andorra
+              node_small_id: 3665
+              public_address: <value>
+            signature: <value>
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "message": "\u003cvalue\u003e"
+              }
+            type: simple
+    x-speakeasy-test-group: Nodes
+  - workflowId: nodes_create_lock
+    steps:
+      - stepId: test
+        operationId: nodes_create_lock
+        requestBody:
+          contentType: application/json
+          payload:
+            model: Focus
+        successCriteria:
+          - condition: $statusCode == 200
+          - condition: $response.header.Content-Type == application/json
+          - context: $response.body
+            condition: |
+              {
+                "node_small_id": 248208,
+                "public_key": "\u003cvalue\u003e",
+                "stack_small_id": 863000
+              }
+            type: simple
+    x-speakeasy-test-group: Nodes

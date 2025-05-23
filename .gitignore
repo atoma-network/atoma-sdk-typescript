@@ -1,3 +1,8 @@
+/mcp-server
+/bin
+/.eslintcache
+.speakeasy/temp/
+.DS_Store
 /__tests__
 /models
 /models/errors

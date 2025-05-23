@@ -20,7 +20,7 @@ specific category of applications.
 
 ```typescript
 import { AtomaSDKCore } from "atoma-sdk/core.js";
-import { chatCreate } from "atoma-sdk/funcs/chatCreate.js";
+import { completionsCreate } from "atoma-sdk/funcs/completionsCreate.js";
 import { SDKValidationError } from "atoma-sdk/models/errors/sdkvalidationerror.js";
 
 // Use `AtomaSDKCore` for best tree-shaking performance.
@@ -30,14 +30,28 @@ const atomaSDK = new AtomaSDKCore({
 });
 
 async function run() {
-  const res = await chatCreate(atomaSDK, {
-    messages: [
-      {
-        content: "Hello! How can you help me today?",
-        role: "user",
-      },
-    ],
+  const res = await completionsCreate(atomaSDK, {
+    frequencyPenalty: 0,
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    logprobs: 1,
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    presencePenalty: 0,
+    prompt: [
+      "Hello!",
+    ],
+    seed: 123,
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    stream: false,
+    suffix: "json(\"\n\")",
+    temperature: 0.7,
+    topP: 1,
+    user: "user-1234",
   });
 
   switch (true) {

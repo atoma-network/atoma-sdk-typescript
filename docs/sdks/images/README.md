@@ -31,7 +31,13 @@ const atomaSDK = new AtomaSDK({
 async function run() {
   const result = await atomaSDK.images.generate({
     model: "black-forest-labs/FLUX.1-schnell",
+    n: 1,
     prompt: "A cute baby sea otter floating on its back",
+    quality: "hd",
+    responseFormat: "url",
+    size: "1024x1024",
+    style: "vivid",
+    user: "user-1234",
   });
 
   // Handle the result
@@ -58,7 +64,13 @@ const atomaSDK = new AtomaSDKCore({
 async function run() {
   const res = await imagesGenerate(atomaSDK, {
     model: "black-forest-labs/FLUX.1-schnell",
+    n: 1,
     prompt: "A cute baby sea otter floating on its back",
+    quality: "hd",
+    responseFormat: "url",
+    size: "1024x1024",
+    style: "vivid",
+    user: "user-1234",
   });
 
   if (!res.ok) {

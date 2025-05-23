@@ -7,7 +7,21 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
+import {
+  PromptTokensDetails,
+  PromptTokensDetails$inboundSchema,
+  PromptTokensDetails$Outbound,
+  PromptTokensDetails$outboundSchema,
+} from "./prompttokensdetails.js";
 
+/**
+ * Represents the completion usage.
+ *
+ * @remarks
+ *
+ * This is used to represent the completion usage in the chat completion request.
+ * It can be either a completion usage or a completion chunk usage.
+ */
 export type CompletionUsage = {
   /**
    * Number of tokens in the completion.
@@ -17,6 +31,7 @@ export type CompletionUsage = {
    * Number of tokens in the prompt.
    */
   promptTokens: number;
+  promptTokensDetails?: PromptTokensDetails | null | undefined;
   /**
    * Total number of tokens used (prompt + completion).
    */
@@ -31,11 +46,14 @@ export const CompletionUsage$inboundSchema: z.ZodType<
 > = z.object({
   completion_tokens: z.number().int(),
   prompt_tokens: z.number().int(),
+  prompt_tokens_details: z.nullable(PromptTokensDetails$inboundSchema)
+    .optional(),
   total_tokens: z.number().int(),
 }).transform((v) => {
   return remap$(v, {
     "completion_tokens": "completionTokens",
     "prompt_tokens": "promptTokens",
+    "prompt_tokens_details": "promptTokensDetails",
     "total_tokens": "totalTokens",
   });
 });
@@ -44,6 +62,7 @@ export const CompletionUsage$inboundSchema: z.ZodType<
 export type CompletionUsage$Outbound = {
   completion_tokens: number;
   prompt_tokens: number;
+  prompt_tokens_details?: PromptTokensDetails$Outbound | null | undefined;
   total_tokens: number;
 };
 
@@ -55,11 +74,14 @@ export const CompletionUsage$outboundSchema: z.ZodType<
 > = z.object({
   completionTokens: z.number().int(),
   promptTokens: z.number().int(),
+  promptTokensDetails: z.nullable(PromptTokensDetails$outboundSchema)
+    .optional(),
   totalTokens: z.number().int(),
 }).transform((v) => {
   return remap$(v, {
     completionTokens: "completion_tokens",
     promptTokens: "prompt_tokens",
+    promptTokensDetails: "prompt_tokens_details",
     totalTokens: "total_tokens",
   });
 });

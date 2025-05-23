@@ -7,11 +7,12 @@ import { chatCreateStream } from "../funcs/chatCreateStream.js";
 import { EventStream } from "../lib/event-streams.js";
 import { ClientSDK, RequestOptions } from "../lib/sdks.js";
 import * as components from "../models/components/index.js";
+import * as operations from "../models/operations/index.js";
 import { unwrapAsync } from "../types/fp.js";
 
 export class Chat extends ClientSDK {
   /**
-   * Create chat completion
+   * Create chat completions
    *
    * @remarks
    * This function processes chat completion requests by determining whether to use streaming
@@ -45,7 +46,7 @@ export class Chat extends ClientSDK {
   async createStream(
     request: components.CreateChatCompletionStreamRequest,
     options?: RequestOptions,
-  ): Promise<EventStream<components.ChatCompletionStreamResponse>> {
+  ): Promise<EventStream<operations.ChatCompletionsCreateStreamResponseBody>> {
     return unwrapAsync(chatCreateStream(
       this,
       request,

@@ -3,7 +3,6 @@
  */
 
 import * as z from "zod";
-import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
@@ -20,6 +19,14 @@ import {
   CompletionUsage$outboundSchema,
 } from "./completionusage.js";
 
+/**
+ * Represents the chat completion chunk.
+ *
+ * @remarks
+ *
+ * This is used to represent the chat completion chunk in the chat completion request.
+ * It can be either a chat completion chunk or a chat completion chunk choice.
+ */
 export type ChatCompletionChunk = {
   /**
    * A list of chat completion chunk choices.
@@ -38,23 +45,10 @@ export type ChatCompletionChunk = {
    */
   model: string;
   /**
-   * The system fingerprint for the completion
+   * The object of the chat completion chunk (which is always `chat.completion.chunk`)
    */
-  systemFingerprint?: string | null | undefined;
-  /**
-   * Usage statistics for the completion request.
-   */
+  object: string;
   usage?: CompletionUsage | null | undefined;
-  /**
-   * Specifies the latency tier to use for processing the request. This parameter is relevant for customers subscribed to the scale tier service
-   */
-
-  serviceTier?: string | undefined;
-
-  /**
-   * The type of the o chunk.
-   */
-  object?: string;
 };
 
 /** @internal */
@@ -62,34 +56,14 @@ export const ChatCompletionChunk$inboundSchema: z.ZodType<
   ChatCompletionChunk,
   z.ZodTypeDef,
   unknown
-> = z
-  .object({
-    choices: z.array(ChatCompletionChunkChoice$inboundSchema),
-    created: z.number().int(),
-    id: z.string(),
-    model: z.string(),
-    system_fingerprint: z.nullable(z.string()).optional(),
-    usage: z.nullable(CompletionUsage$inboundSchema).optional(),
-    object: z.string(),
-    service_tier: z.string().optional(),
-  })
-  .transform(
-    (v: {
-      choices: Array<ChatCompletionChunkChoice>;
-      created: number;
-      id: string;
-      model: string;
-      system_fingerprint?: string | null | undefined;
-      usage?: CompletionUsage | null | undefined;
-      object: string;
-      service_tier?: string | undefined;
-    }) => {
-      return remap$(v, {
-        system_fingerprint: "systemFingerprint",
-        service_tier: "serviceTier",
-      });
-    },
-  );
+> = z.object({
+  choices: z.array(ChatCompletionChunkChoice$inboundSchema),
+  created: z.number().int(),
+  id: z.string(),
+  model: z.string(),
+  object: z.string(),
+  usage: z.nullable(CompletionUsage$inboundSchema).optional(),
+});
 
 /** @internal */
 export type ChatCompletionChunk$Outbound = {
@@ -97,7 +71,7 @@ export type ChatCompletionChunk$Outbound = {
   created: number;
   id: string;
   model: string;
-  system_fingerprint?: string | null | undefined;
+  object: string;
   usage?: CompletionUsage$Outbound | null | undefined;
 };
 
@@ -106,29 +80,14 @@ export const ChatCompletionChunk$outboundSchema: z.ZodType<
   ChatCompletionChunk$Outbound,
   z.ZodTypeDef,
   ChatCompletionChunk
-> = z
-  .object({
-    choices: z.array(ChatCompletionChunkChoice$outboundSchema),
-    created: z.number().int(),
-    id: z.string(),
-    model: z.string(),
-    systemFingerprint: z.nullable(z.string()).optional(),
-    usage: z.nullable(CompletionUsage$outboundSchema).optional(),
-  })
-  .transform(
-    (v: {
-      choices: Array<ChatCompletionChunkChoice$Outbound>;
-      created: number;
-      id: string;
-      model: string;
-      systemFingerprint?: string | null | undefined;
-      usage?: CompletionUsage$Outbound | null | undefined;
-    }) => {
-      return remap$(v, {
-        systemFingerprint: "system_fingerprint",
-      });
-    },
-  );
+> = z.object({
+  choices: z.array(ChatCompletionChunkChoice$outboundSchema),
+  created: z.number().int(),
+  id: z.string(),
+  model: z.string(),
+  object: z.string(),
+  usage: z.nullable(CompletionUsage$outboundSchema).optional(),
+});
 
 /**
  * @internal
