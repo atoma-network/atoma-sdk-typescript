@@ -29,7 +29,17 @@ export const ConfidentialComputeStreamResponse$inboundSchema: z.ZodType<
   z.ZodTypeDef,
   unknown
 > = z.object({
-  data: ConfidentialComputeResponse$inboundSchema,
+  data: z.string().transform((v, ctx) => {
+    try {
+      return JSON.parse(v);
+    } catch (err) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: `malformed json: ${err}`,
+      });
+      return z.NEVER;
+    }
+  }).pipe(ConfidentialComputeResponse$inboundSchema),
 });
 
 /** @internal */

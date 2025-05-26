@@ -13,6 +13,8 @@ import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
 import * as components from "../models/components/index.js";
 import { APIError } from "../models/errors/apierror.js";
+import * as operations from "../models/operations/index.js";
+
 import {
   ConnectionError,
   InvalidRequestError,
@@ -22,13 +24,12 @@ import {
 } from "../models/errors/httpclienterrors.js";
 import { SDKValidationError } from "../models/errors/sdkvalidationerror.js";
 import { generateKeyPair, encryptMessage, decryptMessage } from "../lib/crypto_utils.js";
-import * as operations from "../models/operations/index.js";
 
 export async function confidentialChatCreateStream(
   client: AtomaSDKCore,
   request: components.CreateChatCompletionRequest,
   options?: RequestOptions,
-): Promise<EventStream<operations.ConfidentialChatCompletionsCreateStreamResponseBody>> {
+): Promise<EventStream<operations.ChatCompletionsCreateStreamResponseBody>> {
   const parsed = safeParse(
     request,
     (value) =>
@@ -73,7 +74,7 @@ export async function confidentialChatCreateStream(
         || client._options.retryConfig
         || { strategy: "none" },
       retryCodes: options?.retryCodes || ["429", "500", "502", "503", "504"],
-      baseURL: options?.serverURL || client._options.serverURL || "",
+      baseURL: options?.serverURL || client._options.serverURL || "https://api.atoma.network",
     };
 
     const requestRes = client._createRequest(context, {
@@ -102,7 +103,7 @@ export async function confidentialChatCreateStream(
     const response = doResult.value;
 
     const [result] = await M.match<
-      EventStream<operations.ConfidentialChatCompletionsCreateStreamResponseBody>,
+      EventStream<operations.ChatCompletionsCreateStreamResponseBody>,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -116,7 +117,7 @@ export async function confidentialChatCreateStream(
         z.instanceof(ReadableStream<Uint8Array>).transform(stream => {
           return new EventStream({
             stream,
-            decoder(rawEvent) {
+            decoder(rawEvent): any {
               // Decrypt the encrypted event data
               const encryptedResponse = components.ConfidentialComputeStreamResponse$inboundSchema.parse(rawEvent);
 
@@ -136,14 +137,13 @@ export async function confidentialChatCreateStream(
               // Parse decrypted response
               const decryptedJson = JSON.parse(new TextDecoder().decode(decryptedData));
               return {
-                data: components.ConfidentialComputeStreamResponse$inboundSchema.parse(decryptedJson)
+                data: components.ChatCompletionChunk$inboundSchema.parse(decryptedJson)
               };
             },
           });
         }),
       ),
-      M.fail([400, 401, "4XX"]),
-      M.fail([500, "5XX"]),
+      M.fail([400, 401, "4XX", 500, "5XX"]),
     )(response);
     if (!result.ok) {
       throw result.error;
