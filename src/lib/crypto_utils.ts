@@ -1,6 +1,5 @@
-import { box, randomBytes } from 'tweetnacl';
-import { createHmac, createCipheriv, createDecipheriv } from 'crypto';
-import { createHash as createBlake2Hash } from 'blake2';
+import { createHmac, createCipheriv, createDecipheriv, randomBytes } from 'crypto';
+import { BLAKE2b } from '@stablelib/blake2b';
 import { x25519 } from '@noble/curves/ed25519';
 // import { encodeBase64, decodeBase64 } from 'tweetnacl-util';
 // import { BLAKE2b } from '@stablelib/blake2b';
@@ -40,9 +39,9 @@ function deriveKey(sharedSecret: Uint8Array, salt: Uint8Array): Uint8Array {
  * @returns A 32-byte hash
  */
 export function calculateHash(data: Uint8Array): Uint8Array {
-    const hash = createBlake2Hash('blake2b', { digestLength: 32 });  // Use BLAKE2b with 32-byte digest
+    const hash = new BLAKE2b(32);  // Use BLAKE2b with 32-byte digest
     hash.update(data);
-    return new Uint8Array(hash.digest());
+    return hash.digest();
 }
 
 /**
@@ -54,60 +53,60 @@ export function calculateHash(data: Uint8Array): Uint8Array {
  * @returns A tuple containing [nodePublicKey, salt, encryptedRequest]
  */
 export async function encryptMessage(
-  sdk: AtomaSDKCore,
-  clientDhPrivateKey: Uint8Array,
-  requestBody: any,
-  model: string
+    sdk: AtomaSDKCore,
+    clientDhPrivateKey: Uint8Array,
+    requestBody: any,
+    model: string
 ): Promise<[Uint8Array, Uint8Array, components.ConfidentialComputeRequest$Outbound]> {
-  // Generate our public key from private key using X25519
-  const clientDhPublicKey = x25519.getPublicKey(clientDhPrivateKey);
+    // Generate our public key from private key using X25519
+    const clientDhPublicKey = x25519.getPublicKey(clientDhPrivateKey);
 
-  // Get node's public key
-  const nodeRes = await nodesNodesCreateLock(sdk, { model }, undefined);
-  if (!nodeRes.ok) {
-    throw new Error('Failed to get node public key: ' + nodeRes.error);
-  }
-
-  const nodeDhPublicKeyBytes = Buffer.from(nodeRes.value.publicKey, 'base64');
-  const stackSmallId = nodeRes.value.stackSmallId;
-
-  // Generate random salt and create shared secret using X25519
-  const salt = generateRandomBytes(SALT_SIZE);
-  const sharedSecret = x25519.getSharedSecret(clientDhPrivateKey, nodeDhPublicKeyBytes);
-
-  // Derive encryption key using HKDF
-  const encryptionKey = deriveKey(sharedSecret, salt);
-  const nonce = generateRandomBytes(NONCE_SIZE);
-
-  // Encrypt the message
-  const message = Buffer.from(JSON.stringify(requestBody));
-  const plaintextBodyHash = calculateHash(message);
-
-  // Create cipher
-  const cipher = createCipheriv('aes-256-gcm', encryptionKey, nonce);
-  const ciphertext = cipher.update(message);
-  const final = cipher.final();
-  const authTag = cipher.getAuthTag();
-  
-  // Concatenate in the order: ciphertext + final + auth tag
-  const encrypted = Buffer.concat([ciphertext, final, authTag]);
-
-  // Return the encrypted request with snake_case fields
-  return [
-    nodeDhPublicKeyBytes,
-    salt,
-    {
-      ciphertext: encrypted.toString('base64'),  // The entire encrypted message including auth tag
-      client_dh_public_key: Buffer.from(clientDhPublicKey).toString('base64'),
-      model_name: model,
-      node_dh_public_key: nodeRes.value.publicKey,
-      nonce: Buffer.from(nonce).toString('base64'),
-      plaintext_body_hash: Buffer.from(plaintextBodyHash).toString('base64'),
-      salt: Buffer.from(salt).toString('base64'),
-      stack_small_id: stackSmallId,
-      stream: requestBody.stream || false
+    // Get node's public key
+    const nodeRes = await nodesNodesCreateLock(sdk, { model }, undefined);
+    if (!nodeRes.ok) {
+        throw new Error('Failed to get node public key: ' + nodeRes.error);
     }
-  ];
+
+    const nodeDhPublicKeyBytes = Buffer.from(nodeRes.value.publicKey, 'base64');
+    const stackSmallId = nodeRes.value.stackSmallId;
+
+    // Generate random salt and create shared secret using X25519
+    const salt = generateRandomBytes(SALT_SIZE);
+    const sharedSecret = x25519.getSharedSecret(clientDhPrivateKey, nodeDhPublicKeyBytes);
+
+    // Derive encryption key using HKDF
+    const encryptionKey = deriveKey(sharedSecret, salt);
+    const nonce = generateRandomBytes(NONCE_SIZE);
+
+    // Encrypt the message
+    const message = Buffer.from(JSON.stringify(requestBody));
+    const plaintextBodyHash = calculateHash(message);
+
+    // Create cipher
+    const cipher = createCipheriv('aes-256-gcm', encryptionKey, nonce);
+    const ciphertext = cipher.update(message);
+    const final = cipher.final();
+    const authTag = cipher.getAuthTag();
+
+    // Concatenate in the order: ciphertext + final + auth tag
+    const encrypted = Buffer.concat([ciphertext, final, authTag]);
+
+    // Return the encrypted request with snake_case fields
+    return [
+        nodeDhPublicKeyBytes,
+        salt,
+        {
+            ciphertext: encrypted.toString('base64'),  // The entire encrypted message including auth tag
+            client_dh_public_key: Buffer.from(clientDhPublicKey).toString('base64'),
+            model_name: model,
+            node_dh_public_key: nodeRes.value.publicKey,
+            nonce: Buffer.from(nonce).toString('base64'),
+            plaintext_body_hash: Buffer.from(plaintextBodyHash).toString('base64'),
+            salt: Buffer.from(salt).toString('base64'),
+            stack_small_id: stackSmallId,
+            stream: requestBody.stream || false
+        }
+    ];
 }
 
 /**
@@ -129,24 +128,24 @@ export function decryptMessage(
     try {
         // Generate shared secret using X25519
         const sharedSecret = x25519.getSharedSecret(clientPrivateKey, nodePublicKey);
-        
+
         // Derive encryption key using HKDF
         const encryptionKey = deriveKey(sharedSecret, salt);
-        
+
         // Extract auth tag (last 16 bytes)
         const authTag = ciphertext.slice(-16);
         const encryptedData = ciphertext.slice(0, -16);
-        
+
         // Create decipher
         const decipher = createDecipheriv('aes-256-gcm', encryptionKey, nonce);
         decipher.setAuthTag(authTag);
-        
+
         // Decrypt
         const decrypted = Buffer.concat([
             decipher.update(encryptedData),
             decipher.final()
         ]);
-        
+
         return new Uint8Array(decrypted);
     } catch (error) {
         console.error('Decryption error:', error);
@@ -159,10 +158,11 @@ export function decryptMessage(
  * @returns An object containing the keypair
  */
 export function generateKeyPair() {
-    const keypair = box.keyPair();
+    const privateKey = randomBytes(32);
+    const publicKey = x25519.getPublicKey(privateKey);
     return {
-        publicKey: keypair.publicKey,
-        privateKey: keypair.secretKey
+        publicKey,
+        privateKey
     };
 }
 
@@ -173,4 +173,4 @@ export function generateKeyPair() {
  */
 export function generateRandomBytes(length: number): Uint8Array {
     return randomBytes(length);
-} 
+}

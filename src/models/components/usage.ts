@@ -7,28 +7,35 @@ import { remap as remap$ } from "../../lib/primitives.js";
 import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
+import {
+  CompletionTokensDetails,
+  CompletionTokensDetails$inboundSchema,
+  CompletionTokensDetails$Outbound,
+  CompletionTokensDetails$outboundSchema,
+} from "./completiontokensdetails.js";
+import {
+  PromptTokensDetails,
+  PromptTokensDetails$inboundSchema,
+  PromptTokensDetails$Outbound,
+  PromptTokensDetails$outboundSchema,
+} from "./prompttokensdetails.js";
 
-/**
- * Represents usage statistics for a confidential compute request
- */
 export type Usage = {
   /**
-   * Number of compute units used
-   *
-   * @remarks
-   * NOTE: This is not used for the embeddings endpoint
+   * The number of completion tokens used
    */
-  completionTokens?: number | null | undefined;
+  completionTokens: number;
   /**
-   * Details about the completion tokens
+   * The details of the completion tokens
    */
-  completionTokensDetails?: any | undefined;
+  completionTokensDetails?: CompletionTokensDetails | null | undefined;
   /**
-   * Number of compute units used
+   * The number of prompt tokens used
    */
   promptTokens: number;
+  promptTokensDetails?: PromptTokensDetails | null | undefined;
   /**
-   * Number of compute units used
+   * The total number of tokens used
    */
   totalTokens: number;
 };
@@ -36,24 +43,27 @@ export type Usage = {
 /** @internal */
 export const Usage$inboundSchema: z.ZodType<Usage, z.ZodTypeDef, unknown> = z
   .object({
-    completion_tokens: z.nullable(z.number().int()).optional(),
-    completion_tokens_details: z.any().optional(),
+    completion_tokens: z.number().int(),
+    completion_tokens_details: CompletionTokensDetails$inboundSchema.optional().nullable(),
     prompt_tokens: z.number().int(),
+    prompt_tokens_details: PromptTokensDetails$inboundSchema.optional().nullable(),
     total_tokens: z.number().int(),
   }).transform((v) => {
     return remap$(v, {
       "completion_tokens": "completionTokens",
       "completion_tokens_details": "completionTokensDetails",
       "prompt_tokens": "promptTokens",
+      "prompt_tokens_details": "promptTokensDetails",
       "total_tokens": "totalTokens",
     });
   });
 
 /** @internal */
 export type Usage$Outbound = {
-  completion_tokens?: number | null | undefined;
-  completion_tokens_details?: any | undefined;
+  completion_tokens: number;
+  completion_tokens_details?: CompletionTokensDetails$Outbound;
   prompt_tokens: number;
+  prompt_tokens_details?: PromptTokensDetails$Outbound;
   total_tokens: number;
 };
 
@@ -63,15 +73,17 @@ export const Usage$outboundSchema: z.ZodType<
   z.ZodTypeDef,
   Usage
 > = z.object({
-  completionTokens: z.nullable(z.number().int()).optional(),
-  completionTokensDetails: z.any().optional(),
+  completionTokens: z.number().int(),
+  completionTokensDetails: CompletionTokensDetails$outboundSchema,
   promptTokens: z.number().int(),
+  promptTokensDetails: PromptTokensDetails$outboundSchema,
   totalTokens: z.number().int(),
 }).transform((v) => {
   return remap$(v, {
     completionTokens: "completion_tokens",
     completionTokensDetails: "completion_tokens_details",
     promptTokens: "prompt_tokens",
+    promptTokensDetails: "prompt_tokens_details",
     totalTokens: "total_tokens",
   });
 });

@@ -1,21 +1,46 @@
 # ChatCompletionMessage
 
-## Example Usage
+A message that is part of a conversation which is based on the role
+of the author of the message.
+
+This is used to represent the message in the chat completion request.
+It can be either a system message, a user message, an assistant message, or a tool message.
+
+
+## Supported Types
+
+### `components.System`
 
 ```typescript
-import { ChatCompletionMessage } from "atoma-sdk/models/components";
+const value: components.System = {
+  name: "AI expert",
+  role: "system",
+};
+```
 
-let value: ChatCompletionMessage = {
-  content: "Hello! How can you help me today?",
-  name: "john_doe",
+### `components.User`
+
+```typescript
+const value: components.User = {
+  name: "John Doe",
   role: "user",
 };
 ```
 
-## Fields
+### `components.Assistant`
 
-| Field                                                                                        | Type                                                                                         | Required                                                                                     | Description                                                                                  | Example                                                                                      |
-| -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
-| `content`                                                                                    | *string*                                                                                     | :heavy_check_mark:                                                                           | The contents of the message                                                                  | Hello! How can you help me today?                                                            |
-| `name`                                                                                       | *string*                                                                                     | :heavy_minus_sign:                                                                           | The name of the author of this message                                                       | john_doe                                                                                     |
-| `role`                                                                                       | *string*                                                                                     | :heavy_check_mark:                                                                           | The role of the message author. One of: "system", "user", "assistant", "tool", or "function" | user                                                                                         |
+```typescript
+const value: components.Assistant = {
+  name: "AI",
+  role: "assistant",
+};
+```
+
+### `components.Tool`
+
+```typescript
+const value: components.Tool = {
+  role: "tool",
+};
+```
+

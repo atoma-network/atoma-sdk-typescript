@@ -13,6 +13,8 @@ import { extractSecurity, resolveGlobalSecurity } from "../lib/security.js";
 import { pathToFunc } from "../lib/url.js";
 import * as components from "../models/components/index.js";
 import { APIError } from "../models/errors/apierror.js";
+import * as operations from "../models/operations/index.js";
+
 import {
   ConnectionError,
   InvalidRequestError,
@@ -27,7 +29,7 @@ export async function confidentialChatCreateStream(
   client: AtomaSDKCore,
   request: components.CreateChatCompletionRequest,
   options?: RequestOptions,
-): Promise<EventStream<components.ChatCompletionStreamResponse>> {
+): Promise<EventStream<operations.ChatCompletionsCreateStreamResponseBody>> {
   const parsed = safeParse(
     request,
     (value) =>
@@ -72,6 +74,7 @@ export async function confidentialChatCreateStream(
         || client._options.retryConfig
         || { strategy: "none" },
       retryCodes: options?.retryCodes || ["429", "500", "502", "503", "504"],
+      baseURL: options?.serverURL || client._options.serverURL || "https://api.atoma.network",
     };
 
     const requestRes = client._createRequest(context, {
@@ -100,7 +103,7 @@ export async function confidentialChatCreateStream(
     const response = doResult.value;
 
     const [result] = await M.match<
-      EventStream<components.ChatCompletionStreamResponse>,
+      EventStream<operations.ChatCompletionsCreateStreamResponseBody>,
       | APIError
       | SDKValidationError
       | UnexpectedClientError
@@ -114,10 +117,10 @@ export async function confidentialChatCreateStream(
         z.instanceof(ReadableStream<Uint8Array>).transform(stream => {
           return new EventStream({
             stream,
-            decoder(rawEvent) {
+            decoder(rawEvent): any {
               // Decrypt the encrypted event data
               const encryptedResponse = components.ConfidentialComputeStreamResponse$inboundSchema.parse(rawEvent);
-              
+
               // Decrypt the response data
               const decryptedData = decryptMessage(
                 Buffer.from(encryptedResponse.data.ciphertext, 'base64'),

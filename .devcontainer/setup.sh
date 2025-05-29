@@ -27,4 +27,4 @@ EOL
 echo "$TS_CONFIG_CONTENT" > samples/tsconfig.json
 
 # Generate starter usage sample with speakeasy
-speakeasy generate usage -s ../atoma-proxy/atoma-proxy/docs/openapi.yml -l typescript -o samples/root.ts
+speakeasy generate usage -s openapi.yml -l typescript -o samples/root.ts

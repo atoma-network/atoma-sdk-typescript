@@ -7,7 +7,7 @@ OpenAI's API chat completions v1 endpoint
 
 ### Available Operations
 
-* [create](#create) - Create chat completion
+* [create](#create) - Create chat completions
 * [createStream](#createstream)
 
 ## create
@@ -40,13 +40,81 @@ const atomaSDK = new AtomaSDK({
 
 async function run() {
   const result = await atomaSDK.chat.create({
+    frequencyPenalty: 0,
+    functions: [
+      {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The location to get the weather for",
+            },
+          },
+          "required": [
+            "location",
+          ],
+        },
+      },
+    ],
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    maxCompletionTokens: 4096,
     messages: [
       {
-        content: "Hello! How can you help me today?",
+        content: "You are a helpful AI assistant",
+        name: "AI expert",
+        role: "system",
+      },
+      {
+        content: "Hello!",
+        name: "John Doe",
         role: "user",
+      },
+      {
+        content: "I'm here to help you with any questions you have. How can I assist you today?",
+        name: "AI",
+        role: "assistant",
       },
     ],
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    parallelToolCalls: true,
+    presencePenalty: 0,
+    seed: 123,
+    serviceTier: "auto",
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    temperature: 0.7,
+    tools: [
+      {
+        function: {
+          description: "Get the current weather in a location",
+          name: "get_current_weather",
+          parameters: {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The location to get the weather for",
+              },
+            },
+            "required": [
+              "location",
+            ],
+          },
+        },
+        type: "function",
+      },
+    ],
+    topLogprobs: 1,
+    topP: 1,
+    user: "user-1234",
   });
 
   // Handle the result
@@ -72,13 +140,81 @@ const atomaSDK = new AtomaSDKCore({
 
 async function run() {
   const res = await chatCreate(atomaSDK, {
+    frequencyPenalty: 0,
+    functions: [
+      {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The location to get the weather for",
+            },
+          },
+          "required": [
+            "location",
+          ],
+        },
+      },
+    ],
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    maxCompletionTokens: 4096,
     messages: [
       {
-        content: "Hello! How can you help me today?",
+        content: "You are a helpful AI assistant",
+        name: "AI expert",
+        role: "system",
+      },
+      {
+        content: "Hello!",
+        name: "John Doe",
         role: "user",
+      },
+      {
+        content: "I'm here to help you with any questions you have. How can I assist you today?",
+        name: "AI",
+        role: "assistant",
       },
     ],
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    parallelToolCalls: true,
+    presencePenalty: 0,
+    seed: 123,
+    serviceTier: "auto",
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    temperature: 0.7,
+    tools: [
+      {
+        function: {
+          description: "Get the current weather in a location",
+          name: "get_current_weather",
+          parameters: {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The location to get the weather for",
+              },
+            },
+            "required": [
+              "location",
+            ],
+          },
+        },
+        type: "function",
+      },
+    ],
+    topLogprobs: 1,
+    topP: 1,
+    user: "user-1234",
   });
 
   if (!res.ok) {
@@ -126,14 +262,81 @@ const atomaSDK = new AtomaSDK({
 
 async function run() {
   const result = await atomaSDK.chat.createStream({
+    frequencyPenalty: 0,
+    functions: [
+      {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The location to get the weather for",
+            },
+          },
+          "required": [
+            "location",
+          ],
+        },
+      },
+    ],
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    maxCompletionTokens: 4096,
     messages: [
       {
-        content: "Hello! How can you help me today?",
-        name: "john_doe",
+        content: "You are a helpful AI assistant",
+        name: "AI expert",
+        role: "system",
+      },
+      {
+        content: "Hello!",
+        name: "John Doe",
         role: "user",
+      },
+      {
+        content: "I'm here to help you with any questions you have. How can I assist you today?",
+        name: "AI",
+        role: "assistant",
       },
     ],
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    parallelToolCalls: true,
+    presencePenalty: 0,
+    seed: 123,
+    serviceTier: "auto",
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    temperature: 0.7,
+    tools: [
+      {
+        function: {
+          description: "Get the current weather in a location",
+          name: "get_current_weather",
+          parameters: {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The location to get the weather for",
+              },
+            },
+            "required": [
+              "location",
+            ],
+          },
+        },
+        type: "function",
+      },
+    ],
+    topLogprobs: 1,
+    topP: 1,
+    user: "user-1234",
   });
 
   for await (const event of result) {
@@ -161,14 +364,81 @@ const atomaSDK = new AtomaSDKCore({
 
 async function run() {
   const res = await chatCreateStream(atomaSDK, {
+    frequencyPenalty: 0,
+    functions: [
+      {
+        "name": "get_current_weather",
+        "description": "Get the current weather in a location",
+        "parameters": {
+          "type": "object",
+          "properties": {
+            "location": {
+              "type": "string",
+              "description": "The location to get the weather for",
+            },
+          },
+          "required": [
+            "location",
+          ],
+        },
+      },
+    ],
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    maxCompletionTokens: 4096,
     messages: [
       {
-        content: "Hello! How can you help me today?",
-        name: "john_doe",
+        content: "You are a helpful AI assistant",
+        name: "AI expert",
+        role: "system",
+      },
+      {
+        content: "Hello!",
+        name: "John Doe",
         role: "user",
+      },
+      {
+        content: "I'm here to help you with any questions you have. How can I assist you today?",
+        name: "AI",
+        role: "assistant",
       },
     ],
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    parallelToolCalls: true,
+    presencePenalty: 0,
+    seed: 123,
+    serviceTier: "auto",
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    temperature: 0.7,
+    tools: [
+      {
+        function: {
+          description: "Get the current weather in a location",
+          name: "get_current_weather",
+          parameters: {
+            "type": "object",
+            "properties": {
+              "location": {
+                "type": "string",
+                "description": "The location to get the weather for",
+              },
+            },
+            "required": [
+              "location",
+            ],
+          },
+        },
+        type: "function",
+      },
+    ],
+    topLogprobs: 1,
+    topP: 1,
+    user: "user-1234",
   });
 
   if (!res.ok) {
@@ -197,7 +467,7 @@ run();
 
 ### Response
 
-**Promise\<[EventStream<components.ChatCompletionStreamResponse>](../../models/.md)\>**
+**Promise\<[EventStream<operations.ChatCompletionsCreateStreamResponseBody>](../../models/.md)\>**
 
 ### Errors
 

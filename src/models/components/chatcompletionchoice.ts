@@ -8,12 +8,26 @@ import { safeParse } from "../../lib/schemas.js";
 import { Result as SafeParseResult } from "../../types/fp.js";
 import { SDKValidationError } from "../errors/sdkvalidationerror.js";
 import {
+  ChatCompletionLogProbs,
+  ChatCompletionLogProbs$inboundSchema,
+  ChatCompletionLogProbs$Outbound,
+  ChatCompletionLogProbs$outboundSchema,
+} from "./chatcompletionlogprobs.js";
+import {
   ChatCompletionMessage,
   ChatCompletionMessage$inboundSchema,
   ChatCompletionMessage$Outbound,
   ChatCompletionMessage$outboundSchema,
 } from "./chatcompletionmessage.js";
 
+/**
+ * Represents the chat completion choice.
+ *
+ * @remarks
+ *
+ * This is used to represent the chat completion choice in the chat completion request.
+ * It can be either a chat completion message or a chat completion chunk.
+ */
 export type ChatCompletionChoice = {
   /**
    * The reason the chat completion was finished.
@@ -23,10 +37,16 @@ export type ChatCompletionChoice = {
    * The index of this choice in the list of choices.
    */
   index: number;
+  logprobs?: ChatCompletionLogProbs | null | undefined;
   /**
-   * Log probability information for the choice, if applicable.
+   * A message that is part of a conversation which is based on the role
+   *
+   * @remarks
+   * of the author of the message.
+   *
+   * This is used to represent the message in the chat completion request.
+   * It can be either a system message, a user message, an assistant message, or a tool message.
    */
-  logprobs?: any | undefined;
   message: ChatCompletionMessage;
 };
 
@@ -38,7 +58,7 @@ export const ChatCompletionChoice$inboundSchema: z.ZodType<
 > = z.object({
   finish_reason: z.nullable(z.string()).optional(),
   index: z.number().int(),
-  logprobs: z.any().optional(),
+  logprobs: z.nullable(ChatCompletionLogProbs$inboundSchema).optional(),
   message: ChatCompletionMessage$inboundSchema,
 }).transform((v) => {
   return remap$(v, {
@@ -50,7 +70,7 @@ export const ChatCompletionChoice$inboundSchema: z.ZodType<
 export type ChatCompletionChoice$Outbound = {
   finish_reason?: string | null | undefined;
   index: number;
-  logprobs?: any | undefined;
+  logprobs?: ChatCompletionLogProbs$Outbound | null | undefined;
   message: ChatCompletionMessage$Outbound;
 };
 
@@ -62,7 +82,7 @@ export const ChatCompletionChoice$outboundSchema: z.ZodType<
 > = z.object({
   finishReason: z.nullable(z.string()).optional(),
   index: z.number().int(),
-  logprobs: z.any().optional(),
+  logprobs: z.nullable(ChatCompletionLogProbs$outboundSchema).optional(),
   message: ChatCompletionMessage$outboundSchema,
 }).transform((v) => {
   return remap$(v, {

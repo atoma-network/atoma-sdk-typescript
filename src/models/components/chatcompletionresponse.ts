@@ -20,6 +20,14 @@ import {
   CompletionUsage$outboundSchema,
 } from "./completionusage.js";
 
+/**
+ * Represents the chat completion response.
+ *
+ * @remarks
+ *
+ * This is used to represent the chat completion response in the chat completion request.
+ * It can be either a chat completion or a chat completion stream.
+ */
 export type ChatCompletionResponse = {
   /**
    * A list of chat completion choices.
@@ -38,6 +46,14 @@ export type ChatCompletionResponse = {
    */
   model: string;
   /**
+   * The object of the chat completion.
+   */
+  object: string;
+  /**
+   * The service tier of the chat completion.
+   */
+  serviceTier?: string | null | undefined;
+  /**
    * The system fingerprint for the completion, if applicable.
    */
   systemFingerprint?: string | null | undefined;
@@ -54,10 +70,13 @@ export const ChatCompletionResponse$inboundSchema: z.ZodType<
   created: z.number().int(),
   id: z.string(),
   model: z.string(),
+  object: z.string(),
+  service_tier: z.nullable(z.string()).optional(),
   system_fingerprint: z.nullable(z.string()).optional(),
   usage: z.nullable(CompletionUsage$inboundSchema).optional(),
 }).transform((v) => {
   return remap$(v, {
+    "service_tier": "serviceTier",
     "system_fingerprint": "systemFingerprint",
   });
 });
@@ -68,6 +87,8 @@ export type ChatCompletionResponse$Outbound = {
   created: number;
   id: string;
   model: string;
+  object: string;
+  service_tier?: string | null | undefined;
   system_fingerprint?: string | null | undefined;
   usage?: CompletionUsage$Outbound | null | undefined;
 };
@@ -82,10 +103,13 @@ export const ChatCompletionResponse$outboundSchema: z.ZodType<
   created: z.number().int(),
   id: z.string(),
   model: z.string(),
+  object: z.string(),
+  serviceTier: z.nullable(z.string()).optional(),
   systemFingerprint: z.nullable(z.string()).optional(),
   usage: z.nullable(CompletionUsage$outboundSchema).optional(),
 }).transform((v) => {
   return remap$(v, {
+    serviceTier: "service_tier",
     systemFingerprint: "system_fingerprint",
   });
 });

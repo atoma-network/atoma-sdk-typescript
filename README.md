@@ -30,7 +30,7 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
 <!-- $toc-max-depth=2 -->
-* [atoma-sdk](#atoma-sdk)
+* [Atoma's Typescript SDK](#atomas-typescript-sdk)
   * [SDK Installation](#sdk-installation)
   * [Requirements](#requirements)
   * [SDK Example Usage](#sdk-example-usage)
@@ -61,25 +61,115 @@ The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https
 ### NPM
 
 ```bash
-npm i atoma-sdk
+npm add https://github.com/atoma-network/atoma-sdk-typescript.git
 ```
 
 ### PNPM
 
 ```bash
-pnpm i atoma-sdk
+pnpm add https://github.com/atoma-network/atoma-sdk-typescript.git
 ```
 
 ### Bun
 
 ```bash
-bun add atoma-sdk
+bun add https://github.com/atoma-network/atoma-sdk-typescript.git
 ```
 
 ### Yarn
 
 ```bash
-yarn add atoma-sdk
+yarn add https://github.com/atoma-network/atoma-sdk-typescript.git zod
+
+# Note that Yarn does not install peer dependencies automatically. You will need
+# to install zod as shown above.
+```
+
+> [!NOTE]
+> This package is published with CommonJS and ES Modules (ESM) support.
+
+
+### Model Context Protocol (MCP) Server
+
+This SDK is also an installable MCP server where the various SDK methods are
+exposed as tools that can be invoked by AI applications.
+
+> Node.js v20 or greater is required to run the MCP server from npm.
+
+<details>
+<summary>Claude installation steps</summary>
+
+Add the following server definition to your `claude_desktop_config.json` file:
+
+```json
+{
+  "mcpServers": {
+    "AtomaSDK": {
+      "command": "npx",
+      "args": [
+        "-y", "--package", "atoma-sdk",
+        "--",
+        "mcp", "start",
+        "--bearer-auth", "..."
+      ]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary>Cursor installation steps</summary>
+
+Create a `.cursor/mcp.json` file in your project root with the following content:
+
+```json
+{
+  "mcpServers": {
+    "AtomaSDK": {
+      "command": "npx",
+      "args": [
+        "-y", "--package", "atoma-sdk",
+        "--",
+        "mcp", "start",
+        "--bearer-auth", "..."
+      ]
+    }
+  }
+}
+```
+
+</details>
+
+You can also run MCP servers as a standalone binary with no additional dependencies. You must pull these binaries from available Github releases:
+
+```bash
+curl -L -o mcp-server \
+    https://github.com/{org}/{repo}/releases/download/{tag}/mcp-server-bun-darwin-arm64 && \
+chmod +x mcp-server
+```
+
+If the repo is a private repo you must add your Github PAT to download a release `-H "Authorization: Bearer {GITHUB_PAT}"`.
+
+
+```json
+{
+  "mcpServers": {
+    "Todos": {
+      "command": "./DOWNLOAD/PATH/mcp-server",
+      "args": [
+        "start"
+      ]
+    }
+  }
+}
+```
+
+For a full list of server arguments, run:
+
+```sh
+npx -y --package atoma-sdk -- mcp start --help
 ```
 <!-- End SDK Installation [installation] -->
 
@@ -102,14 +192,28 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.create({
-    messages: [
-      {
-        content: "Hello! How can you help me today?",
-        role: "user",
-      },
-    ],
+  const result = await atomaSDK.completions.create({
+    frequencyPenalty: 0,
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    logprobs: 1,
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    presencePenalty: 0,
+    prompt: [
+      "Hello!",
+    ],
+    seed: 123,
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    stream: false,
+    suffix: "json(\"\n\")",
+    temperature: 0.7,
+    topP: 1,
+    user: "user-1234",
   });
 
   // Handle the result
@@ -141,14 +245,28 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.create({
-    messages: [
-      {
-        content: "Hello! How can you help me today?",
-        role: "user",
-      },
-    ],
+  const result = await atomaSDK.completions.create({
+    frequencyPenalty: 0,
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    logprobs: 1,
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    presencePenalty: 0,
+    prompt: [
+      "Hello!",
+    ],
+    seed: 123,
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    stream: false,
+    suffix: "json(\"\n\")",
+    temperature: 0.7,
+    topP: 1,
+    user: "user-1234",
   });
 
   // Handle the result
@@ -169,13 +287,23 @@ run();
 
 ### [chat](docs/sdks/chat/README.md)
 
-* [create](docs/sdks/chat/README.md#create) - Create chat completion
+* [create](docs/sdks/chat/README.md#create) - Create chat completions
 * [createStream](docs/sdks/chat/README.md#createstream)
+
+### [completions](docs/sdks/completions/README.md)
+
+* [create](docs/sdks/completions/README.md#create) - Create completions
+* [createStream](docs/sdks/completions/README.md#createstream)
 
 ### [confidentialChat](docs/sdks/confidentialchat/README.md)
 
-* [create](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completion
+* [create](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completions
 * [createStream](docs/sdks/confidentialchat/README.md#createstream)
+
+### [confidentialCompletions](docs/sdks/confidentialcompletions/README.md)
+
+* [create](docs/sdks/confidentialcompletions/README.md#create) - Create confidential completions
+* [createStream](docs/sdks/confidentialcompletions/README.md#createstream)
 
 ### [confidentialEmbeddings](docs/sdks/confidentialembeddings/README.md)
 
@@ -200,6 +328,7 @@ run();
 ### [models](docs/sdks/models/README.md)
 
 * [modelsList](docs/sdks/models/README.md#modelslist) - List models
+* [openRouterModelsList](docs/sdks/models/README.md#openroutermodelslist) - OpenRouter models listing endpoint
 
 ### [nodes](docs/sdks/nodes/README.md)
 
@@ -224,16 +353,21 @@ To read more about standalone functions, check [FUNCTIONS.md](./FUNCTIONS.md).
 
 <summary>Available standalone functions</summary>
 
-- [`chatCreate`](docs/sdks/chat/README.md#create) - Create chat completion
+- [`chatCreate`](docs/sdks/chat/README.md#create) - Create chat completions
 - [`chatCreateStream`](docs/sdks/chat/README.md#createstream)
-- [`confidentialChatCreate`](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completion
+- [`completionsCreate`](docs/sdks/completions/README.md#create) - Create completions
+- [`completionsCreateStream`](docs/sdks/completions/README.md#createstream)
+- [`confidentialChatCreate`](docs/sdks/confidentialchat/README.md#create) - Create confidential chat completions
 - [`confidentialChatCreateStream`](docs/sdks/confidentialchat/README.md#createstream)
+- [`confidentialCompletionsCreate`](docs/sdks/confidentialcompletions/README.md#create) - Create confidential completions
+- [`confidentialCompletionsCreateStream`](docs/sdks/confidentialcompletions/README.md#createstream)
 - [`confidentialEmbeddingsCreate`](docs/sdks/confidentialembeddings/README.md#create) - Create confidential embeddings
 - [`confidentialImagesGenerate`](docs/sdks/confidentialimages/README.md#generate) - Create confidential image
 - [`embeddingsCreate`](docs/sdks/embeddings/README.md#create) - Create embeddings
 - [`healthHealth`](docs/sdks/health/README.md#health) - Health
 - [`imagesGenerate`](docs/sdks/images/README.md#generate) - Create image
 - [`modelsModelsList`](docs/sdks/models/README.md#modelslist) - List models
+- [`modelsOpenRouterModelsList`](docs/sdks/models/README.md#openroutermodelslist) - OpenRouter models listing endpoint
 - [`nodesNodesCreate`](docs/sdks/nodes/README.md#nodescreate) - Create node
 - [`nodesNodesCreateLock`](docs/sdks/nodes/README.md#nodescreatelock) - Create a node lock for confidential compute
 
@@ -257,15 +391,25 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.createStream({
-    messages: [
-      {
-        content: "Hello! How can you help me today?",
-        name: "john_doe",
-        role: "user",
-      },
-    ],
+  const result = await atomaSDK.completions.createStream({
+    frequencyPenalty: 0,
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    logprobs: 1,
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    presencePenalty: 0,
+    prompt: "<value>",
+    seed: 123,
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    suffix: "json(\"\n\")",
+    temperature: 0.7,
+    topP: 1,
+    user: "user-1234",
   });
 
   for await (const event of result) {
@@ -296,14 +440,28 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.create({
-    messages: [
-      {
-        content: "Hello! How can you help me today?",
-        role: "user",
-      },
-    ],
+  const result = await atomaSDK.completions.create({
+    frequencyPenalty: 0,
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    logprobs: 1,
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    presencePenalty: 0,
+    prompt: [
+      "Hello!",
+    ],
+    seed: 123,
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    stream: false,
+    suffix: "json(\"\n\")",
+    temperature: 0.7,
+    topP: 1,
+    user: "user-1234",
   }, {
     retries: {
       strategy: "backoff",
@@ -344,14 +502,28 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.create({
-    messages: [
-      {
-        content: "Hello! How can you help me today?",
-        role: "user",
-      },
-    ],
+  const result = await atomaSDK.completions.create({
+    frequencyPenalty: 0,
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    logprobs: 1,
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    presencePenalty: 0,
+    prompt: [
+      "Hello!",
+    ],
+    seed: 123,
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    stream: false,
+    suffix: "json(\"\n\")",
+    temperature: 0.7,
+    topP: 1,
+    user: "user-1234",
   });
 
   // Handle the result
@@ -383,14 +555,28 @@ const atomaSDK = new AtomaSDK({
 async function run() {
   let result;
   try {
-    result = await atomaSDK.chat.create({
-      messages: [
-        {
-          content: "Hello! How can you help me today?",
-          role: "user",
-        },
-      ],
+    result = await atomaSDK.completions.create({
+      frequencyPenalty: 0,
+      logitBias: {
+        "1234567890": 0.5,
+        "1234567891": -0.5,
+      },
+      logprobs: 1,
       model: "meta-llama/Llama-3.3-70B-Instruct",
+      n: 1,
+      presencePenalty: 0,
+      prompt: [
+        "Hello!",
+      ],
+      seed: 123,
+      stop: [
+        "json([\"stop\", \"halt\"])",
+      ],
+      stream: false,
+      suffix: "json(\"\n\")",
+      temperature: 0.7,
+      topP: 1,
+      user: "user-1234",
     });
 
     // Handle the result
@@ -443,7 +629,7 @@ In some rare cases, the SDK can fail to get a response from the server or even m
 
 ### Override Server URL Per-Client
 
-The default server can also be overridden globally by passing a URL to the `serverURL: string` optional parameter when initializing the SDK client instance. For example:
+The default server can be overridden globally by passing a URL to the `serverURL: string` optional parameter when initializing the SDK client instance. For example:
 ```typescript
 import { AtomaSDK } from "atoma-sdk";
 
@@ -453,14 +639,28 @@ const atomaSDK = new AtomaSDK({
 });
 
 async function run() {
-  const result = await atomaSDK.chat.create({
-    messages: [
-      {
-        content: "Hello! How can you help me today?",
-        role: "user",
-      },
-    ],
+  const result = await atomaSDK.completions.create({
+    frequencyPenalty: 0,
+    logitBias: {
+      "1234567890": 0.5,
+      "1234567891": -0.5,
+    },
+    logprobs: 1,
     model: "meta-llama/Llama-3.3-70B-Instruct",
+    n: 1,
+    presencePenalty: 0,
+    prompt: [
+      "Hello!",
+    ],
+    seed: 123,
+    stop: [
+      "json([\"stop\", \"halt\"])",
+    ],
+    stream: false,
+    suffix: "json(\"\n\")",
+    temperature: 0.7,
+    topP: 1,
+    user: "user-1234",
   });
 
   // Handle the result

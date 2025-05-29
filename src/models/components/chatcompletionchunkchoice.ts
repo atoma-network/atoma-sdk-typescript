@@ -13,8 +13,35 @@ import {
   ChatCompletionChunkDelta$Outbound,
   ChatCompletionChunkDelta$outboundSchema,
 } from "./chatcompletionchunkdelta.js";
+import {
+  ChatCompletionLogProbs,
+  ChatCompletionLogProbs$inboundSchema,
+  ChatCompletionLogProbs$Outbound,
+  ChatCompletionLogProbs$outboundSchema,
+} from "./chatcompletionlogprobs.js";
+import {
+  StopReasonUnion,
+  StopReasonUnion$inboundSchema,
+  StopReasonUnion$Outbound,
+  StopReasonUnion$outboundSchema,
+} from "./stopreasonunion.js";
 
+/**
+ * Represents the chat completion chunk choice.
+ *
+ * @remarks
+ *
+ * This is used to represent the chat completion chunk choice in the chat completion request.
+ */
 export type ChatCompletionChunkChoice = {
+  /**
+   * Represents the chat completion chunk delta.
+   *
+   * @remarks
+   *
+   * This is used to represent the chat completion chunk delta in the chat completion request.
+   * It can be either a chat completion chunk delta message or a chat completion chunk delta choice.
+   */
   delta: ChatCompletionChunkDelta;
   /**
    * The reason the chat completion was finished, if applicable.
@@ -24,6 +51,8 @@ export type ChatCompletionChunkChoice = {
    * The index of this choice in the list of choices.
    */
   index: number;
+  logprobs?: ChatCompletionLogProbs | null | undefined;
+  stopReason?: StopReasonUnion | null | undefined;
 };
 
 /** @internal */
@@ -35,9 +64,12 @@ export const ChatCompletionChunkChoice$inboundSchema: z.ZodType<
   delta: ChatCompletionChunkDelta$inboundSchema,
   finish_reason: z.nullable(z.string()).optional(),
   index: z.number().int(),
+  logprobs: z.nullable(ChatCompletionLogProbs$inboundSchema).optional(),
+  stop_reason: z.nullable(StopReasonUnion$inboundSchema).optional(),
 }).transform((v) => {
   return remap$(v, {
     "finish_reason": "finishReason",
+    "stop_reason": "stopReason",
   });
 });
 
@@ -46,6 +78,8 @@ export type ChatCompletionChunkChoice$Outbound = {
   delta: ChatCompletionChunkDelta$Outbound;
   finish_reason?: string | null | undefined;
   index: number;
+  logprobs?: ChatCompletionLogProbs$Outbound | null | undefined;
+  stop_reason?: StopReasonUnion$Outbound | null | undefined;
 };
 
 /** @internal */
@@ -57,9 +91,12 @@ export const ChatCompletionChunkChoice$outboundSchema: z.ZodType<
   delta: ChatCompletionChunkDelta$outboundSchema,
   finishReason: z.nullable(z.string()).optional(),
   index: z.number().int(),
+  logprobs: z.nullable(ChatCompletionLogProbs$outboundSchema).optional(),
+  stopReason: z.nullable(StopReasonUnion$outboundSchema).optional(),
 }).transform((v) => {
   return remap$(v, {
     finishReason: "finish_reason",
+    stopReason: "stop_reason",
   });
 });
 
