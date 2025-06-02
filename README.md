@@ -17,10 +17,6 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 </div>
 
 
-<br /><br />
-> [!IMPORTANT]
-> This SDK is not yet ready for production use. To complete setup please follow the steps outlined in your [workspace](https://app.speakeasy.com/org/atoma/atoma-sdk). Delete this section before > publishing to a package manager.
-
 <!-- Start Summary [summary] -->
 ## Summary
 
