@@ -61,25 +61,25 @@ The SDK can be installed with either [npm](https://www.npmjs.com/), [pnpm](https
 ### NPM
 
 ```bash
-npm add https://github.com/atoma-network/atoma-sdk-typescript.git
+npm i atoma-sdk
 ```
 
 ### PNPM
 
 ```bash
-pnpm add https://github.com/atoma-network/atoma-sdk-typescript.git
+pnpm add atoma-sdk
 ```
 
 ### Bun
 
 ```bash
-bun add https://github.com/atoma-network/atoma-sdk-typescript.git
+bun add atoma-sdk
 ```
 
 ### Yarn
 
 ```bash
-yarn add https://github.com/atoma-network/atoma-sdk-typescript.git zod
+yarn add atoma-sdk zod
 
 # Note that Yarn does not install peer dependencies automatically. You will need
 # to install zod as shown above.
