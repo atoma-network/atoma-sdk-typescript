@@ -1,6 +1,6 @@
 # Atoma's Typescript SDK
 
-[![Discord](https://img.shields.io/discord/1172593757586214964?label=Discord&logo=discord&logoColor=white)
+[![Discord](https://img.shields.io/discord/1172593757586214964?label=Discord&logo=discord&logoColor=white)](https://discord.gg/QvcSZGKM)
 [![Twitter](https://img.shields.io/twitter/follow/Atoma_Network?style=social)](https://x.com/Atoma_Network)
 [![Documentation](https://img.shields.io/badge/docs-mintify-blue?logo=mintify)](https://docs.atoma.network)
 [![License](https://img.shields.io/github/license/atoma-network/atoma-node)](LICENSE)
