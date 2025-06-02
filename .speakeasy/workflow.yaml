@@ -10,9 +10,6 @@ targets:
     atoma-sdk:
         target: typescript
         source: atoma-proxy
-        publish:
-            npm:
-                token: $npm_token
         codeSamples:
             registry:
                 location: registry.speakeasyapi.dev/atoma/test/atoma-proxy-typescript-code-samples
