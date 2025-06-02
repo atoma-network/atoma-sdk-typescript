@@ -1,8 +1,8 @@
 export default {
   build: {
     outDir: "dist",
-    format: ["esm", "commonjs"],
-    sourcemap: true,
+    format: ["esm"],
+    sourcemap: false,
     declaration: true,
   },
   sourceDialects: ["atoma-sdk/source"],
