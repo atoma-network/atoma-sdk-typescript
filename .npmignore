@@ -1,15 +1,25 @@
-**/*
-!/FUNCTIONS.md
-!/RUNTIMES.md
-!/REACT_QUERY.md
-!/**/*.ts
-!/**/*.js
-!/**/*.mjs
-!/**/*.json
-!/**/*.map
+# Source files
+src/
+test/
+tests/
+__tests__/
+*.test.ts
+*.spec.ts
 
-/eslint.config.mjs
-/cjs
-/.tshy
-/.tshy-*
-/__tests__
+# Build artifacts
+dist/node_modules/
+dist/**/*.map
+dist/**/*.test.js
+dist/**/*.spec.js
+
+# Development files
+.git/
+.github/
+.vscode/
+*.log
+.eslintrc*
+.prettierrc*
+tsconfig.json
+tshy.config.js
+vitest.config.ts
+.speakeasy/
