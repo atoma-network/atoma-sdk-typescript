@@ -17,11 +17,6 @@ Developer-friendly & type-safe Typescript SDK specifically catered to leverage *
 </div>
 
 
-<!-- Start Summary [summary] -->
-## Summary
-
-
-<!-- End Summary [summary] -->
 
 <!-- Start Table of Contents [toc] -->
 ## Table of Contents
